@@ -1,28 +1,28 @@
 //
-//  AddressBookPresenter.swift
-//  SGTS
+//  FilmsPresenter.swift
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 29.05.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import UIKit
 import DifferenceKit
 import SnapKit
 
-protocol AddressBookPresentationLogic {
-    func presentSearchBar(response: AddressBookFlow.OnSearchNavBarIconTap.Response)
-    func presentUpdate(response: AddressBookFlow.Update.Response)
-    func presentWaitIndicator(response: AddressBookFlow.OnWaitIndicator.Response)
-    func presentAlert(response: AddressBookFlow.AlertInfo.Response)
+protocol FilmsPresentationLogic {
+    func presentRouteBackToLoginScreen(response: FilmsScreenFlow.OnSelectItem.Response)
+    func presentRouteToOneFilmDetails(response: FilmsScreenFlow.RoutePayload.Response)
 
-    func presentRouteToSideMenu(response: AddressBookFlow.RoutePayload.Response)
-    func presentRouteBackToNewEmailCreateScreen(response: AddressBookFlow.OnSelectItem.Response)
-    func presentRouteToNewEmailCreateScreen(response: AddressBookFlow.OnSelectItem.Response)
-    func presentRouteToOneContactDetails(response: AddressBookFlow.RoutePayload.Response)
+    func presentSearchBar(response: FilmsScreenFlow.OnSearchBarGlassIconTap.Response)
+    func presentUpdate(response: FilmsScreenFlow.Update.Response)
+
+    func presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response)
+    func presentAlert(response: FilmsScreenFlow.AlertInfo.Response)
+
 }
 
 
-final class AddressBookPresenter: AddressBookPresentationLogic {
+final class FilmsPresenter: FilmsPresentationLogic {
 
     enum Constants {
         static let mainImageWidthHeight: CGFloat = 45
@@ -30,35 +30,23 @@ final class AddressBookPresenter: AddressBookPresentationLogic {
 
     // MARK: - Public properties
 
-    weak var viewController: AddressBookDisplayLogic?
+    weak var viewController: FilmsDisplayLogic?
 
     // MARK: - Public methods
 
-    func presentRouteToOneContactDetails(response: AddressBookFlow.RoutePayload.Response) {
+    func presentRouteBackToLoginScreen(response: FilmsScreenFlow.OnSelectItem.Response) {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayRouteToOneContactDetails(viewModel: AddressBookFlow.RoutePayload.ViewModel())
+            self?.viewController?.displayRouteBackToLoginScreen(viewModel: FilmsScreenFlow.RoutePayload.ViewModel())
         }
     }
 
-    func presentRouteBackToNewEmailCreateScreen(response: AddressBookFlow.OnSelectItem.Response) {
+    func presentRouteToOneFilmDetails(response: FilmsScreenFlow.RoutePayload.Response) {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayRouteBackToNewEmailCreateScreen(viewModel: AddressBookFlow.RoutePayload.ViewModel())
+            self?.viewController?.displayRouteToOneFilmDetails(viewModel: FilmsScreenFlow.RoutePayload.ViewModel())
         }
     }
 
-    func presentRouteToNewEmailCreateScreen(response: AddressBookFlow.OnSelectItem.Response) {
-        DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayRouteToNewEmailCreateScreen(viewModel: AddressBookFlow.RoutePayload.ViewModel())
-        }
-    }
-
-    func presentRouteToSideMenu(response: AddressBookFlow.RoutePayload.Response) {
-        DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayRouteToSideMenu(viewModel: AddressBookFlow.RoutePayload.ViewModel())
-        }
-    }
-
-    func presentSearchBar(response: AddressBookFlow.OnSearchNavBarIconTap.Response) {
+    func presentSearchBar(response: FilmsScreenFlow.OnSearchBarGlassIconTap.Response) {
         DispatchQueue.global(qos: .default).async { [weak self] in
             guard let self = self else { return }
             let backColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
@@ -71,7 +59,7 @@ final class AddressBookPresenter: AddressBookPresentationLogic {
             let searchIcon = Theme.shared.isLight ? UIHelper.Image.searchIcon24x24L : UIHelper.Image.searchIcon24x24D
 
             DispatchQueue.main.async { [weak self] in
-                self?.viewController?.toggleSearchBar(viewModel: AddressBookFlow.OnSearchNavBarIconTap.ViewModel(
+                self?.viewController?.toggleSearchBar(viewModel: FilmsScreenFlow.OnSearchBarGlassIconTap.ViewModel(
                     id: 11,
                     backColor: backColor,
                     isSearchBarDisplaying: response.isSearchBarDisplaying,
@@ -87,7 +75,7 @@ final class AddressBookPresenter: AddressBookPresentationLogic {
     }
 
 
-    func presentUpdate(response: AddressBookFlow.Update.Response) {
+    func presentUpdate(response: FilmsScreenFlow.Update.Response) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             let backColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
@@ -149,7 +137,7 @@ final class AddressBookPresenter: AddressBookPresentationLogic {
 
             if response.emailsToShow.isEmpty {
                 DispatchQueue.main.async { [weak self] in
-                    self?.viewController?.displayUpdate(viewModel: AddressBookFlow.Update.ViewModel(
+                    self?.viewController?.displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel(
                         backViewColor: backColor,
                         navBarBackground: backColor,
                         navBar: navBar,
@@ -184,9 +172,9 @@ final class AddressBookPresenter: AddressBookPresentationLogic {
                             tableItems.append(AnyDifferentiable(contactCellVM))
                         }
                     }
-                    self.presentWaitIndicator(response: AddressBookFlow.OnWaitIndicator.Response(isShow: false))
+                    self.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
                     DispatchQueue.main.async { [weak self] in
-                        self?.viewController?.displayUpdate(viewModel: AddressBookFlow.Update.ViewModel(
+                        self?.viewController?.displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel(
                             backViewColor: backColor,
                             navBarBackground: backColor,
                             navBar: navBar,
@@ -201,32 +189,32 @@ final class AddressBookPresenter: AddressBookPresentationLogic {
         }
     }
 
-    func presentAlert(response: AddressBookFlow.AlertInfo.Response) {
+    func presentAlert(response: FilmsScreenFlow.AlertInfo.Response) {
         let title = getString(.error)
         let text = response.error.localizedDescription
         let buttonTitle = getString(.closeAction)
 
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayAlert(viewModel: AddressBookFlow.AlertInfo.ViewModel(
+            self?.viewController?.displayAlert(viewModel: FilmsScreenFlow.AlertInfo.ViewModel(
                 title: title,
                 text: text,
                 buttonTitle: buttonTitle))
         }
     }
 
-    func presentWaitIndicator(response: AddressBookFlow.OnWaitIndicator.Response) {
+    func presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response) {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayWaitIndicator(viewModel: AddressBookFlow.OnWaitIndicator.ViewModel(isShow: response.isShow))
+            self?.viewController?.displayWaitIndicator(viewModel: FilmsScreenFlow.OnWaitIndicator.ViewModel(isShow: response.isShow))
         }
     }
 
     // MARK: - Private methods
 
-    private func makeOneAddressAndNameCell(response: AddressBookFlow.Update.Response,
+    private func makeOneAddressAndNameCell(response: FilmsScreenFlow.Update.Response,
                                            emailToShow: String,
                                            backViewColor: UIColor,
                                            index: Int,
-                                           completion: @escaping (ContactNameAndAddressCellViewModel, Int) -> Void) {
+                                           completion: @escaping (FilmCollectionCellViewModel, Int) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             var avatarImage = UIImage()
 
@@ -270,7 +258,7 @@ final class AddressBookPresenter: AddressBookPresentationLogic {
 
             let chevron = Theme.shared.isLight ? UIHelper.Image.chevronRightL : UIHelper.Image.chevronRightD
 
-            let oneAddressAndNameCell = ContactNameAndAddressCellViewModel(
+            let oneAddressAndNameCell = FilmCollectionCellViewModel(
                 id: contact.uid,
                 cellBackColor: backCellViewColor,
                 avatarImage: avatarImage,

@@ -1,14 +1,15 @@
 //
 //  LogInRegistrInteractor.swift
-//  SGTS
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 03.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import Foundation
 
 protocol LogInRegistrBusinessLogic {
     func onDidLoadViews(request: LogInRegistrFlow.OnDidLoadViews.Request)
+    func useCurrent(loginText: String, passwordText: String)
     func enterButtonTapped(request: LogInRegistrFlow.OnEnterButtonTap.Request)
 }
 
@@ -21,6 +22,10 @@ final class LogInRegistrInteractor: LogInRegistrBusinessLogic, LogInRegistrDataS
     var presenter: LogInRegistrPresentationLogic?
     var worker: LogInRegistrWorkingLogic?
 
+    // MARK: - Private properties
+    var loginText: String?
+    var passwordText: String?
+
     // MARK: - Lifecycle
     deinit {}
 
@@ -30,7 +35,13 @@ final class LogInRegistrInteractor: LogInRegistrBusinessLogic, LogInRegistrDataS
         presenter?.presentUpdate(response: LogInRegistrFlow.Update.Response())
     }
 
+    func useCurrent(loginText: String, passwordText: String) {
+        self.loginText = loginText
+        self.passwordText = passwordText
+    }
+
     func enterButtonTapped(request: LogInRegistrFlow.OnEnterButtonTap.Request) {
+//        worker?.//save or do smth
         presenter?.presentRouteToFilmsScreen(response: LogInRegistrFlow.RoutePayload.Response())
     }
 

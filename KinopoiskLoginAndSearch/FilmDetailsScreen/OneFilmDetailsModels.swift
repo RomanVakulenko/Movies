@@ -1,14 +1,14 @@
 //
-//  OneEmailDetailsModels.swift
-//  SGTS
+//  OneFilmDetailsModel.swift
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 22.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import DifferenceKit
 import UIKit
 
-enum OneEmailDetailsModel {
+enum OneFilmDetailsModel {
 
     enum Errors: Error {
         case cantFetchOneEmail

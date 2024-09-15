@@ -7,26 +7,22 @@
 
 import Foundation
 
-enum NetworkManagerErrors: Error, CustomStringConvertible {
-    case netServiceError(error: NetServiceError)
-    case dataMapperError(error: DataMapperError)
+enum NetworkManagerErrors: Error, LocalizedError {
+    case netServiceError(NetServiceError)
+    case dataMapperError(DataMapperError)
     case invalidURL
     case invalidRequest
-    case noData
 
-
-    var description: String {
+    var errorDescription: String? {
         switch self {
         case .netServiceError(let error):
-            return "Network service error: \(error.description)"
+            return "Network service error: \(error.localizedDescription)"
         case .dataMapperError(let error):
-            return "Data mapper error: \(error.description)"
+            return "Data mapper error: \(error.localizedDescription)"
         case .invalidURL:
             return "The provided URL is invalid."
         case .invalidRequest:
             return "The URL request could not be created."
-        case .noData:
-            return "No data was returned from the server."
         }
     }
 }

@@ -1,8 +1,8 @@
 //
 //  LogInRegistrModel.swift
-//  SGTS
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 03.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import UIKit

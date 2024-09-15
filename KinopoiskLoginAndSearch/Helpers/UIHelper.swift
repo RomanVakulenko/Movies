@@ -75,6 +75,15 @@ enum UIHelper {
         static let huge48px: CGFloat = 48
         static let huge56px: CGFloat = 56
     }
+
+    enum Images {
+//        magnifyingglass //system image
+//        chevron.down
+
+        static let logOffCyan24px = UIImage(named: "logOff24px") ?? UIImage()
+        static let sortCyan24px = UIImage(named: "sortCyan") ?? UIImage()
+
+    }
 }
 
 

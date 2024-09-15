@@ -1,40 +1,42 @@
 //
-//  AddressBookWorker.swift
-//  SGTS
+//  FilmsWorker.swift
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 29.05.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import Foundation
 
-protocol AddressBookWorkingLogic {
-    func getAllContacts(completion: @escaping (Result<[ContactListItem], OneContactDetailsModel.Errors>) -> Void)
+protocol FilmsWorkingLogic {
+    func loadFilmsFromNetwork(completion: @escaping (Result<TaskList, Error>) -> Void)
     func searchContacts(by query: String,
                         completion: @escaping (Result<[String], OneContactDetailsModel.Errors>) -> Void)
 }
 
 
-final class AddressBookWorker: AddressBookWorkingLogic {
+final class FilmsWorker: FilmsWorkingLogic {
 
     // MARK: - Private properties
+    private let networkManager: NetworkManagerProtocol
 
-    private let contactManager = ContactManager.shared.self
+    // MARK: - Init
+    init(networkManager: NetworkManagerProtocol) {
+        self.networkManager = networkManager
+    }
 
-    // MARK: - Public methods
-
-    func getAllContacts(completion: @escaping (Result<[ContactListItem], OneContactDetailsModel.Errors>) -> Void) {
-        contactManager.getAllContacts() { result in
+    func loadFilmsFromNetwork(completion: @escaping (Result<TaskList, Error>) -> Void) {
+        networkManager.loadData { [weak self] result in
             switch result {
-            case .success(let arrayOfContacts):
-                completion(.success(arrayOfContacts))
-
-            case .failure(_):
-                completion(.failure(.cantFetchAllContacts))
+            case .success(let taskList):
+                completion(.success(taskList))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
 
-    func searchContacts(by query: String,
+
+    func searchFilms(by query: String,
                         completion: @escaping (Result<[String], OneContactDetailsModel.Errors>) -> Void) {
         contactManager.searchContacts(by: query) { result in
             switch result {
@@ -48,3 +50,4 @@ final class AddressBookWorker: AddressBookWorkingLogic {
         }
     }
 }
+

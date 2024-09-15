@@ -1,27 +1,24 @@
 //
-//  OneEmailDetailsBuilder.swift
-//  SGTS
+//  OneFilmDetailsBuilder.swift
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 22.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import UIKit
 
-protocol OneEmailDetailsBuilderProtocol: AnyObject {
-    func getControllerWith(id: String, 
-                           messageTypeFromSideMenu: TabBarManager.MessageType) -> UIViewController
+protocol OneFilmDetailsBuilderProtocol: AnyObject {
+    func getControllerFor(film: OneFilm) -> UIViewController
 }
 
-final class OneEmailDetailsBuilder: OneEmailDetailsBuilderProtocol {
+final class OneFilmDetailsBuilder: OneFilmDetailsBuilderProtocol {
 
-    func getControllerWith(id: String, 
-                           messageTypeFromSideMenu: TabBarManager.MessageType) -> UIViewController {
-        let viewController = OneEmailDetailsController()
-        let interactor = OneEmailDetailsInteractor(mailUIDL: id, 
-                                                   messageTypeFromSideMenu: messageTypeFromSideMenu)
-        let presenter = OneEmailDetailsPresenter()
-        let worker = OneEmailDetailsWorker()
-        let router = OneEmailDetailsRouter()
+    func getControllerFor(film: OneFilm) -> UIViewController {
+        let viewController = OneFilmDetailsController()
+        let interactor = OneFilmDetailsInteractor(film: film)
+        let presenter = OneFilmDetailsPresenter()
+        let worker = OneFilmDetailsWorker()
+        let router = OneFilmDetailsRouter()
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter

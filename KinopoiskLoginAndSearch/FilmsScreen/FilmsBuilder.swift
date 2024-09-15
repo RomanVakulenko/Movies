@@ -1,8 +1,8 @@
 //
 //  FilmsBuilder.swift
-//  SGTS
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 29.05.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import UIKit
@@ -18,12 +18,12 @@ final class FilmsBuilder: FilmsBuilderProtocol {
         let viewController = FilmsController()
 
         let networkManager = NetworkManager(networkService: NetworkService(), mapper: DataMapper())
-        let networkWorker = FilmsNetworkWorker(networkManager: networkManager)
-        let interactor = FilmsInteractor(networkWorker: networkWorker)
+        let worker = FilmsWorker(networkManager: networkManager)
+        let interactor = FilmsInteractor()
 
         let presenter = FilmsPresenter()
-        let worker = FilmsWorker()
         let router = FilmsRouter()
+
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter

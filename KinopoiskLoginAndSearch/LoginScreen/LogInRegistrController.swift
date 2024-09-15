@@ -1,8 +1,8 @@
 //
 //  LogInRegistrController.swift
-//  SGTS
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 03.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 
@@ -73,8 +73,14 @@ extension LogInRegistrController: LogInRegistrDisplayLogic {
     }
 }
 
+
  // MARK: - LogInRegistrViewOutput
 extension LogInRegistrController: LogInRegistrViewOutput {
+
+    func useCurrent(loginText: String, passwordText: String) {
+        interactor?.useCurrent(loginText: loginText,
+                               passwordText: passwordText)
+    }
 
     func enterButtonTapped() {
         interactor?.enterButtonTapped(request: LogInRegistrFlow.OnEnterButtonTap.Request())

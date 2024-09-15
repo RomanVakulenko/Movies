@@ -1,28 +1,28 @@
 //
-//  OneEmailDetailsView.swift
-//  SGTS
+//  OneFilmDetailsView.swift
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 22.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import UIKit
 import SnapKit
 
-protocol OneEmailDetailsViewOutput: AnyObject,
+protocol OneFilmDetailsViewOutput: AnyObject,
                                     OneEmailDetailsUpperViewOutput,
                                     OneEmailAttachmentViewOutput,
                                     FotoCellViewModelOutput,
                                     OneEmailDetailsButtonsViewOutput { }
 
-protocol OneEmailDetailsViewLogic: UIView {
-    func update(viewModel: OneEmailDetailsModel.ViewModel)
-    func displayWaitIndicator(viewModel: OneEmailDetailsFlow.OnWaitIndicator.ViewModel)
+protocol OneFilmDetailsViewLogic: UIView {
+    func update(viewModel: OneFilmDetailsModel.ViewModel)
+    func displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel)
     
-    var output: OneEmailDetailsViewOutput? { get set }
+    var output: OneFilmDetailsViewOutput? { get set }
 }
 
 
-final class OneEmailDetailsView: UIView, OneEmailDetailsViewLogic, SpinnerDisplayable {
+final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplayable {
     
     private enum Constants {
         static let upperViewHeight165px: CGFloat = 1 + 88 + 8 + 67 + 1//1 - bottomSeparator
@@ -32,7 +32,7 @@ final class OneEmailDetailsView: UIView, OneEmailDetailsViewLogic, SpinnerDispla
 
     // MARK: - Public properties
 
-    weak var output: OneEmailDetailsViewOutput?
+    weak var output: OneFilmDetailsViewOutput?
 
     // MARK: - Private properties
 
@@ -81,7 +81,7 @@ final class OneEmailDetailsView: UIView, OneEmailDetailsViewLogic, SpinnerDispla
         return lbl
     }()
 
-    private(set) var viewModel: OneEmailDetailsModel.ViewModel?
+    private(set) var viewModel: OneFilmDetailsModel.ViewModel?
 
     private var tableViewHeight: CGFloat = 0
 
@@ -102,7 +102,7 @@ final class OneEmailDetailsView: UIView, OneEmailDetailsViewLogic, SpinnerDispla
     
     // MARK: - Public Methods
     
-    func update(viewModel: OneEmailDetailsModel.ViewModel) {
+    func update(viewModel: OneFilmDetailsModel.ViewModel) {
         self.viewModel = viewModel
         backgroundColor = viewModel.backViewColor
         backView.backgroundColor = viewModel.backViewColor
@@ -163,14 +163,10 @@ final class OneEmailDetailsView: UIView, OneEmailDetailsViewLogic, SpinnerDispla
             }
         }
 
-        if viewModel.hasFotos {
-            tableView.register(cellType: FotoCell.self)
-        }
-
         tableView.reloadData()
     }
     
-    func displayWaitIndicator(viewModel: OneEmailDetailsFlow.OnWaitIndicator.ViewModel) {
+    func displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel) {
         if viewModel.isShow {
             showSpinner()
         } else {
@@ -204,10 +200,10 @@ final class OneEmailDetailsView: UIView, OneEmailDetailsViewLogic, SpinnerDispla
     private func configure() {
         addSubviews()
         configureConstraints()
-        tableView.register(cellType: TextFieldCell.self)
-        tableView.register(cellType: CellWithWKWebView.self)
-        tableView.register(cellType: FotoCell.self)
-        tableView.register(cellType: SeparatorCell.self)
+//        tableView.register(cellType: TextFieldCell.self)
+//        tableView.register(cellType: CellWithWKWebView.self)
+//        tableView.register(cellType: FotoCell.self)
+//        tableView.register(cellType: SeparatorCell.self)
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = true
@@ -281,7 +277,7 @@ final class OneEmailDetailsView: UIView, OneEmailDetailsViewLogic, SpinnerDispla
 
 // MARK: - UITableViewDataSource
 
-extension OneEmailDetailsView: UITableViewDataSource {
+extension OneFilmDetailsView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -290,31 +286,31 @@ extension OneEmailDetailsView: UITableViewDataSource {
         return viewModel?.items.count ?? 0
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = viewModel?.items[indexPath.row].base
-
-        if let vm = item as? TextFieldCellViewModel {
-            let cell = tableView.dequeueReusableCell(for: indexPath) as TextFieldCell
-            cell.viewModel = vm
-            return cell
-        } else if let vm = item as? CellWithWKWebViewViewModel {
-            let cell = tableView.dequeueReusableCell(for: indexPath) as CellWithWKWebView
-//            cell.updateBodyHeightForWebView(height: 200) //todo: what height use??
-            cell.viewModel = vm
-            return cell
-        } else if let vm = item as? FotoCellViewModel {
-            let cell = tableView.dequeueReusableCell(for: indexPath) as FotoCell
-            cell.viewModel = vm
-            cell.viewModel?.output = output
-            return cell
-        } else if let vm = item as? SeparatorCellViewModel {
-            let cell = tableView.dequeueReusableCell(for: indexPath) as SeparatorCell
-            cell.viewModel = vm
-            return cell
-        } else {
-            return UITableViewCell()
-        }
-    }
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let item = viewModel?.items[indexPath.row].base
+//
+//        if let vm = item as? TextFieldCellViewModel {
+//            let cell = tableView.dequeueReusableCell(for: indexPath) as TextFieldCell
+//            cell.viewModel = vm
+//            return cell
+//        } else if let vm = item as? CellWithWKWebViewViewModel {
+//            let cell = tableView.dequeueReusableCell(for: indexPath) as CellWithWKWebView
+////            cell.updateBodyHeightForWebView(height: 200) //todo: what height use??
+//            cell.viewModel = vm
+//            return cell
+//        } else if let vm = item as? FotoCellViewModel {
+//            let cell = tableView.dequeueReusableCell(for: indexPath) as FotoCell
+//            cell.viewModel = vm
+//            cell.viewModel?.output = output
+//            return cell
+//        } else if let vm = item as? SeparatorCellViewModel {
+//            let cell = tableView.dequeueReusableCell(for: indexPath) as SeparatorCell
+//            cell.viewModel = vm
+//            return cell
+//        } else {
+//            return UITableViewCell()
+//        }
+//    }
 }
 
 

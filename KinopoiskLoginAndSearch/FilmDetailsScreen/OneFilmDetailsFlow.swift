@@ -1,37 +1,26 @@
 //
-//  OneEmailDetailsFlow.swift
-//  SGTS
+//  OneFilmDetailsFlow.swift
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 22.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import Foundation
 import UIKit
 
-enum OneEmailDetailsFlow {
+enum OneFilmDetailsFlow {
 
     enum Update {
 
         struct Request { }
 
         struct Response {
-            let emailModelWithNeededProperties: EmailMessageWithNeededProperties
-            let shouldUpdateButtons: Bool
-            let htmlInlineAttachments: [AttachmentModel]
-            let messageTypeFromSideMenu: TabBarManager.MessageType
+           
         }
 
-        typealias ViewModel = OneEmailDetailsModel.ViewModel
+        typealias ViewModel = OneFilmDetailsModel.ViewModel
     }
 
-    enum OnTrashNavBarIcon {
-
-        struct Request {}
-
-        struct Response {}
-
-        struct ViewModel {}
-    }
 
     enum RoutePayload {
 
@@ -42,7 +31,7 @@ enum OneEmailDetailsFlow {
         struct ViewModel {}
     }
 
-    enum OnChevronTapped {
+    enum OnWebLinkTap {
 
         struct Request {}
 
@@ -59,77 +48,6 @@ enum OneEmailDetailsFlow {
 
         struct ViewModel {}
     }
-
-
-    enum OnAttachedFileOrImageTapped {
-
-        struct Request {
-            var fotoViewModel: FotoCellViewModel?
-            var cloudEmailViewModel: CloudEmailAttachmentViewModel?
-        }
-
-        struct Response { }
-
-        struct ViewModel { }
-    }
-
-    enum OnDownloadIconOrToSaveAttachedFile {
-
-        struct Request {
-            var fotoViewModel: FotoCellViewModel?
-        }
-
-        struct Response {}
-
-        struct ViewModel {}
-    }
-
-    enum OnQuattroIcon {
-
-        struct Request {}
-
-        struct Response {}
-
-        struct ViewModel {}
-    }
-
-    enum OnEnvelopNavBarButton {
-        
-        struct Request {}
-
-        struct Response {}
-
-        struct ViewModel {}
-    }
-
-
-    enum OnReplyButton {
-
-        struct Request {}
-
-        struct Response {}
-
-        struct ViewModel {}
-    }
-
-    enum OnReplyToAllButton {
-
-        struct Request {}
-
-        struct Response {}
-
-        struct ViewModel {}
-    }
-
-    enum OnForwardButton {
-
-        struct Request {}
-
-        struct Response {}
-
-        struct ViewModel {}
-    }
-
 
     enum OnWaitIndicator {
 

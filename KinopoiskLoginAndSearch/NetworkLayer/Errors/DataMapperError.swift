@@ -12,11 +12,11 @@ enum DataMapperError: Error, CustomStringConvertible {
 
     var description: String {
         switch self {
-        ///Ошибка от сервера (HTTP-статус 4xx) или ошибка при парсинге данных.
+            
         case .failAtMapping:
             return """
-                   Не могу обновить данные.
-                   Что-то пошло не так
+                   Can not update.
+                   Something is wrong
                    """
         }
     }

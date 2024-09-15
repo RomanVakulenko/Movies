@@ -1,8 +1,8 @@
 //
 //  LogInRegistrView.swift
-//  SGTS
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 02.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import UIKit
@@ -10,6 +10,8 @@ import SnapKit
 
 protocol LogInRegistrViewOutput: AnyObject {
     func enterButtonTapped()
+    func useCurrent(loginText: String,
+                    passwordText: String)
 }
 
 protocol LogInRegistrViewLogic: UIView {
@@ -23,11 +25,7 @@ protocol LogInRegistrViewLogic: UIView {
 final class LogInRegistrView: UIView, LogInRegistrViewLogic {
 
     enum Constants {
-        static let borderWidth: CGFloat = UIHelper.Margins.small1px
-        static let cornerRadius: CGFloat = UIHelper.Margins.medium8px
         static let leftViewWidth: CGFloat = 15
-        static let fieldFontSize: CGFloat = UIHelper.Margins.medium16px
-        static let fieldsAndButtonHeight: CGFloat = UIHelper.Margins.large24px
         static let appTitleOffset: CGFloat = 128
     }
 
@@ -46,14 +44,15 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
         let textField = UITextField()
         textField.textColor = UIHelper.Color.gray
         textField.placeholder = GlobalConstants.loginPlaceholder
-        textField.font = UIFont(name: "SFUIDisplay-Regular", size: Constants.fieldFontSize)
+        textField.font = UIFont(name: "SFUIDisplay-Regular", size: GlobalConstants.fieldFontSize16px)
         textField.layer.borderColor = UIHelper.Color.gray.cgColor
-        textField.layer.borderWidth = Constants.borderWidth
-        textField.layer.cornerRadius = Constants.cornerRadius
+        textField.layer.borderWidth = GlobalConstants.borderWidth
+        textField.layer.cornerRadius = GlobalConstants.cornerRadius
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0,
                                                   width: Constants.leftViewWidth,
                                                   height: textField.frame.height))
         textField.leftViewMode = .always
+        textField.delegate = self
         return textField
     }()
 
@@ -61,21 +60,22 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
         let textField = UITextField()
         textField.textColor = UIHelper.Color.gray
         textField.placeholder = GlobalConstants.passwordPlaceholder
-        textField.font = UIFont(name: "SFUIDisplay-Regular", size: Constants.fieldFontSize)
+        textField.font = UIFont(name: "SFUIDisplay-Regular", size: GlobalConstants.fieldFontSize16px)
         textField.layer.borderColor = UIHelper.Color.gray.cgColor
-        textField.layer.borderWidth = Constants.borderWidth
-        textField.layer.cornerRadius = Constants.cornerRadius
+        textField.layer.borderWidth = GlobalConstants.borderWidth
+        textField.layer.cornerRadius = GlobalConstants.cornerRadius
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0,
                                                   width: Constants.leftViewWidth,
                                                   height: textField.frame.height))
         textField.leftViewMode = .always
         textField.isSecureTextEntry = true
+        textField.delegate = self
         return textField
     }()
 
     private lazy var enterButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.layer.cornerRadius = Constants.cornerRadius
+        btn.layer.cornerRadius = GlobalConstants.cornerRadius
         btn.addTarget(self, action: #selector(enterButton_touchUpInside(_:)), for: .touchUpInside)
         return btn
     }()
@@ -130,7 +130,6 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
     }
 
     private func configureConstraints() {
-        let view = self
         backView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
@@ -143,19 +142,19 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
         loginTextField.snp.makeConstraints {
             $0.centerY.equalTo(backView.snp.centerY)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(Constants.fieldsAndButtonHeight)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
         }
 
         passwordTextField.snp.makeConstraints {
             $0.top.equalTo(loginTextField.snp.bottom).offset(UIHelper.Margins.medium8px)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(Constants.fieldsAndButtonHeight)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
         }
 
         enterButton.snp.makeConstraints {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(-Constants.appTitleOffset)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(Constants.fieldsAndButtonHeight)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
         }
     }
 
@@ -167,5 +166,50 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
             $0.bottom.equalToSuperview().inset(insets.bottom)
             $0.trailing.equalToSuperview().inset(insets.right)
         }
+    }
+}
+
+
+// MARK: - UITextViewDelegate
+extension LogInRegistrView: UITextFieldDelegate {
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let currentText = textField.text as NSString? else { return true }
+
+        guard let cursorPosition = textField.selectedTextRange else { return true }
+        let updatedText = currentText.replacingCharacters(in: range, with: string)
+
+        // Устанавливаем текст в зависимости от текстового поля
+        if textField == self.loginTextField {
+            self.loginTextField.text = updatedText
+        } else if textField == self.passwordTextField {
+            self.passwordTextField.text = updatedText
+        }
+
+        output?.useCurrent(
+            loginText: self.loginTextField.text ?? "",
+            passwordText: self.passwordTextField.text ?? "")
+
+        // Вычисляем новое положение курсора
+        let currentCursorPosition = textField.offset(from: textField.beginningOfDocument, to: cursorPosition.start)
+        let newCursorPosition: Int
+
+        if string.isEmpty { // Если удаляем символ
+            newCursorPosition = max(currentCursorPosition - 1, 0)
+        } else { // Если вводим символ
+            newCursorPosition = currentCursorPosition + string.count
+        }
+
+        // Устанавливаем новое положение курсора
+        if let newPosition = textField.position(from: textField.beginningOfDocument, offset: newCursorPosition) {
+            textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+        }
+
+        return false
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

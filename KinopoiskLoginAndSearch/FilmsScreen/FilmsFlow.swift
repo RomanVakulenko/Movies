@@ -1,29 +1,29 @@
 //
 //  AddressBookFlow.swift
-//  SGTS
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 29.05.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import Foundation
 
-enum AddressBookFlow {
+enum FilmsScreenFlow {
 
     enum Update {
 
         struct Request {}
 
         struct Response {
-            let pickedEmailAddresses: [String]
-            let isCheckmarkBarIconActive: Bool
-            let emailsToShow: [String]
-            let allContactsSet: Set<ContactListItem>
-            let isMultiPickingMode: Bool
-            let doesAllEmailsContainPickedEmails: Bool
-            let typeOfSearch: TypeOfSearch
+//            let pickedEmailAddresses: [String]
+//            let isCheckmarkBarIconActive: Bool
+//            let emailsToShow: [String]
+//            let allContactsSet: Set<ContactListItem>
+//            let isMultiPickingMode: Bool
+//            let doesAllEmailsContainPickedEmails: Bool
+//            let typeOfSearch: TypeOfSearch
         }
 
-        typealias ViewModel = AddressBookModel.ViewModel
+        typealias ViewModel = FilmsModel.ViewModel
     }
 
     enum OnDidLoadViews {
@@ -35,7 +35,7 @@ enum AddressBookFlow {
         struct ViewModel {}
     }
 
-    enum OnBurgerMenuTap {
+    enum OnSortIconTap {
 
         struct Request {}
 
@@ -44,22 +44,20 @@ enum AddressBookFlow {
         struct ViewModel {}
     }
 
-    enum OnSearchNavBarIconTap {
+    enum OnSearchBarGlassIconTap {
 
         struct Request {
             let searchText: String?
-            let isSearchBarDisplaying: Bool
         }
 
         struct Response {
             let searchText: String?
-            let isSearchBarDisplaying: Bool
         }
 
         typealias ViewModel = SearchViewModel
     }
 
-    enum OnCheckmarkBarIconTap {
+    enum OnLogOffBarItemTap {
 
         struct Request {}
 
@@ -68,16 +66,11 @@ enum AddressBookFlow {
         struct ViewModel {}
     }
 
+    enum OnYearButtonTap {
 
-    enum OnAvatarTap {
+        struct Request {}
 
-        struct Request {
-            let onePickedEmailAddress: String
-        }
-
-        struct Response {
-            let somePickedEmailAddresses: Array<String>
-        }
+        struct Response {}
 
         struct ViewModel {}
     }
@@ -86,12 +79,9 @@ enum AddressBookFlow {
 
         struct Request {
             let id: String
-            let onePickedEmailAddress: String
         }
 
-        struct Response {
-            let somePickedEmailAddresses: Array<String>
-        }
+        struct Response {}
 
         struct ViewModel {}
     }

@@ -1,42 +1,41 @@
 //
-//  AddressBookView.swift
-//  SGTS
+//  FilmsView.swift
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 29.05.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import UIKit
 import SnapKit
 
-protocol AddressBookViewOutput: AnyObject,
-                                SearchViewOutput,
-                                ContactNameAndAddressCellViewModelOutput {
+protocol FilmsViewOutput: AnyObject,
+                          SearchViewOutput,
+                          FilmsCollectionCellViewModelOutput {
+    func didTapSortIcon()
+    func yearButtonTapped()
 }
 
-protocol AddressBookViewLogic: UIView {
-    func toggleSearchBar(viewModel: SearchViewModel)
-    func update(viewModel: AddressBookModel.ViewModel)
-    func displayWaitIndicator(viewModel: AddressBookFlow.OnWaitIndicator.ViewModel)
+protocol FilmsViewLogic: UIView {
 
-    var output: AddressBookViewOutput? { get set }
+    func update(viewModel: FilmsModel.ViewModel)
+    func displayWaitIndicator(viewModel: FilmsScreenFlow.OnWaitIndicator.ViewModel)
+
+    var output: FilmsViewOutput? { get set }
 }
 
-final class AddressBookView: UIView, AddressBookViewLogic, SpinnerDisplayable {
+final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
 
     // MARK: - Private properties
-    private enum Constants {
-        static let addHeightForSeparatorTo1pxTotal: CGFloat = 0.67
-    }
 
     private lazy var backView: UIView = {
         let view = UIView()
-        view.clipsToBounds = true
         return view
     }()
 
-    private lazy var separatorView: UIView = {
-        let line = UIView()
-        return line
+    private(set) lazy var sortView: UIImageView = {
+        let view = UIImageView()
+        view.isUserInteractionEnabled = true
+        return view
     }()
 
     private lazy var searchView: SearchView = {
@@ -44,9 +43,17 @@ final class AddressBookView: UIView, AddressBookViewLogic, SpinnerDisplayable {
         return view
     }()
 
+    private lazy var yearButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.backgroundColor = .clear
+        btn.layer.cornerRadius = GlobalConstants.cornerRadius
+        btn.addTarget(self, action: #selector(yearButton_touchUpInside(_:)), for: .touchUpInside)
+        return btn
+    }()
+
     private let tableView = UITableView()
 
-    private(set) var viewModel: AddressBookModel.ViewModel?
+    private(set) var viewModel: FilmsModel.ViewModel?
 
 
     // MARK: - Init
@@ -56,60 +63,36 @@ final class AddressBookView: UIView, AddressBookViewLogic, SpinnerDisplayable {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         configure()
-        backgroundColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
+        backgroundColor = .none
     }
 
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    weak var output: AddressBookViewOutput?
+    weak var output: FilmsViewOutput?
 
     // MARK: - Public Methods
 
-    func update(viewModel: AddressBookModel.ViewModel) {
+    func update(viewModel: FilmsModel.ViewModel) {
         self.viewModel = viewModel
-
         self.layer.backgroundColor = viewModel.backViewColor.cgColor
         backView.layer.backgroundColor = viewModel.backViewColor.cgColor
-        separatorView.layer.borderWidth = UIHelper.Margins.small1px
-        separatorView.layer.borderColor = viewModel.separatorColor.cgColor
+        sortView.image = viewModel.sortIcon
+
+        searchView.viewModel = viewModel.searchViewModel
+        searchView.update(viewModel: viewModel.searchViewModel)
+        searchView.output = output
+
+        if yearButton.titleLabel?.attributedText != viewModel.yearButtonText { //fixes flashing at update
+            yearButton.setAttributedTitle(viewModel.yearButtonText, for: .normal)
+        }
+        updateConstraints(insets: viewModel.insets)
 
         tableView.reloadData()
     }
 
-    func toggleSearchBar(viewModel: SearchViewModel) {
-        if viewModel.isSearchBarDisplaying {
-            backView.addSubview(searchView)
-
-            separatorView.snp.remakeConstraints {
-                $0.top.equalTo(backView.snp.top)
-                $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(UIHelper.Margins.small1px)
-            }
-
-            searchView.snp.makeConstraints {
-                $0.top.equalTo(separatorView.snp.bottom)
-                $0.leading.trailing.equalToSuperview()
-            }
-
-            tableView.snp.remakeConstraints {
-                $0.top.equalTo(searchView.snp.bottom)
-                $0.leading.trailing.bottom.equalToSuperview()
-            }
-        } else {
-            searchView.removeFromSuperview()
-            tableView.snp.remakeConstraints {
-                $0.top.equalTo(separatorView.snp.bottom)
-                $0.leading.trailing.bottom.equalToSuperview()
-            }
-        }
-        searchView.viewModel = viewModel
-        searchView.update(viewModel: viewModel)
-        searchView.output = output
-    }
-
-    func displayWaitIndicator(viewModel: AddressBookFlow.OnWaitIndicator.ViewModel) {
+    func displayWaitIndicator(viewModel: FilmsScreenFlow.OnWaitIndicator.ViewModel) {
         if viewModel.isShow {
             showSpinner()
         } else {
@@ -117,50 +100,85 @@ final class AddressBookView: UIView, AddressBookViewLogic, SpinnerDisplayable {
         }
     }
 
+
+    // MARK: - Actions
+
+    @objc func didTapSort_touchUpInside(_ sender: UIButton) {
+        output?.didTapSortIcon()
+    }
+
+    @objc func yearButton_touchUpInside(_ sender: UIButton) {
+        output?.yearButtonTapped()
+    }
+
     // MARK: - Private Methods
 
     private func configure() {
         addSubviews()
         configureConstraints()
-        tableView.register(cellType: ContactNameAndAddressCell.self)
+        tableView.register(cellType: FilmsTableCell.self)
         tableView.dataSource = self
-        tableView.separatorStyle = .singleLine
+        tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = true
         tableView.showsHorizontalScrollIndicator = false
         tableView.isUserInteractionEnabled = true
         tableView.delaysContentTouches = false
+
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSort_touchUpInside(_:)))
+        sortView.isUserInteractionEnabled = true
+        sortView.addGestureRecognizer(tapGestureRecognizer)
     }
 
     private func addSubviews() {
         self.addSubview(backView)
-        [separatorView, tableView].forEach { backView.addSubview($0) }
+        [sortView, searchView, yearButton, tableView].forEach { backView.addSubview($0) }
     }
 
     private func configureConstraints() {
         let view = self
-
         backView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.leading.trailing.equalToSuperview()
         }
 
-        separatorView.snp.makeConstraints {
-            $0.top.equalTo(backView.snp.top)
+        sortView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview()
+            $0.height.width.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+        }
+
+        searchView.snp.makeConstraints {
+            $0.top.trailing.equalToSuperview()
+            $0.leading.equalTo(sortView.snp.trailing).offset(UIHelper.Margins.small4px)
+        }
+
+        yearButton.snp.makeConstraints {
+            $0.top.equalTo(searchView.snp.bottom).offset(UIHelper.Margins.medium8px)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(UIHelper.Margins.small1px)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
         }
 
         tableView.snp.makeConstraints {
-            $0.top.equalTo(separatorView.snp.bottom)
+            $0.top.equalTo(yearButton.snp.bottom).offset(UIHelper.Margins.medium16px)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
+    
+    ///Must have the same set of constraints as makeConstraints method
+    private func updateConstraints(insets: UIEdgeInsets) {
+        backView.snp.updateConstraints {
+            $0.top.equalToSuperview().offset(insets.top)
+            $0.leading.equalToSuperview().offset(insets.left)
+            $0.bottom.equalToSuperview().inset(insets.bottom)
+            $0.trailing.equalToSuperview().inset(insets.right)
+        }
+    }
+
 }
 
 // MARK: - UITableViewDataSource
 
-extension AddressBookView: UITableViewDataSource {
+extension FilmsView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -172,8 +190,8 @@ extension AddressBookView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = viewModel?.items[indexPath.row].base
 
-        if let vm = item as? ContactNameAndAddressCellViewModel {
-            let cell = tableView.dequeueReusableCell(for: indexPath) as ContactNameAndAddressCell
+        if let vm = item as? FilmsTableCellViewModel {
+            let cell = tableView.dequeueReusableCell(for: indexPath) as FilmsTableCell
             cell.viewModel = vm
             cell.viewModel?.output = output
             return cell

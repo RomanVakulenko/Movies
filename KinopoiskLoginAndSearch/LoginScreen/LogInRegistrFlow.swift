@@ -1,8 +1,8 @@
 //
 //  LogInRegistrFlow.swift
-//  SGTS
+//  KinopoiskLoginAndSearch
 //
-//  Created by Roman Vakulenko on 03.04.2024.
+//  Created by Roman Vakulenko on 14.09.2024.
 //
 
 import Foundation
@@ -13,10 +13,7 @@ enum LogInRegistrFlow {
 
         struct Request {}
         
-        struct Response {
-            let login: String
-            let password: String
-        }
+        struct Response {}
 
         typealias ViewModel = LogInRegistrModel.ViewModel
     }

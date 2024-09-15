@@ -8,9 +8,9 @@
 import Foundation
 
 protocol FilmsWorkingLogic {
-    func loadFilmsFromNetwork(completion: @escaping (Result<TaskList, Error>) -> Void)
-    func searchContacts(by query: String,
-                        completion: @escaping (Result<[String], OneContactDetailsModel.Errors>) -> Void)
+//    func loadFilmsFromNetwork(completion: @escaping (Result<TaskList, Error>) -> Void)
+//    func searchContacts(by query: String,
+//                        completion: @escaping (Result<[String], OneContactDetailsModel.Errors>) -> Void)
 }
 
 
@@ -24,30 +24,30 @@ final class FilmsWorker: FilmsWorkingLogic {
         self.networkManager = networkManager
     }
 
-    func loadFilmsFromNetwork(completion: @escaping (Result<TaskList, Error>) -> Void) {
-        networkManager.loadData { [weak self] result in
-            switch result {
-            case .success(let taskList):
-                completion(.success(taskList))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
-
-    func searchFilms(by query: String,
-                        completion: @escaping (Result<[String], OneContactDetailsModel.Errors>) -> Void) {
-        contactManager.searchContacts(by: query) { result in
-            switch result {
-            case .success(let foundContacts):
-                let filteredEmails = foundContacts.map { $0.email.lowercased() }
-                completion(.success(filteredEmails))
-
-            case .failure(_):
-                completion(.failure(.cantSearchContacts))
-            }
-        }
-    }
+//    func loadFilmsFromNetwork(completion: @escaping (Result<TaskList, Error>) -> Void) {
+//        networkManager.loadData { [weak self] result in
+//            switch result {
+//            case .success(let taskList):
+//                completion(.success(taskList))
+//            case .failure(let error):
+//                completion(.failure(error))
+//            }
+//        }
+//    }
+//
+//
+//    func searchFilms(by query: String,
+//                        completion: @escaping (Result<[String], OneContactDetailsModel.Errors>) -> Void) {
+//        contactManager.searchContacts(by: query) { result in
+//            switch result {
+//            case .success(let foundContacts):
+//                let filteredEmails = foundContacts.map { $0.email.lowercased() }
+//                completion(.success(filteredEmails))
+//
+//            case .failure(_):
+//                completion(.failure(.cantSearchContacts))
+//            }
+//        }
+//    }
 }
 

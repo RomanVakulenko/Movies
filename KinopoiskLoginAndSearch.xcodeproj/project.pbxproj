@@ -66,6 +66,8 @@
 		ADB40B9E2C95EF4700AAAAE9 /* LogInRegistrWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B9D2C95EF4700AAAAE9 /* LogInRegistrWorker.swift */; };
 		ADF8855B2C974E99000E24DD /* StillCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8855A2C974E99000E24DD /* StillCollectionCell.swift */; };
 		ADF8855D2C974EEE000E24DD /* StillCollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */; };
+		ADF885642C978241000E24DD /* Films.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF885632C978241000E24DD /* Films.swift */; };
+		ADF885672C9782CD000E24DD /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF885662C9782CD000E24DD /* Images.swift */; };
 		D6C9A8175BF1E55093E1FD64 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F68FE39B056B88AB2ECEB329 /* Pods_KinopoiskLoginAndSearch.framework */; };
 /* End PBXBuildFile section */
 
@@ -133,6 +135,8 @@
 		ADB40B9D2C95EF4700AAAAE9 /* LogInRegistrWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInRegistrWorker.swift; sourceTree = "<group>"; };
 		ADF8855A2C974E99000E24DD /* StillCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillCollectionCell.swift; sourceTree = "<group>"; };
 		ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillCollectionCellViewModel.swift; sourceTree = "<group>"; };
+		ADF885632C978241000E24DD /* Films.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Films.swift; sourceTree = "<group>"; };
+		ADF885662C9782CD000E24DD /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		F68FE39B056B88AB2ECEB329 /* Pods_KinopoiskLoginAndSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KinopoiskLoginAndSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -218,9 +222,10 @@
 			children = (
 				ADB40B1F2C95987600AAAAE9 /* AppDelegate.swift */,
 				ADB40B212C95987600AAAAE9 /* SceneDelegate.swift */,
-				ADB40B3C2C95A4B800AAAAE9 /* Protocols */,
 				ADB40B5F2C95B02800AAAAE9 /* KeychainAndPreferences */,
+				ADB40B3C2C95A4B800AAAAE9 /* Protocols */,
 				ADB40B352C95A41B00AAAAE9 /* NetworkLayer */,
+				ADF885622C97820F000E24DD /* Models */,
 				AD6BA6F42C9609A5002458CF /* Cells and Views */,
 				ADB40B622C95BF6200AAAAE9 /* LoginScreen */,
 				ADB40B872C95C35C00AAAAE9 /* FilmsScreen */,
@@ -344,6 +349,15 @@
 				ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */,
 			);
 			path = OneFilmCollectionCell;
+			sourceTree = "<group>";
+		};
+		ADF885622C97820F000E24DD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ADF885632C978241000E24DD /* Films.swift */,
+				ADF885662C9782CD000E24DD /* Images.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -485,6 +499,7 @@
 				AD6BA6EA2C960073002458CF /* FilmsTableCellViewModel.swift in Sources */,
 				ADB40B6F2C95BFEF00AAAAE9 /* LogInRegistrFlow.swift in Sources */,
 				ADF8855B2C974E99000E24DD /* StillCollectionCell.swift in Sources */,
+				ADF885642C978241000E24DD /* Films.swift in Sources */,
 				ADB40B562C95AB4100AAAAE9 /* KeychainKino.swift in Sources */,
 				ADB40B532C95A6F000AAAAE9 /* UIHelper.swift in Sources */,
 				ADB40B812C95C35600AAAAE9 /* FilmsFlow.swift in Sources */,
@@ -506,6 +521,7 @@
 				ADB40B5C2C95ABB000AAAAE9 /* KeyсhainWrapper.swift in Sources */,
 				ADB40B732C95BFEF00AAAAE9 /* LogInRegistrModel.swift in Sources */,
 				ADB40B942C95C3FE00AAAAE9 /* OneFilmDetailsController.swift in Sources */,
+				ADF885672C9782CD000E24DD /* Images.swift in Sources */,
 				ADB40B822C95C35600AAAAE9 /* FilmsBuilder.swift in Sources */,
 				ADB40B6D2C95BFEF00AAAAE9 /* LogInRegistrBuilder.swift in Sources */,
 				ADF8855D2C974EEE000E24DD /* StillCollectionCellViewModel.swift in Sources */,

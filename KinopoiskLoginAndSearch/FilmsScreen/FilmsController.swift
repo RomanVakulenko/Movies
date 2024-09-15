@@ -116,7 +116,7 @@ extension FilmsController: FilmsViewOutput {
     }
 
     func yearButtonTapped() {
-        <#code#>
+//        <#code#>
     }
 
     func didTapAOneFilm(_ viewModel: FilmsTableCellViewModel) {

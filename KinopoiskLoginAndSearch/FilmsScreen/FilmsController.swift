@@ -106,6 +106,10 @@ extension FilmsController: FilmsDisplayLogic {
 // MARK: - AddressBookViewOutput
 
 extension FilmsController: FilmsViewOutput {
+    func loadNextTwentyFilms() {
+        interactor?.loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request())
+    }
+
     func didTapAtSearchIconInSearchView(searchText: String) {
         interactor?.didTapSearchBarIcon(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request(searchText: searchText))
     }

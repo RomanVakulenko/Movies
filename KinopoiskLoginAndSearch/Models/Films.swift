@@ -40,6 +40,20 @@ struct Genre: Codable {
     let genre: String
 }
 
+struct DetailsFilmDTO: Codable {
+    let kinopoiskId: Int
+    let nameOriginal: String
+    let coverUrl: String?
+    let ratingKinopoisk: Double
+    let webUrl: String
+    let description: String
+    let shortDescription: String
+    let countries: [Country]
+    let genres: [Genre]
+    let startYear: Int
+    let endYear: Int
+}
+
 
 // MARK: - Business
 
@@ -57,32 +71,57 @@ struct Films {
 
 struct OneFilm {
     let kinopoiskId: Int
-    let imdbId: String?
     let nameRu: String?
     let nameEn: String?
     let nameOriginal: String
     let countries: [Country]
     let genres: [Genre]
     let ratingKinopoisk: Double?
-    let ratingImdb: Double?
     let year: Int
-    let type: String
-    let posterUrl: String
     let posterUrlPreview: String
+    var cachedAvatarPath: String?
 
     init(from dto: OneFilmDTO) {
         self.kinopoiskId = dto.kinopoiskId
-        self.imdbId = dto.imdbId
         self.nameRu = dto.nameRu
         self.nameEn = dto.nameEn
         self.nameOriginal = dto.nameOriginal
         self.countries = dto.countries
         self.genres = dto.genres
         self.ratingKinopoisk = dto.ratingKinopoisk
-        self.ratingImdb = dto.ratingImdb
         self.year = dto.year
-        self.type = dto.type
-        self.posterUrl = dto.posterUrl
         self.posterUrlPreview = dto.posterUrlPreview
+        self.cachedAvatarPath = nil
+    }
+}
+
+
+struct DetailsFilm {
+    let kinopoiskId: Int
+    let nameOriginal: String
+    var coverUrl: String?
+    let ratingKinopoisk: Double
+    let webUrl: String
+    let description: String
+    let shortDescription: String
+    let countries: [Country]
+    let genres: [Genre]
+    let startYear: Int
+    let endYear: Int
+    var cachedStillsPaths: [String]?
+
+    init(from dto: DetailsFilmDTO) {
+        self.kinopoiskId = dto.kinopoiskId
+        self.nameOriginal = dto.nameOriginal
+        self.coverUrl = dto.coverUrl
+        self.ratingKinopoisk = dto.ratingKinopoisk
+        self.webUrl = dto.webUrl
+        self.description = dto.description
+        self.shortDescription = dto.shortDescription
+        self.countries = dto.countries
+        self.genres = dto.genres
+        self.startYear = dto.startYear
+        self.endYear = dto.endYear
+        self.cachedStillsPaths = nil
     }
 }

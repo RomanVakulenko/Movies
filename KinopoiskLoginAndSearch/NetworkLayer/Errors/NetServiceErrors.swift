@@ -9,9 +9,10 @@ import Foundation
 
 
 enum NetServiceError: Error, LocalizedError {
+    case canNotCreateRequest
     case badInternetConnection
     case badStatusCode(Int)
-    case unknownError
+    case serverError
     case invalidToken
     case requestLimitExceeded
     case movieNotFound
@@ -20,12 +21,14 @@ enum NetServiceError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
+        case .canNotCreateRequest:
+            return "Some problem at creating URLRequest."
         case .badInternetConnection:
             return "Unable to update data. Please check your internet connection."
         case .badStatusCode(let statusCode):
             return "Unable to update data. Received status code: \(statusCode)."
-        case .unknownError:
-            return "An unknown error occurred."
+        case .serverError:
+            return "A serverError error occurred."
         case .invalidToken:
             return "Error 401: Invalid or missing token."
         case .requestLimitExceeded:

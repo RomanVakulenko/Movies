@@ -8,17 +8,23 @@
 import UIKit
 
 protocol OneFilmDetailsBuilderProtocol: AnyObject {
-    func getControllerFor(film: OneFilm) -> UIViewController
+    func getControllerFor(filmId: Int) -> UIViewController
 }
 
 final class OneFilmDetailsBuilder: OneFilmDetailsBuilderProtocol {
 
-    func getControllerFor(film: OneFilm) -> UIViewController {
+    func getControllerFor(filmId: Int) -> UIViewController {
         let viewController = OneFilmDetailsController()
-        let interactor = OneFilmDetailsInteractor(film: film)
+
+        let networkManager = NetworkManager(networkService: NetworkService(),
+                                            mapper: DataMapper(),
+                                            cacheManager: CacheManager())
+        let worker = OneFilmDetailsWorker(networkManager: networkManager)
+        let interactor = OneFilmDetailsInteractor(filmId: filmId)
+
         let presenter = OneFilmDetailsPresenter()
-        let worker = OneFilmDetailsWorker()
         let router = OneFilmDetailsRouter()
+
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter

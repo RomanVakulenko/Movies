@@ -8,48 +8,24 @@
 import Foundation
 
 
-final class EndPont {
-    private init() {}
-    static var shared = EndPont()
+enum KinopoiskAPI {
+    static let baseURL = "https://kinopoiskapiunofficial.tech/api/v2.2/films"
+    static let apiKey = "e366973a-2ae8-4a4e-94f2-c67f51da6d62"
 
-    private var baseURL: String {
-        return "https://kinopoiskapiunofficial.tech/api/v2.2/films/"
-    }
+    case filmDetails(filmId: Int)
+    case filmsByPage(page: Int, order: String = "RATING", type: String = "ALL", ratingFrom: Int = 0, ratingTo: Int = 10, yearFrom: Int = 1900, yearTo: Int = 2030)
+    case filmImages(filmId: Int, type: String = "STILL", page: Int)
 
-    func urlFor(variant: Variant) -> URL? {
-        var urlComponents = URLComponents(string: baseURL + variant.path)
-        urlComponents?.queryItems = variant.queryItems
-        return urlComponents?.url
-    }
-}
+    var urlString: String {
+        switch self {
+        case .filmDetails(let filmId):
+            return "\(KinopoiskAPI.baseURL)/\(filmId)"
 
-extension EndPont {
-
-    enum Variant {
-        case id
-        case images
-
-        var path: String {
-            switch self {
-            case .id:
-                return "77044"
-            case .images:
-                return "https://kinopoiskapiunofficial.tech/api/v2.2/films/77044/images?page=" //дописывать страницу 1, 2. и т/д/
-            }
-        }
-
-        var queryItems: [URLQueryItem] {
-            switch self {
-            case .pricesForLatest:
-                return [
-                    URLQueryItem(name: "currency", value: "rub"),
-                    URLQueryItem(name: "period_type", value: "year"),
-                    URLQueryItem(name: "page", value: "1"),
-                    URLQueryItem(name: "limit", value: "30"),
-                    URLQueryItem(name: "show_to_affiliates", value: "false"),
-                    URLQueryItem(name: "token", value: Use.token)
-                ]
-            }
+        case .filmsByPage(let page, let order, let type, let ratingFrom, let ratingTo, let yearFrom, let yearTo):
+            return "\(KinopoiskAPI.baseURL)?order=\(order)&type=\(type)&ratingFrom=\(ratingFrom)&ratingTo=\(ratingTo)&yearFrom=\(yearFrom)&yearTo=\(yearTo)&page=\(page)"
+            
+        case .filmImages(let filmId, let type, let page):
+            return "\(KinopoiskAPI.baseURL)/\(filmId)/images?type=\(type)&page=\(page)"
         }
     }
 }

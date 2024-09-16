@@ -17,7 +17,9 @@ final class FilmsBuilder: FilmsBuilderProtocol {
     func getController() -> UIViewController {
         let viewController = FilmsController()
 
-        let networkManager = NetworkManager(networkService: NetworkService(), mapper: DataMapper())
+        let networkManager = NetworkManager(networkService: NetworkService(), 
+                                            mapper: DataMapper(), 
+                                            cacheManager: CacheManager())
         let worker = FilmsWorker(networkManager: networkManager)
         let interactor = FilmsInteractor()
 

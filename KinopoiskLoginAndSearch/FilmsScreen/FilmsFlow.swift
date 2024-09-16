@@ -14,13 +14,7 @@ enum FilmsScreenFlow {
         struct Request {}
 
         struct Response {
-//            let pickedEmailAddresses: [String]
-//            let isCheckmarkBarIconActive: Bool
-//            let emailsToShow: [String]
-//            let allContactsSet: Set<ContactListItem>
-//            let isMultiPickingMode: Bool
-//            let doesAllEmailsContainPickedEmails: Bool
-//            let typeOfSearch: TypeOfSearch
+            let filmsSortedFiltered: [OneFilm]?
         }
 
         typealias ViewModel = FilmsModel.ViewModel
@@ -36,6 +30,18 @@ enum FilmsScreenFlow {
     }
 
     enum OnSortIconTap {
+
+        struct Request {
+            let isSorredByIncreasing: Bool
+        }
+
+        struct Response {}
+
+        struct ViewModel {}
+    }
+
+
+    enum OnLoadRequest {
 
         struct Request {}
 
@@ -68,7 +74,9 @@ enum FilmsScreenFlow {
 
     enum OnYearButtonTap {
 
-        struct Request {}
+        struct Request {
+            let year: Int
+        }
 
         struct Response {}
 

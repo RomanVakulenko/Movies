@@ -13,6 +13,7 @@ protocol FilmsViewOutput: AnyObject,
                           FilmsCollectionCellViewModelOutput {
     func didTapSortIcon()
     func yearButtonTapped()
+    func loadNextTwentyFilms()
 }
 
 protocol FilmsViewLogic: UIView {
@@ -118,6 +119,7 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
         configureConstraints()
         tableView.register(cellType: FilmsTableCell.self)
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = true
         tableView.showsHorizontalScrollIndicator = false
@@ -173,7 +175,6 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
             $0.trailing.equalToSuperview().inset(insets.right)
         }
     }
-
 }
 
 // MARK: - UITableViewDataSource
@@ -200,4 +201,24 @@ extension FilmsView: UITableViewDataSource {
         }
     }
 
+}
+
+
+extension FilmsView: UITableViewDelegate {
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let tableView = scrollView as? UITableView else { return }
+
+        let visibleRows = tableView.indexPathsForVisibleRows?.count ?? 0
+        let totalRows = tableView.numberOfRows(inSection: 0)
+
+        if totalRows > 0 && visibleRows > 0 {
+            let lastVisibleIndex = tableView.indexPathsForVisibleRows?.last?.row ?? 0
+
+            // Проверяем, если 11 ячейка из каждых 20 показана
+            if lastVisibleIndex >= totalRows - (totalRows / 2) || (lastVisibleIndex % 20 == 10) {
+                output?.loadNextTwentyFilms()
+            }
+        }
+    }
 }

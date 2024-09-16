@@ -35,7 +35,7 @@ extension NetworkService: NetworkServiceProtocol {
                 if error.domain == NSURLErrorDomain || error.code == NSURLErrorTimedOut {
                     netError = .badInternetConnection
                 } else {
-                    netError = .unknownError
+                    netError = .serverError
                 }
                 DispatchQueue.main.async { completion(.failure(netError)) }
                 return
@@ -43,12 +43,28 @@ extension NetworkService: NetworkServiceProtocol {
 
             if let httpResponse = response as? HTTPURLResponse {
                 let statusCode = httpResponse.statusCode
-                if (400...499).contains(statusCode) {
-                    DispatchQueue.main.async { completion(.failure(.badStatusCode)) }
+
+                switch statusCode {
+                case 401:
+                    DispatchQueue.main.async { completion(.failure(.invalidToken)) }
                     return
-                } else if (500...599).contains(statusCode) {
-                    DispatchQueue.main.async { completion(.failure(.badInternetConnection)) }
+                case 402:
+                    DispatchQueue.main.async { completion(.failure(.requestLimitExceeded)) }
                     return
+                case 404:
+                    DispatchQueue.main.async { completion(.failure(.movieNotFound)) }
+                    return
+                case 429:
+                    DispatchQueue.main.async { completion(.failure(.tooManyRequests)) }
+                    return
+                case 400...499:
+                    DispatchQueue.main.async { completion(.failure(.badStatusCode(statusCode))) }
+                    return
+                case 500...599:
+                    DispatchQueue.main.async { completion(.failure(.serverError)) }
+                    return
+                default:
+                    break
                 }
             }
 
@@ -60,5 +76,4 @@ extension NetworkService: NetworkServiceProtocol {
             DispatchQueue.main.async { completion(.success(data)) }
         }.resume()
     }
-
 }

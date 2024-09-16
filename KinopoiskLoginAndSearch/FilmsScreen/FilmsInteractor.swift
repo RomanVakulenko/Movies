@@ -17,10 +17,11 @@ protocol FilmsBusinessLogic {
 
     func filterByYear(request: FilmsScreenFlow.OnYearButtonTap.Request)
     func onCellTap(request: FilmsScreenFlow.OnSelectItem.Request)
+    func loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request)
 }
 
 protocol FilmsDataStore: AnyObject {
-    var oneFilmForOpenDetails: ContactListItem { get }
+    var idOfSelectedFilm: Int? { get }
 }
 
 final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
@@ -29,67 +30,51 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
 
     var presenter: FilmsPresentationLogic?
     var worker: FilmsWorkingLogic?
-
-    var allFilms: Set<ContactListItem> = []
-    var oneFilmForOpenDetails = ContactListItem()
-//    var typeOfSearch: TypeOfSearch
-    
+    var idOfSelectedFilm: Int?
 
     // MARK: - Private properties
     private var isSearchingAtSearchField = false
-    private var emailsToShow: [String] {
-        get {
-            if isSearchingAtSearchField == true {
-                return filteredFilms
-            } else {
-                return allEmailsArray
-            }
-        }
-    }
 
-    private var allEmailsArray: [String] = []
-    private var filteredFilms: [String] = []
-    private var allEmailsSet: Set<String> = []
+    private var filmsSortedFiltered: [OneFilm] = []
+    private var isSortedDescending = true
+    private var isFilteredByYear = false
+    private var yearForFilter = 0
 
     // MARK: - Public methods
 
     func onDidLoadViews(request: FilmsScreenFlow.OnDidLoadViews.Request) {
         presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: true))
-        worker?.getFilms(){ [weak self] result in
+        
+        worker?.loadFilms{ [weak self] result in
             guard let self = self else { return }
             presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
 
             switch result {
             case .success(let films):
-                Log.i("Contacts got successfully")
-                allEmailsArray = contacts.map { $0.email.lowercased() }
-                allEmailsSet = Set(allEmailsArray)
-
-                allContactsSet = Set(contacts.map { ContactListItem(withEmailLowercased: $0) })
-
-                if typeOfSearch == .server { //if came from sideMenu
-                    isSearchBarDisplaying = true
-                    presenter?.presentSearchBar(response: FilmsScreenFlow.OnSearchBarGlassIconTap.Response(
-                        searchText: nil,
-                        isSearchBarDisplaying: isSearchBarDisplaying))
-                }
+                filmsSortedFiltered = films.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 }
                 presenterDoUpdate()
 
             case .failure(let failure):
-                Log.e(failure.localizedDescription)
                 presenter?.presentAlert(response: FilmsScreenFlow.AlertInfo.Response(error: failure))
             }
         }
     }
 
-    func didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request) {
-//        <#code#>
+    func loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request) {
+
     }
 
+    func didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request) {
+        isSortedDescending.toggle()
+        sortOrFilterFilms()
+    }
 
     func filterByYear(request: FilmsScreenFlow.OnYearButtonTap.Request) {
-//        <#code#>
+        yearForFilter = request.year
+        isFilteredByYear = true
+        sortOrFilterFilms()
     }
+
 
     func didTapSearchBarIcon(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request) {
         guard let searchingText = request.searchText else { return }
@@ -122,6 +107,7 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
     }
 
     func onCellTap(request: FilmsScreenFlow.OnSelectItem.Request) {
+        idOfSelectedFilm
 //        if let oneFilmDetails = allContactsSet.first(where: { $0.uid == request.id }) {
 //            oneContactInfoForOpenDetails = oneContactDetails
 //            presenter?.presentRouteToOneFilmDetails(response: FilmsScreenFlow.RoutePayload.Response())
@@ -134,14 +120,31 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
 
     //MARK: - Private methods
 
+    private func sortOrFilterFilms() {
+        let sortedAndFiltered: [OneFilm]
+
+        if isFilteredByYear {
+            sortedAndFiltered = filmsSortedFiltered.filter { film in
+                film.year == yearForFilter
+            }
+        } else {
+            sortedAndFiltered = filmsSortedFiltered
+        }
+
+        sortedAndFiltered.sort { film1, film2 in
+            let rating1 = film1.ratingKinopoisk ?? 0.0
+            let rating2 = film2.ratingKinopoisk ?? 0.0
+
+            if rating1 == rating2 {
+                return film1.nameOriginal < film2.nameOriginal
+            }
+            return isSortedDescending ? rating1 > rating2 : rating1 < rating2
+        }
+        presenterDoUpdate()
+    }
+
+
     private func presenterDoUpdate() {
-//        presenter?.presentUpdate(response: FilmsScreenFlow.Update.Response(
-//            pickedEmailAddresses: pickedEmailAddresses,
-//            isCheckmarkBarIconActive: isCheckmarkBarIconActive,
-//            emailsToShow: emailsToShow,
-//            allContactsSet: allContactsSet,
-//            isMultiPickingMode: isMultiPickingMode,
-//            doesAllEmailsContainPickedEmails: doesAllEmailsContainPickedEmails,
-//            typeOfSearch: typeOfSearch))
+        presenter?.presentUpdate(response: FilmsScreenFlow.Update.Response(filmsSortedFiltered: filmsSortedFiltered))
     }
 }

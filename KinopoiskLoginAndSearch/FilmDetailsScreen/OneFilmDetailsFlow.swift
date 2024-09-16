@@ -15,7 +15,8 @@ enum OneFilmDetailsFlow {
         struct Request { }
 
         struct Response {
-           
+            let film: DetailsFilm
+            let stills: [OneStill]?
         }
 
         typealias ViewModel = OneFilmDetailsModel.ViewModel
@@ -35,7 +36,9 @@ enum OneFilmDetailsFlow {
 
         struct Request {}
 
-        struct Response {}
+        struct Response {
+            let webUrl: String
+        }
 
         struct ViewModel {}
     }

@@ -10,26 +10,24 @@ import UIKit
 
 enum OneFilmDetailsModel {
 
-    enum Errors: Error {
-        case cantFetchOneEmail
-        case errorAtCreatingFolder
-        case errorAtAddingToFolder
-        case errorAtMovingToFolder
-        case errorAtDeleting
-    }
-
     struct ViewModel {
-        let navBarBackground: UIColor
         let backViewColor: UIColor
-        let navBar: CustomNavBar
-        let separatorColor: UIColor
-        let hasAttachment: Bool
-        let hasFotos: Bool
-        
+        let backArrow: UIImage
+        let coverView: UIImage
+        let linkIcon: UIImage
+
+        let filmTitle: NSAttributedString
+        let filmRating: NSAttributedString
+        let descriptionTitle: NSAttributedString
+
+        let descriptionText: NSAttributedString
+        let genres: NSAttributedString
+        let yearsAndCountries: NSAttributedString
+
+        let stillTitle: NSAttributedString
+
         let views: [AnyDifferentiable]
         let items: [AnyDifferentiable]
-        
-        let swipeInstructionTextLabel: NSAttributedString
     }
 
 }

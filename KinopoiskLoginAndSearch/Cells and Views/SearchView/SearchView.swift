@@ -29,33 +29,20 @@ final class SearchView: UIView, SearchViewLogic {
 
     // MARK: - Private properties
 
-    private enum Constants {
-        static let heightOfBackViewForSearch72px: CGFloat = 72
-    }
-
     private lazy var backView: UIView = {
         let view = UIView()
         return view
     }()
 
-    private lazy var topSeparatorAtSearchBar: UIView = {
-        let line = UIView()
-        return line
-    }()
-
     private(set) lazy var searchBar: UISearchBar = {
         let view = UISearchBar()
         view.delegate = self
-        view.searchTextField.font = UIHelper.Font.RobotoRegular16
+        view.searchTextField.font = UIHelper.Font.InterMedium14
         view.searchTextField.leftView = nil
         view.showsCancelButton = false
         return view
     }()
 
-    private lazy var bottomSeparatorAtSearchBar: UIView = {
-        let line = UIView()
-        return line
-    }()
 
     // MARK: - Init
 
@@ -82,13 +69,16 @@ final class SearchView: UIView, SearchViewLogic {
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
             textfield.textColor = viewModel.searchTextColor
             textfield.backgroundColor = viewModel.backColor
-            textfield.layer.cornerRadius = UIHelper.Margins.medium8px
-            textfield.layer.borderColor = viewModel.separatorColor.cgColor
-            textfield.layer.borderWidth = UIHelper.Margins.small1px
+            textfield.layer.cornerRadius = GlobalConstants.cornerRadius
+            textfield.layer.borderColor = UIHelper.Color.gray.cgColor
+            textfield.layer.borderWidth = GlobalConstants.borderWidth
 
             let searchIconView = UIImageView(image: viewModel.searchIcon)
             searchIconView.contentMode = .scaleAspectFit
-            searchIconView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+            searchIconView.frame = CGRect(x: 0, 
+                                          y: 0,
+                                          width: UIHelper.Margins.large20px,
+                                          height: UIHelper.Margins.large20px)
             textfield.rightView = searchIconView
             textfield.clearButtonMode = .never
             textfield.rightViewMode = .always
@@ -98,8 +88,6 @@ final class SearchView: UIView, SearchViewLogic {
             searchIconView.addGestureRecognizer(tapGestureRecognizer)
 
         }
-        bottomSeparatorAtSearchBar.backgroundColor = viewModel.separatorColor
-
         updateConstraints(insets: viewModel.insets)
     }
 
@@ -120,27 +108,25 @@ final class SearchView: UIView, SearchViewLogic {
 
     private func addSubviews() {
         self.addSubview(backView)
-        [topSeparatorAtSearchBar, searchBar, bottomSeparatorAtSearchBar].forEach { backView.addSubview($0) }
-
+        backView.addSubview(searchBar)
     }
 
     private func configureConstraints() {
+        let view = self
+
         backView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(Constants.heightOfBackViewForSearch72px)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+//            $0.bottom.equalToSuperview()
+            $0.height.equalTo(UIHelper.Margins.huge56px)
         }
 
         searchBar.snp.makeConstraints {
             $0.top.equalTo(backView.snp.top)
-            $0.leading.equalTo(backView.snp.leading).offset(UIHelper.Margins.medium8px)
-            $0.trailing.equalTo(backView.snp.trailing).inset(UIHelper.Margins.medium8px)
+            $0.leading.equalTo(backView.snp.leading)
+            $0.trailing.equalTo(backView.snp.trailing)
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(UIHelper.Margins.huge40px)
-        }
-
-        bottomSeparatorAtSearchBar.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(UIHelper.Margins.small1px)
+            $0.height.equalTo(UIHelper.Margins.large24px)
         }
     }
 

@@ -17,14 +17,16 @@ struct SearchViewModel {
     let searchText: String
     let searchTextColor: UIColor
     let searchIcon: UIImage
+    let insets: UIEdgeInsets
 
-    init(id: AnyHashable, backColor: UIColor, searchBarAttributedPlaceholder: NSAttributedString, searchText: String, searchIcon: UIImage, searchTextColor: UIColor) {
+    init(id: AnyHashable, backColor: UIColor, searchBarAttributedPlaceholder: NSAttributedString, searchText: String, searchIcon: UIImage, searchTextColor: UIColor, insets: UIEdgeInsets) {
         self.id = id
         self.backColor = backColor
         self.searchBarAttributedPlaceholder = searchBarAttributedPlaceholder
         self.searchText = searchText
         self.searchIcon = searchIcon
         self.searchTextColor = searchTextColor
+        self.insets = insets
     }
 }
 
@@ -38,7 +40,8 @@ extension SearchViewModel: Differentiable {
         source.searchBarAttributedPlaceholder == searchBarAttributedPlaceholder &&
         source.searchText == searchText &&
         source.searchIcon == searchIcon &&
-        source.searchTextColor == searchTextColor
+        source.searchTextColor == searchTextColor &&
+        source.insets == insets
     }
 }
 

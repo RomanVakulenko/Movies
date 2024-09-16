@@ -121,7 +121,7 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
     //MARK: - Private methods
 
     private func sortOrFilterFilms() {
-        let sortedAndFiltered: [OneFilm]
+        var sortedAndFiltered: [OneFilm]
 
         if isFilteredByYear {
             sortedAndFiltered = filmsSortedFiltered.filter { film in
@@ -145,6 +145,8 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
 
 
     private func presenterDoUpdate() {
-        presenter?.presentUpdate(response: FilmsScreenFlow.Update.Response(filmsSortedFiltered: filmsSortedFiltered))
+        presenter?.presentUpdate(response: FilmsScreenFlow.Update.Response(
+            filmsSortedFiltered: filmsSortedFiltered,
+            yearForFilterAt: yearForFilter))
     }
 }

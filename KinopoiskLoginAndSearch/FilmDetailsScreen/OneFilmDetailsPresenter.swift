@@ -232,31 +232,4 @@ final class OneFilmDetailsPresenter: OneFilmDetailsPresentationLogic {
         return fotoCellVMs
     }
 
-
-
-    // MARK: - makeAttributedTextTitleAndAdresses
-
-    private func makeAttributedTextTitleAndAdresses(title: String, array: [String]) -> NSMutableAttributedString {
-        let attributedTitle = NSAttributedString(
-            string: title,
-            attributes: Theme.shared.isLight ? UIHelper.Attributed.grayAlpha06LRobotoSemiBold14 : UIHelper.Attributed.whiteDarkDRobotoSemiBold14)
-
-        let allCombinedAttributedEmailsAndCommas = NSMutableAttributedString()
-        allCombinedAttributedEmailsAndCommas.append(attributedTitle)
-
-        for email in array {
-            let attributedOneEmail = NSAttributedString(
-                string: email,
-                attributes: Theme.shared.isLight ? UIHelper.Attributed.grayAlpha06RobotoRegular14 : UIHelper.Attributed.whiteDarkDRobotoRegular14)
-            let attrinbutedComma = NSAttributedString(
-                string: ", ", //TODO make text and comma together (don't separate them)
-                attributes: Theme.shared.isLight ? UIHelper.Attributed.grayAlpha06RobotoRegular14 : UIHelper.Attributed.whiteDarkDRobotoRegular14)
-
-            allCombinedAttributedEmailsAndCommas.append(attributedOneEmail)
-            allCombinedAttributedEmailsAndCommas.append(attrinbutedComma)
-        }
-        return allCombinedAttributedEmailsAndCommas
-    }
-
-
 }

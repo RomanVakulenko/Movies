@@ -16,13 +16,13 @@ protocol StillCollectionCellViewModelOutput: AnyObject {
 
 struct StillCollectionCellViewModel {
     let id: String
-    let still: UIImage?
+    let stillImage: UIImage?
 
     weak var output: StillCollectionCellViewModelOutput?
 
-    init(id: String, still: UIImage?, output: StillCollectionCellViewModelOutput? = nil) {
+    init(id: String, stillImage: UIImage?, output: StillCollectionCellViewModelOutput? = nil) {
         self.id = id
-        self.still = still
+        self.stillImage = stillImage
         self.output = output
     }
 
@@ -38,6 +38,6 @@ extension StillCollectionCellViewModel: Differentiable {
     }
 
     func isContentEqual(to source: StillCollectionCellViewModel) -> Bool {
-        source.still == still
+        source.stillImage == stillImage
     }
 }

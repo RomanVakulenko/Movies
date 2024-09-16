@@ -1,5 +1,5 @@
 //
-//  AddressBookFlow.swift
+//  FilmsScreenFlow.swift
 //  KinopoiskLoginAndSearch
 //
 //  Created by Roman Vakulenko on 14.09.2024.
@@ -15,9 +15,21 @@ enum FilmsScreenFlow {
 
         struct Response {
             let filmsSortedFiltered: [OneFilm]?
+            let yearForFilterAt: Int
         }
 
         typealias ViewModel = FilmsModel.ViewModel
+    }
+
+    enum UpdateSearch {
+
+        struct Request {}
+
+        struct Response {
+            let searchText: String?
+        }
+
+        typealias ViewModel = SearchViewModel
     }
 
     enum OnDidLoadViews {

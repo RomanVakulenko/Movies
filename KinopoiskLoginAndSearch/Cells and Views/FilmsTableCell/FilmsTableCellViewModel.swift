@@ -8,12 +8,12 @@
 import Foundation
 import DifferenceKit
 
-protocol FilmsCollectionCellViewModelOutput: AnyObject {
+protocol FilmsTableCellViewModelOutput: AnyObject {
     func didTapAOneFilm(_ viewModel: FilmsTableCellViewModel)
 }
 
 struct FilmsTableCellViewModel {
-    let id: String
+    let filmId: String
 //    let cellBackColor: UIColor
     let filmImage: UIImage?
     let filmTitle: NSAttributedString
@@ -21,12 +21,12 @@ struct FilmsTableCellViewModel {
     let rating: NSAttributedString
     let insets: UIEdgeInsets
 
-    weak var output: FilmsCollectionCellViewModelOutput?
+    weak var output: FilmsTableCellViewModelOutput?
 
-    init(id: String, 
+    init(filmId: String,
 //         cellBackColor: UIColor,
-         filmImage: UIImage?, filmTitle: NSAttributedString, subtitle: NSAttributedString, rating: NSAttributedString, insets: UIEdgeInsets, output: FilmsCollectionCellViewModelOutput? = nil) {
-        self.id = id
+         filmImage: UIImage?, filmTitle: NSAttributedString, subtitle: NSAttributedString, rating: NSAttributedString, insets: UIEdgeInsets, output: FilmsTableCellViewModelOutput? = nil) {
+        self.filmId = filmId
 //        self.cellBackColor = cellBackColor
         self.filmImage = filmImage
         self.filmTitle = filmTitle
@@ -44,7 +44,7 @@ struct FilmsTableCellViewModel {
 
 extension FilmsTableCellViewModel: Differentiable {
     var differenceIdentifier: String {
-        id
+        filmId
     }
 
     func isContentEqual(to source: FilmsTableCellViewModel) -> Bool {

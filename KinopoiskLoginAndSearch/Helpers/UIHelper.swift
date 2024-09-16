@@ -12,33 +12,18 @@ import UIKit
 enum UIHelper {
     
     enum Attributed {
-        //Both
-        static let none: [NSAttributedString.Key: Any] = [.font: Font.none, .foregroundColor: UIColor.clear]
-        
-        static let systemBlueInterBold18: [NSAttributedString.Key: Any] = [.font: Font.InterBold18, .foregroundColor: UIColor.systemBlue]
+        static let grayMedium14: [NSAttributedString.Key: Any] = [.font: Font.InterMedium14, .foregroundColor: UIColor.gray]
 
         static let whiteInterBold18: [NSAttributedString.Key: Any] = [.font: Font.InterBold18, .foregroundColor: UIColor.white]
 
-        static let whiteMedium16: [NSAttributedString.Key: Any] = [.font: Font.InterMedium16, .foregroundColor: UIColor.white]
+        static let cyanSomeBold18: [NSAttributedString.Key: Any] = [.font: Font.InterBold18, .foregroundColor: Color.cyanSome]
 
         static let cyanSomeBold22: [NSAttributedString.Key: Any] = [.font: Font.InterBold22, .foregroundColor: Color.cyanSome]
-
-        static let systemBlueInterBold18StrikedBlack: [NSAttributedString.Key: Any] = [
-            .font: Font.InterBold18,
-            .foregroundColor: UIColor.black,
-            .strikethroughStyle: NSUnderlineStyle.single.rawValue]
-
-        static let systemBlueInterBold18Black: [NSAttributedString.Key: Any] = [
-            .font: Font.InterBold18,
-            .foregroundColor: UIColor.black]
     }
     
     enum Font {
-        static let none = UIFont.systemFont(ofSize: 1, weight: .ultraLight)
-        
-        static let InterBold14 = UIFont(name: "Inter-Bold", size: 14) ?? UIFont.systemFont(ofSize: 14, weight: .bold)
-        static let InterMedium16 = UIFont(name: "Inter-Medium", size: 16) ?? UIFont.systemFont(ofSize: 14, weight: .medium)
-        static let InterBold18 = UIFont(name: "Inter-Bold", size: 18) ?? UIFont.systemFont(ofSize: 16, weight: .bold)
+        static let InterMedium14 = UIFont(name: "Inter-Medium", size: 14) ?? UIFont.systemFont(ofSize: 14, weight: .medium)
+        static let InterBold18 = UIFont(name: "Inter-Bold", size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .bold)
         static let InterBold22 = UIFont(name: "Inter-Bold", size: 22) ?? UIFont.systemFont(ofSize: 22, weight: .bold)
     }
     
@@ -77,7 +62,8 @@ enum UIHelper {
     }
 
     enum Images {
-//        magnifyingglass //system image
+        //system images
+//        magnifyingglass
 //        chevron.down
 
         static let logOffCyan24px = UIImage(named: "logOff24px") ?? UIImage()

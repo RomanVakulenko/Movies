@@ -10,14 +10,14 @@ import SnapKit
 
 protocol FilmsViewOutput: AnyObject,
                           SearchViewOutput,
-                          FilmsCollectionCellViewModelOutput {
+                          FilmsTableCellViewModelOutput {
     func didTapSortIcon()
     func yearButtonTapped()
     func loadNextTwentyFilms()
 }
 
 protocol FilmsViewLogic: UIView {
-
+    func updateSearchView(viewModel: SearchViewModel)
     func update(viewModel: FilmsModel.ViewModel)
     func displayWaitIndicator(viewModel: FilmsScreenFlow.OnWaitIndicator.ViewModel)
 
@@ -48,6 +48,7 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
         let btn = UIButton(type: .system)
         btn.backgroundColor = .clear
         btn.layer.cornerRadius = GlobalConstants.cornerRadius
+        btn.layer.borderColor = UIHelper.Color.gray.cgColor
         btn.addTarget(self, action: #selector(yearButton_touchUpInside(_:)), for: .touchUpInside)
         return btn
     }()
@@ -75,15 +76,17 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
 
     // MARK: - Public Methods
 
+    func updateSearchView(viewModel: SearchViewModel) {
+        searchView.viewModel = viewModel
+        searchView.update(viewModel: viewModel)
+        searchView.output = output
+    }
+
     func update(viewModel: FilmsModel.ViewModel) {
         self.viewModel = viewModel
         self.layer.backgroundColor = viewModel.backViewColor.cgColor
         backView.layer.backgroundColor = viewModel.backViewColor.cgColor
         sortView.image = viewModel.sortIcon
-
-        searchView.viewModel = viewModel.searchViewModel
-        searchView.update(viewModel: viewModel.searchViewModel)
-        searchView.output = output
 
         if yearButton.titleLabel?.attributedText != viewModel.yearButtonText { //fixes flashing at update
             yearButton.setAttributedTitle(viewModel.yearButtonText, for: .normal)

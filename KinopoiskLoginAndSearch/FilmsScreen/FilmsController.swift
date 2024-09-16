@@ -10,6 +10,8 @@ import SnapKit
 
 protocol FilmsDisplayLogic: AnyObject {
     func displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel)
+    func displaySearchView(viewModel: FilmsScreenFlow.UpdateSearch.ViewModel)
+
     func displayWaitIndicator(viewModel: FilmsScreenFlow.OnWaitIndicator.ViewModel)
     func displayAlert(viewModel: FilmsScreenFlow.AlertInfo.ViewModel)
 
@@ -74,6 +76,10 @@ final class FilmsController: UIViewController, AlertDisplayable, NavigationBarCo
 
 extension FilmsController: FilmsDisplayLogic {
 
+    func displaySearchView(viewModel: FilmsScreenFlow.UpdateSearch.ViewModel) {
+        contentView.updateSearchView(viewModel: viewModel)
+    }
+
 
     func displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel) {
         if didNavBarSet == false {
@@ -116,7 +122,8 @@ extension FilmsController: FilmsViewOutput {
     
 
     func didTapSortIcon() {
-        interactor?.didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request())
+        interactor?.didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request(
+            isSorredByIncreasing: <#Bool#>))
     }
 
     func yearButtonTapped() {
@@ -124,7 +131,7 @@ extension FilmsController: FilmsViewOutput {
     }
 
     func didTapAOneFilm(_ viewModel: FilmsTableCellViewModel) {
-        interactor?.onCellTap(request: FilmsScreenFlow.OnSelectItem.Request(id: viewModel.id))
+        interactor?.onCellTap(request: FilmsScreenFlow.OnSelectItem.Request(id: viewModel.filmId))
     }
 
     

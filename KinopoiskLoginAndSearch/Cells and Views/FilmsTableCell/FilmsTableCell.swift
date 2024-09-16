@@ -54,6 +54,14 @@ final class FilmsTableCell: BaseTableViewCell<FilmsTableCellViewModel> {
 
     // MARK: - Public methods
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        filmImageView.image = nil
+        filmTitle.text = nil
+        subtitle.text = nil
+        rating.text = nil
+    }
+
     override func update(with viewModel: FilmsTableCellViewModel) {
         contentView.backgroundColor = .none
         filmImageView.image = viewModel.filmImage

@@ -59,9 +59,11 @@ final class NetworkManager {
     }
 
 
-    private func downloadAndCacheFilmsAvatars(for films: inout [OneFilm],
+    private func downloadAndCacheFilmsAvatars(for films: [OneFilm],
                                               completion: @escaping (Result<[OneFilm], NetServiceError>) -> Void) {
         let group = DispatchGroup()
+        var films = films
+
         for index in films.indices {
             guard let imageUrl = URL(string: films[index].posterUrlPreview) else { continue }
 
@@ -91,12 +93,13 @@ final class NetworkManager {
     }
 
 
-    private func downloadAndCacheCover(for detailsFilm: inout DetailsFilm,
+    private func downloadAndCacheCover(for detailsFilm: DetailsFilm,
                                        completion: @escaping (Result<DetailsFilm, NetServiceError>) -> Void) {
         guard let imageUrl = URL(string: detailsFilm.coverUrl ?? "") else {
             completion(.success(detailsFilm))
             return
         }
+        var detailsFilm = detailsFilm
         // Есть ли в кэше
         if let cachedData = cacheManager.getObject(forKey: imageUrl.absoluteString as NSString) {
             print("Image loaded from cache for detailsFilm: \(detailsFilm.nameOriginal)")
@@ -120,9 +123,11 @@ final class NetworkManager {
     }
 
 
-    private func downloadAndCacheStills(for stills: inout [OneStill],
+    private func downloadAndCacheStills(for stills: [OneStill],
                                         completion: @escaping (Result<[OneStill], NetServiceError>) -> Void) {
         let group = DispatchGroup()
+        var stills = stills
+
         for index in stills.indices {
             guard let imageUrl = URL(string: stills[index].previewURL ?? "") else { continue }
 
@@ -176,7 +181,7 @@ extension NetworkManager: NetworkManagerProtocol {
                         var films = decodedFilmsDTO.items.map { OneFilm(from: $0) }
                         self.fetchedFilmsCount += films.count
 
-                        self.downloadAndCacheFilmsAvatars(for: &films) { result in
+                        self.downloadAndCacheFilmsAvatars(for: films) { result in
                             switch result {
                             case .success(let filmsWithAvatars):
                                 completion(.success(filmsWithAvatars))
@@ -211,7 +216,7 @@ extension NetworkManager: NetworkManagerProtocol {
                     switch result {
                     case .success(let decodedDetailsFilmDTO):
                         var film = DetailsFilm(from: decodedDetailsFilmDTO)
-                        self.downloadAndCacheCover(for: &film) { result in
+                        self.downloadAndCacheCover(for: film) { result in
                             switch result {
                             case .success(let filmWithCover):
                                 completion(.success(filmWithCover))
@@ -255,7 +260,7 @@ extension NetworkManager: NetworkManagerProtocol {
                         var stills = decodedStillsDTO.items.map { OneStill(from: $0) }
                         self.maxStills = decodedStillsDTO.total
                         
-                        self.downloadAndCacheStills(for: &stills){ result in
+                        self.downloadAndCacheStills(for: stills){ result in
                             switch result {
                             case .success(let stills):
                                 self.amountOfFetchedStills = stills.count

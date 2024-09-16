@@ -13,7 +13,7 @@ protocol FilmsPresentationLogic {
     func presentRouteBackToLoginScreen(response: FilmsScreenFlow.OnSelectItem.Response)
     func presentRouteToOneFilmDetails(response: FilmsScreenFlow.RoutePayload.Response)
 
-    func presentSearchBar(response: FilmsScreenFlow.OnSearchBarGlassIconTap.Response)
+    func presentSearchBar(response: FilmsScreenFlow.UpdateSearch.Response)
     func presentUpdate(response: FilmsScreenFlow.Update.Response)
 
     func presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response)
@@ -26,6 +26,7 @@ final class FilmsPresenter: FilmsPresentationLogic {
 
     enum Constants {
         static let mainImageWidthHeight: CGFloat = 45
+        static let searchViewId: Int = 1
     }
 
     // MARK: - Public properties
@@ -46,30 +47,31 @@ final class FilmsPresenter: FilmsPresentationLogic {
         }
     }
 
-    func presentSearchBar(response: FilmsScreenFlow.OnSearchBarGlassIconTap.Response) {
+    func presentSearchBar(response: FilmsScreenFlow.UpdateSearch.Response) {
         DispatchQueue.global(qos: .default).async { [weak self] in
             guard let self = self else { return }
-            let backColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
-            let separatorColor = Theme.shared.isLight ? UIHelper.Color.grayLightL : UIHelper.Color.grayStrongD
+            let backColor = UIHelper.Color.almostBlack
 
-            let searchBarAttributedPlaceholder = NSAttributedString(string: getString(.searchViewPlaceholder), attributes: Theme.shared.isLight ? UIHelper.Attributed.grayLRobotoRegular16 : UIHelper.Attributed.grayRegularD2RobotoRegular16)
+            let searchBarAttributedPlaceholder = NSAttributedString(
+                string: GlobalConstants.searchBarPlaceholder,
+                attributes: UIHelper.Attributed.grayMedium14)
 
             let searchText = response.searchText ?? ""
-            let searchTextColor = Theme.shared.isLight ? UIHelper.Color.blackMiddleL : UIHelper.Color.whiteStrong
-            let searchIcon = Theme.shared.isLight ? UIHelper.Image.searchIcon24x24L : UIHelper.Image.searchIcon24x24D
+            let searchTextColor = UIHelper.Color.gray
+            let searchIcon = UIImage(systemName: "magnifyingglass")
 
             DispatchQueue.main.async { [weak self] in
-                self?.viewController?.toggleSearchBar(viewModel: FilmsScreenFlow.OnSearchBarGlassIconTap.ViewModel(
-                    id: 11,
+                self?.viewController?.displaySearchView(viewModel: FilmsScreenFlow.UpdateSearch.ViewModel(
+                    id: Constants.searchViewId,
                     backColor: backColor,
-                    isSearchBarDisplaying: response.isSearchBarDisplaying,
                     searchBarAttributedPlaceholder: searchBarAttributedPlaceholder,
                     searchText: searchText,
-                    searchIcon: searchIcon,
+                    searchIcon: searchIcon ?? UIImage(),
                     searchTextColor: searchTextColor,
-                    separatorColor: separatorColor,
-                    insets: .zero)
-                )
+                    insets: UIEdgeInsets(top: UIHelper.Margins.medium16px,
+                                         left: 0,
+                                         bottom: 0,
+                                         right: 0)))
             }
         }
     }
@@ -77,122 +79,84 @@ final class FilmsPresenter: FilmsPresentationLogic {
 
     func presentUpdate(response: FilmsScreenFlow.Update.Response) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            let backColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
-            let separatorColor = Theme.shared.isLight ? UIHelper.Color.grayLightL : UIHelper.Color.grayStrongD
+            guard let self = self,
+                  let films = response.filmsSortedFiltered else { return }
 
-            var tableItems: [AnyDifferentiable] = []
-
-            var textForScreenTitle = getString(.searchContacts)
-            if response.pickedEmailAddresses.count > 0 && response.typeOfSearch == .server {
-                textForScreenTitle = String(response.pickedEmailAddresses.count)
-            } else if response.typeOfSearch == .database  {
-                textForScreenTitle = getString(.addressBookScreenTitle)
-            }
+            let backColor = UIHelper.Color.almostBlack
+            var textForScreenTitle = GlobalConstants.appTitle
             let screenTitle = NSAttributedString(
                 string: textForScreenTitle,
-                attributes: Theme.shared.isLight ? UIHelper.Attributed.blackStrongLRobotoMedium18 : UIHelper.Attributed.whiteStrongRobotoMedium18)
+                attributes: UIHelper.Attributed.cyanSomeBold22)
 
-            var checkmarkNavBarIcon: NavBarButton
-            var navBar: CustomNavBar
 
-            var tabBarTitle: String?
-            var tabBarImage: UIImage?
-            var tabBarSelectedImage: UIImage?
-
-            switch response.typeOfSearch {
-            case .database:
-                if response.isCheckmarkBarIconActive {
-                    checkmarkNavBarIcon = NavBarButton(image: UIHelper.Image.addressBookGreenCheckmarkNavBarIcon24x24Both)
-                } else {
-                    checkmarkNavBarIcon = NavBarButton(image: Theme.shared.isLight ? UIHelper.Image.addressBookCheckmarkNavBarIcon24x24L : UIHelper.Image.addressBookCheckmarkNavBarIcon24x24D)
-                }
-                let searchNavBarIcon = NavBarButton(image: Theme.shared.isLight ? UIHelper.Image.searchIcon24x24L : UIHelper.Image.searchIcon24x24D)
-                navBar = CustomNavBar(title: screenTitle,
+            var rightNavBarItem = NavBarButton(image: UIHelper.Images.logOffCyan24px)
+            var navBar = CustomNavBar(title: screenTitle,
                                       isLeftBarButtonEnable: true,
                                       isLeftBarButtonCustom: false,
                                       leftBarButtonCustom: nil,
-                                      rightBarButtons: [checkmarkNavBarIcon, searchNavBarIcon])
+                                      rightBarButtons: [rightNavBarItem])
 
-            case .server: //sandwich
-                let sandwichNavBarIcon = NavBarButton(image: Theme.shared.isLight ? UIHelper.Image.emailSandwichL : UIHelper.Image.emailSandwichD)
 
-                var planeNavBarIcon: NavBarButton
-                if response.isMultiPickingMode == true {
-                    planeNavBarIcon = NavBarButton(image: Theme.shared.isLight ? UIHelper.Image.newEmailCreatePlaneNavBarIconL : UIHelper.Image.newEmailCreatePlaneNavBarIconD)
-                } else {
-                    planeNavBarIcon = NavBarButton(image: nil)
+            let attachmentFilter = NSTextAttachment()
+            attachmentFilter.image = UIImage(systemName: "chevron.down")
+            attachmentFilter.bounds = CGRect(x: 0,
+                                              y: -UIHelper.Margins.small2px,
+                                              width: UIHelper.Margins.large20px,
+                                              height: UIHelper.Margins.large20px)
+
+            let filterAndChevron = NSAttributedString(attachment: attachmentFilter)
+            let filterMutableAttributedString = NSMutableAttributedString(
+                string: String(response.yearForFilterAt) + " ",
+                attributes: UIHelper.Attributed.grayMedium14)
+            filterMutableAttributedString.append(filterAndChevron)
+
+            let sortIcon = UIHelper.Images.sortCyan24px
+
+            var tableItems: [AnyDifferentiable] = []
+            var dictEmailMessage: Dictionary<Int,FilmsTableCellViewModel> = [:]
+
+            let group = DispatchGroup()
+            var lock = os_unfair_lock_s()
+
+            for (index, film) in films.enumerated() {
+                group.enter()
+                makeOneFilmCell(film: film, index: index) { (makeOneFilmCellViewModel, index) in
+                    os_unfair_lock_lock(&lock)
+                    dictEmailMessage[index] = makeOneFilmCellViewModel //чтобы одновременного обращения к словарю не было
+                    os_unfair_lock_unlock(&lock)
+                    group.leave()
                 }
-                navBar = CustomNavBar(title: screenTitle,
-                                      isLeftBarButtonEnable: true,
-                                      isLeftBarButtonCustom: true,
-                                      leftBarButtonCustom: sandwichNavBarIcon,
-                                      rightBarButtons: [planeNavBarIcon])
-
-                tabBarTitle = TabBarManager.makeTitleImageAndSelectedImageForTabItem(messageType: .searchContactsAtServer).0
-                tabBarImage = TabBarManager.makeTitleImageAndSelectedImageForTabItem(messageType: .searchContactsAtServer).1
-                tabBarSelectedImage = TabBarManager.makeTitleImageAndSelectedImageForTabItem(messageType: .searchContactsAtServer).2
             }
 
+            group.notify(queue: DispatchQueue.global()) {
+                for index in 0...dictEmailMessage.count - 1 {
+                    if let contactCellVM = dictEmailMessage[index] {
+                        tableItems.append(AnyDifferentiable(contactCellVM))
+                    }
+                }
+                self.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
 
-            if response.emailsToShow.isEmpty {
                 DispatchQueue.main.async { [weak self] in
                     self?.viewController?.displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel(
                         backViewColor: backColor,
                         navBarBackground: backColor,
                         navBar: navBar,
-                        separatorColor: separatorColor,
-                        tabBarTitle: tabBarTitle,
-                        tabBarImage: tabBarImage,
-                        tabBarSelectedImage: tabBarSelectedImage,
-                        items: tableItems))
-                }
-            } else {
-                var dictEmailMessage: Dictionary<Int,ContactNameAndAddressCellViewModel> = [:]
-
-                let group = DispatchGroup()
-                var lock = os_unfair_lock_s()
-
-                for (index, emailToShow) in response.emailsToShow.enumerated() {
-                    group.enter()
-                    makeOneAddressAndNameCell(response: response,
-                                              emailToShow: emailToShow,
-                                              backViewColor: backColor,
-                                              index: index) { (contactNameAndAddressCellViewModel, index) in
-                        os_unfair_lock_lock(&lock)
-                        dictEmailMessage[index] = contactNameAndAddressCellViewModel //чтобы одновременного обращения к словарю не было
-                        os_unfair_lock_unlock(&lock)
-                        group.leave()
-                    }
-                }
-
-                group.notify(queue: DispatchQueue.global()) {
-                    for index in 0...dictEmailMessage.count - 1 {
-                        if let contactCellVM = dictEmailMessage[index] {
-                            tableItems.append(AnyDifferentiable(contactCellVM))
-                        }
-                    }
-                    self.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
-                    DispatchQueue.main.async { [weak self] in
-                        self?.viewController?.displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel(
-                            backViewColor: backColor,
-                            navBarBackground: backColor,
-                            navBar: navBar,
-                            separatorColor: separatorColor,
-                            tabBarTitle: tabBarTitle,
-                            tabBarImage: tabBarImage,
-                            tabBarSelectedImage: tabBarSelectedImage,
-                            items: tableItems))
-                    }
+                        yearButtonText: filterMutableAttributedString,
+                        sortIcon: sortIcon,
+                        items: tableItems,
+                        insets: UIEdgeInsets(top: 0,
+                                             left: UIHelper.Margins.medium16px,
+                                             bottom: 0,
+                                             right: UIHelper.Margins.medium16px)))
                 }
             }
         }
     }
 
     func presentAlert(response: FilmsScreenFlow.AlertInfo.Response) {
-        let title = getString(.error)
+        let title = GlobalConstants.error
         let text = response.error.localizedDescription
-        let buttonTitle = getString(.closeAction)
+        let buttonTitle = GlobalConstants.ok
 
         DispatchQueue.main.async { [weak self] in
             self?.viewController?.displayAlert(viewModel: FilmsScreenFlow.AlertInfo.ViewModel(
@@ -210,68 +174,43 @@ final class FilmsPresenter: FilmsPresentationLogic {
 
     // MARK: - Private methods
 
-    private func makeOneAddressAndNameCell(response: FilmsScreenFlow.Update.Response,
-                                           emailToShow: String,
-                                           backViewColor: UIColor,
-                                           index: Int,
-                                           completion: @escaping (FilmCollectionCellViewModel, Int) -> Void) {
+    private func makeOneFilmCell(film: OneFilm,
+                                 index: Int,
+                                 completion: @escaping (FilmsTableCellViewModel, Int) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
+
             var avatarImage = UIImage()
-
-            guard let contact = response.allContactsSet.first(where: { $0.email == emailToShow }) else { return } //если делать здесь $0.email.lowercased(), а в интеракторе не приводить к нижнему регистру, то не красится в галочку при долгом нажатии
-
-            if response.doesAllEmailsContainPickedEmails == false && response.isMultiPickingMode == false {
-                let semaphore = DispatchSemaphore(value: 0) //кол-во потоков(0), кот. имеют доступ к ресурсу
-                if let image = UIImage(contentsOfFile: contact.avatar) {
-                    avatarImage = image //то есть пока не вызван signal() код ниже wait не будет выполняться
-                    semaphore.signal() //Increment the counting semaphore (имеет доступ 1 поток)
-                } else {
-                    let char = String(contact.sname.prefix(1))
-                    let backColorOfImage = Alphabet.colorOfFirstLetter(in: contact.fname)
-
-                    ImageManager.createIcon(for: char,
-                                            backCellViewColor: backViewColor,
-                                            backColorOfImage: backColorOfImage,
-                                            width: Constants.mainImageWidthHeight,
-                                            height: Constants.mainImageWidthHeight) { image in
-                        avatarImage = image ?? UIImage() //то есть пока не вызван signal() код ниже wait не будет выполняться
-                        semaphore.signal()
-                    }
-                }
-                semaphore.wait() //Decrement the counting semaphore (доступ для 0 потоков)
-            } else if response.pickedEmailAddresses.contains(contact.email) {
-                avatarImage = UIHelper.Image.emailPickedScreenAvatarBoth
+            if let image = UIImage(contentsOfFile: film.cachedAvatarPath ?? "") {
+                avatarImage = image
             } else {
-                avatarImage = Theme.shared.isLight ? UIHelper.Image.notPickedAvatarL : UIHelper.Image.notPickedAvatarD
+                avatarImage = UIImage()
             }
 
-            let backCellViewColor: UIColor
-            if response.pickedEmailAddresses.contains(contact.email) {
-                backCellViewColor = Theme.shared.isLight ? UIHelper.Color.almostWhiteL2 : UIHelper.Color.almostBlackD2
-            } else {
-                backCellViewColor = backViewColor
-            }
 
-            let name = NSAttributedString(string: contact.cn, attributes: Theme.shared.isLight ? UIHelper.Attributed.blackMiddleLRobotoSemibold17 : UIHelper.Attributed.whiteStrongRobotoSemibold17)
+            let genres = film.genres
+            let countries = film.countries
+            let genresYearCountries = "\(genres.map { $0.genre.lowercased() }.joined(separator: ", ")), \(film.year), \(countries.map { $0.country }.joined(separator: ", "))"
 
-            let emailAddress = NSAttributedString(string: contact.email, attributes: Theme.shared.isLight ? UIHelper.Attributed.grayAlpha06RobotoRegular14 : UIHelper.Attributed.whiteDarkDRobotoRegular14)
+            let filmTitle = NSAttributedString(string: film.nameOriginal,
+                                               attributes: UIHelper.Attributed.whiteInterBold18)
 
-            let chevron = Theme.shared.isLight ? UIHelper.Image.chevronRightL : UIHelper.Image.chevronRightD
+            let subtitle = NSAttributedString(string: genresYearCountries,
+                                              attributes: UIHelper.Attributed.grayMedium14)
 
-            let oneAddressAndNameCell = FilmCollectionCellViewModel(
-                id: contact.uid,
-                cellBackColor: backCellViewColor,
-                avatarImage: avatarImage,
-                name: name,
-                email: emailAddress,
-                chevron: chevron,
-                insets: UIEdgeInsets(top: UIHelper.Margins.medium16px,
-                                     left: UIHelper.Margins.medium16px,
-                                     bottom: UIHelper.Margins.medium16px,
-                                     right: 0),
-                separatorInset: .zero
-            )
-            completion(oneAddressAndNameCell, index)
+            let rating = NSAttributedString(string: String(film.ratingKinopoisk ?? 0.0),
+                                            attributes: UIHelper.Attributed.cyanSomeBold18)
+
+            let oneFilmCell = FilmsTableCellViewModel(
+                filmId: String(film.kinopoiskId),
+                filmImage: avatarImage,
+                filmTitle: filmTitle,
+                subtitle: subtitle,
+                rating: rating,
+                insets: UIEdgeInsets(top: UIHelper.Margins.medium8px,
+                                     left: 0,
+                                     bottom: UIHelper.Margins.medium8px,
+                                     right: 0))
+            completion(oneFilmCell, index)
         }
     }
 }

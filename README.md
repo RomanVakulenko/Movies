@@ -25,5 +25,6 @@
 - SnapKit, no storyboard
 - Reusable
 - ActivityIndicatorView, SOLID, DRY
-<img src="https://github.com/user-attachments/assets/2a1ce6c9-4d20-4bbe-9be9-5d954a3d625a" width="295">   <img width="266" alt="Снимок экрана 2024-09-19 в 01 43 59" src="https://github.com/user-attachments/assets/4b8f17cb-ca49-4a1e-9869-da96a4d444f3">    <img width="349" alt="Снимок экрана 2024-09-19 в 01 44 23" src="https://github.com/user-attachments/assets/9bdcce3b-e9a6-41c1-a295-b38d1ca2e6ef">
+
+<img src="https://github.com/user-attachments/assets/2a1ce6c9-4d20-4bbe-9be9-5d954a3d625a" width="295">   <img width="295" alt="Снимок экрана 2024-09-19 в 01 43 59" src="https://github.com/user-attachments/assets/4b8f17cb-ca49-4a1e-9869-da96a4d444f3">    <img width="295" alt="Снимок экрана 2024-09-19 в 01 44 23" src="https://github.com/user-attachments/assets/9bdcce3b-e9a6-41c1-a295-b38d1ca2e6ef">
 

@@ -79,7 +79,7 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         configure()
-        backgroundColor = .none
+        backgroundColor = UIHelper.Color.almostBlack
         tableView.refreshControl = self.refreshControl
     }
 

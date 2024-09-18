@@ -11,7 +11,6 @@ import SnapKit
 protocol FilmsRoutingLogic {
     func routeBackToLoginScreen()
     func routeToOneFilmDetails()
-    func openPiker()
 }
 
 
@@ -63,9 +62,6 @@ final class FilmsRouter: FilmsRoutingLogic, FilmsDataPassing, DatePickerRouterPr
         }
     }
 
-    func openPiker() {
-
-    }
 
     func presentYearPicker(from view: UIViewController, completion: @escaping (Int) -> Void) {
         let alertController = UIAlertController(title: "Выберите год", message: nil, preferredStyle: .alert)

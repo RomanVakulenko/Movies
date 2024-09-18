@@ -24,10 +24,7 @@ final class FilmsBuilder: FilmsBuilderProtocol {
                                             mapper: DataMapper(), 
                                             cacheManager: CacheManager(coreDataManager: coreDataManager))
         let worker = FilmsWorker(networkManager: networkManager)
-
-        let storageManager = StorageDataManager.shared
         let interactor = FilmsInteractor()
-
         let presenter = FilmsPresenter()
         let router = FilmsRouter()
 

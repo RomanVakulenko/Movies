@@ -42,6 +42,7 @@ final class SearchView: UIView, SearchViewLogic {
         view.searchTextField.font = UIHelper.Font.InterMedium14
         view.searchTextField.leftView = nil
         view.showsCancelButton = false
+        view.isHidden = true
         return view
     }()
 
@@ -51,6 +52,7 @@ final class SearchView: UIView, SearchViewLogic {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         configure()
+        backgroundColor = UIHelper.Color.almostBlack
     }
 
     required init?(coder _: NSCoder) {
@@ -61,11 +63,10 @@ final class SearchView: UIView, SearchViewLogic {
     // MARK: - Public Methods
     func update(viewModel: SearchViewModel) {
         self.viewModel = viewModel
-        backgroundColor = viewModel.backColor
         backView.layer.backgroundColor = viewModel.backColor.cgColor
         searchBar.searchTextField.attributedPlaceholder = viewModel.searchBarAttributedPlaceholder
 //        searchBar.text = viewModel.searchText
-        searchBar.backgroundImage = UIImage() //fixes topSeparator problem
+        searchBar.backgroundImage = UIImage()
 
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
             textfield.textColor = viewModel.searchTextColor
@@ -88,6 +89,10 @@ final class SearchView: UIView, SearchViewLogic {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapAtSearchIcon(_:)))
             searchIconView.isUserInteractionEnabled = true
             searchIconView.addGestureRecognizer(tapGestureRecognizer)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self else {return}
+            searchBar.isHidden = false
         }
     }
 

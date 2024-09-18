@@ -9,7 +9,9 @@ import Foundation
 
 protocol OneFilmDetailsWorkingLogic {
     func getFilmDetails(id: Int, completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void)
-    func loadFilmImages(id: Int,
+    func downloadAndCacheCover(for detailsFilm: DetailsFilm,
+                               completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void)
+    func loadFilmStills(filmId: Int,
                         completion: @escaping (Result<[OneStill], NetworkManagerErrors>) -> Void)
 }
 
@@ -41,11 +43,30 @@ final class OneFilmDetailsWorker: OneFilmDetailsWorkingLogic {
         }
     }
 
-    func loadFilmImages(id: Int, completion: @escaping (Result<[OneStill], NetworkManagerErrors>) -> Void) {
+    func downloadAndCacheCover(for detailsFilm: DetailsFilm,
+                               completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void) {
         guard !isFetching else { return }
         isFetching = true
 
-        networkManager.loadFilmImages(id: id, pageForStills: currentPageForStills) { [weak self] result in
+        networkManager.downloadAndCacheCover(for: detailsFilm) { [weak self] result in
+            guard let self = self else { return }
+            self.isFetching = false
+
+            switch result {
+            case .success(let detailsFilmWithPathToCover):
+                completion(.success(detailsFilmWithPathToCover))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+
+    }
+
+    func loadFilmStills(filmId: Int, completion: @escaping (Result<[OneStill], NetworkManagerErrors>) -> Void) {
+        guard !isFetching else { return }
+        isFetching = true
+
+        networkManager.loadFilmStills(filmId: filmId, pageForStills: currentPageForStills) { [weak self] result in
             guard let self = self else { return }
             self.isFetching = false
 

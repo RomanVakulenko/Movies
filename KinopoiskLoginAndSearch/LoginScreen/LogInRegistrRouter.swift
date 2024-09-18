@@ -29,7 +29,7 @@ final class LogInRegistrRouter: LogInRegistrRoutingLogic, LogInRegistrDataPassin
         let controller = FilmsBuilder().getController(delegate: viewController)
 
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.navigationController?.pushViewController(controller, animated: false)
+            self?.viewController?.navigationController?.pushViewController(controller, animated: true)
         }
 
 

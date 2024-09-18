@@ -26,6 +26,7 @@ enum GlobalConstants {
     static let filmDescriptionTtile = "Описание"
     static let stills = "Кадры"
 
+    static let spinnerOffset: CGFloat = 72
     static let borderWidth: CGFloat = UIHelper.Margins.small1px
     static let cornerRadius: CGFloat = UIHelper.Margins.medium8px
     static let fieldFontSize16px: CGFloat = UIHelper.Margins.medium16px

@@ -148,7 +148,6 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
     func onCellTap(request: FilmsScreenFlow.OnSelectItem.Request) {
         idOfSelectedFilm = Int(request.id)
         presenter?.presentRouteToOneFilmDetails(response: FilmsScreenFlow.RoutePayload.Response())
-
     }
 
     func didTapLogOff(request: FilmsScreenFlow.OnLogOffBarItemTap.Request) {

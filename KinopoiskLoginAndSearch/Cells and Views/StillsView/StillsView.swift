@@ -9,7 +9,10 @@ import UIKit
 import SnapKit
 
 protocol StillsViewOutput: AnyObject,
-                           StillCollectionCellViewModelOutput { }
+                           StillCollectionCellViewModelOutput { 
+
+    func loadNextTwentyStills()
+}
 
 protocol StillsViewLogic: UIView {
     func update(viewModel: StillsViewModel)
@@ -139,6 +142,22 @@ extension StillsView: UICollectionViewDataSource {
             return cell
         } else {
             return UICollectionViewCell()
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let collectionView = scrollView as? UITableView else { return }
+
+        let visibleRows = collectionView.indexPathsForVisibleRows?.count ?? 0
+        let totalRows = collectionView.numberOfRows(inSection: 0)
+
+        if totalRows > 0 && visibleRows > 0 {
+            let lastVisibleIndex = collectionView.indexPathsForVisibleRows?.last?.row ?? 0
+
+            // Проверяем, если 11 ячейка из каждых 20 показана
+            if lastVisibleIndex >= totalRows - (totalRows / 2) || (lastVisibleIndex % 20 == 10) {
+                output?.loadNextTwentyStills()
+            }
         }
     }
 }

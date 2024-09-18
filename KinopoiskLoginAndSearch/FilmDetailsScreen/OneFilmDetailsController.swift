@@ -9,22 +9,19 @@ import UIKit
 import SnapKit
 
 protocol OneFilmDetailsDisplayLogic: AnyObject {
-    func displayUpdate(viewModel: OneFilmDetailsFlow.Update.ViewModel)
+    func displayUpdateAllButStills(viewModel: OneFilmDetailsFlow.UpdateAllButStills.ViewModel)
+    func displayUpdateStills(viewModel: OneFilmDetailsFlow.UpdateStills.ViewModel)
+
     func displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel)
     func displayAlert(viewModel: OneFilmDetailsFlow.AlertInfo.ViewModel)
-    func displayRouteToOpenImage(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel)
-
-    func displayRouteToMailStartScreen(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel)
-    func displayRouteToSaveDialog(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel)
-    func displayRouteToOpenData(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel)
-
-    func displayRouteToNewEmailCreate(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel)
+//    func displayRouteToOpenImage(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel)
+    func displayRouteToWeb(viewModel: OneFilmDetailsFlow.OnWebLinkTap.ViewModel)
 }
 
 
 // MARK: - OneFilmDetailsController
 
-final class OneFilmDetailsController: UIViewController, NavigationBarControllable, AlertDisplayable {
+final class OneFilmDetailsController: UIViewController, AlertDisplayable {
 
     var interactor: OneFilmDetailsBusinessLogic?
     var router: (OneFilmDetailsRoutingLogic & OneFilmDetailsDataPassing)?
@@ -40,7 +37,8 @@ final class OneFilmDetailsController: UIViewController, NavigationBarControllabl
     override func loadView() {
         contentView.output = self
         view = contentView
-        hideNavigationBar(animated: false) //to hide flashing blue "< Back"
+//        hideNavigationBar(animated: false) //to hide flashing blue "< Back"
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     override func viewDidLoad() {
@@ -49,32 +47,6 @@ final class OneFilmDetailsController: UIViewController, NavigationBarControllabl
         interactor?.onDidLoadViews(request: OneFilmDetailsFlow.OnDidLoadViews.Request())
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if didNavBarSet == true {
-            showNavigationBar(animated: false)
-        }
-    }
-
-    // MARK: - Public methods
-
-
-
-    func leftNavBarButtonDidTapped() {
-        self.navigationController?.popViewController(animated: true)
-    }
-
-    func rightNavBarButtonTapped(index: Int) {
-        switch index {
-        case 0:
-            ()
-        case 1:
-            interactor?.markAsUnread(request: OneFilmDetailsFlow.OnEnvelopNavBarButton.Request())
-        case 2:
-            interactor?.didTapTrashNavBarIcon(request: OneFilmDetailsFlow.OnTrashNavBarIcon.Request())
-        default: return
-        }
-    }
 
     // MARK: - Private methods
     private func configure() {
@@ -91,35 +63,20 @@ final class OneFilmDetailsController: UIViewController, NavigationBarControllabl
 
 extension OneFilmDetailsController: OneFilmDetailsDisplayLogic {
 
-    func displayRouteToOpenData(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel) {
-        router?.routeToOpenData()
+//    func displayRouteToOpenImage(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel) {
+//        router?.routeToOpenImage()
+//    }
+
+    func displayRouteToWeb(viewModel: OneFilmDetailsFlow.OnWebLinkTap.ViewModel) {
+        router?.routeToWeb()
     }
 
-    func displayRouteToMailStartScreen(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel) {
-        router?.routeToMailStartScreen()
+    func displayUpdateAllButStills(viewModel: OneFilmDetailsFlow.UpdateAllButStills.ViewModel) {
+        contentView.updateAllButStills(viewModel: viewModel)
     }
 
-    func displayRouteToSaveDialog(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel) {
-        router?.routeToSaveDialog()
-    }
-
-    ///If photo - task router to show it
-    func displayRouteToOpenImage(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel) {
-        router?.routeToOpenImage()
-    }
-
-    func displayRouteToNewEmailCreate(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel) {
-        router?.routeToNewEmailCreate()
-    }
-
-    func displayUpdate(viewModel: OneFilmDetailsFlow.Update.ViewModel) {
-        if didNavBarSet == false {
-            configureNavigationBar(navBar: viewModel.navBar)
-            showNavigationBar(animated: false)
-            didNavBarSet = true
-        }
-        setNeedsStatusBarAppearanceUpdate()
-        contentView.update(viewModel: viewModel)
+    func displayUpdateStills(viewModel: OneFilmDetailsFlow.UpdateStills.ViewModel) {
+        contentView.updateStills(viewModel: viewModel)
     }
 
     func displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel) {
@@ -136,43 +93,21 @@ extension OneFilmDetailsController: OneFilmDetailsDisplayLogic {
 // MARK: - OneFilmDetailsViewOutput
 
 extension OneFilmDetailsController: OneFilmDetailsViewOutput {
-//    func didTapAtXButtonAtCloudAttachment(_ viewModel: CloudEmailAttachmentViewModel) { }
-//
-//
-//    func chevronOpenCloseAddressesTapped() {
-//        interactor?.didTapChevronAdresses(request: OneFilmDetailsFlow.OnChevronTapped.Request())
-//    }
-//
-//    // MARK: CloudEmailAttachmentOutput
-//    func didTapAtCloudAttachment(_ viewModel: CloudEmailAttachmentViewModel){
-//        interactor?.didTapAtFileOrFoto(request: OneFilmDetailsFlow.OnAttachedFileOrImageTapped.Request(cloudEmailViewModel: viewModel))
-//    }
-//
-//    // MARK: FotoOutput
-//    func didTapAtFoto(_ viewModel: FotoCellViewModel) {
-//        interactor?.didTapAtFileOrFoto(request: OneFilmDetailsFlow.OnAttachedFileOrImageTapped.Request(fotoViewModel: viewModel))
-//    }
-//
-//    func didTapAtDownloadIcon(_ viewModel: FotoCellViewModel) {
-//        interactor?.didTapDownloadIcon(request: OneFilmDetailsFlow.OnDownloadIconOrToSaveAttachedFile.Request(fotoViewModel: viewModel))
-//    }
-//
-//    func didTapAtQuattroIcon(_ viewModel: FotoCellViewModel) {
-//        interactor?.didTapQuattroIcon(request: OneFilmDetailsFlow.OnQuattroIcon.Request())
-//    }
-//
-//    // MARK: ButtonsOutput
-//    func didTapReply(viewModel: OneEmailDetailsButtonsViewModel.ButtonType) {
-//        interactor?.didTapReplyButton(request: OneFilmDetailsFlow.OnReplyButton.Request())
-//    }
-//
-//    func didTapReplyToAll(viewModel: OneEmailDetailsButtonsViewModel.ButtonType) {
-//        interactor?.didTapReplyToAllButton(request: OneFilmDetailsFlow.OnReplyToAllButton.Request())
-//    }
-//
-//    func didTapForward(viewModel: OneEmailDetailsButtonsViewModel.ButtonType) {
-//        interactor?.didTapForwardButton(request: OneFilmDetailsFlow.OnForwardButton.Request())
-//    }
+    func didTapChevronBack() {
+        router?.routeBackToFilmsScreen()
+    }
+    
+    func loadNextTwentyStills() {
+        interactor?.loadNextTwentyStills(request: OneFilmDetailsFlow.OnLoadRequest.Request())
+    }
+    
+    func didTapAtOneStill(_ viewModel: StillCollectionCellViewModel) {
+        () // задании не было - потенциально можно было бы считать и настроить, напримре, показ на полный экран того кадра (но в ТЗ не было)
+    }
+
+    func didTapWebLink() {
+        interactor?.didTapWebLink(request: OneFilmDetailsFlow.OnWebLinkTap.Request())
+    }
 }
 
 

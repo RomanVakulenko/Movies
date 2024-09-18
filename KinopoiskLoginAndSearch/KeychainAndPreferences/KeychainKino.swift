@@ -10,7 +10,7 @@ import Foundation
 protocol ApplicationKeychain {
     var username: String? { get set }
     var password: String? { get set }
-    var token: String? { get set }
+//    var token: String? { get set }
 }
 
 protocol KeyValueStorage {
@@ -21,6 +21,10 @@ protocol KeyValueStorage {
     func set(_ value: String, key: String)
     func set(_ value: Data, key: String)
     func set(_ value: Bool, key: String)
+
+    // Новые методы для работы с массивами
+    func set(_ value: [String], key: String)
+    func array(forKey key: String) -> [String]?
 
     func removeValue(forKey key: String)
     func removeAll()
@@ -73,17 +77,18 @@ extension KeychainKino: ApplicationKeychain {
         }
     }
 
-    var token: String? {
-        get {
-            return storage.string(forKey: Keys.token)
-        }
-        set {
-            if let newValue = newValue {
-                storage.set(newValue, key: Keys.token)
-            } else {
-                storage.removeValue(forKey: Keys.token)
-            }
-        }
-    }
+//
+//    var token: String? {
+//        get {
+//            return storage.string(forKey: Keys.token)
+//        }
+//        set {
+//            if let newValue = newValue {
+//                storage.set(newValue, key: Keys.token)
+//            } else {
+//                storage.removeValue(forKey: Keys.token)
+//            }
+//        }
+//    }
 
 }

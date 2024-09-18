@@ -76,7 +76,7 @@ enum LogInRegistrFlow {
         struct Request {}
 
         struct Response {
-            let error: Error
+            let alertAt: LogInRegistrModel.AlertAt
         }
 
         struct ViewModel {

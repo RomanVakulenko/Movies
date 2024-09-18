@@ -19,6 +19,7 @@ enum FilmsModel {
         let sortIcon: UIImage
 
         let items: [AnyDifferentiable]
+        let isNowFilteringAtSearchOrYearOrSortedDescending: Bool
         let insets: UIEdgeInsets
     }
 }

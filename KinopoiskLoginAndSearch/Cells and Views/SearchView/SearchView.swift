@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 protocol SearchViewOutput: AnyObject {
-    func didTapAtSearchIconInSearchView(searchText: String)
+    func doSearchFor(searchText: String)
 }
 
 protocol SearchViewLogic: UIView {
@@ -31,11 +31,13 @@ final class SearchView: UIView, SearchViewLogic {
 
     private lazy var backView: UIView = {
         let view = UIView()
+        view.backgroundColor = .none
         return view
     }()
 
     private(set) lazy var searchBar: UISearchBar = {
         let view = UISearchBar()
+        view.backgroundColor = .none
         view.delegate = self
         view.searchTextField.font = UIHelper.Font.InterMedium14
         view.searchTextField.leftView = nil
@@ -59,11 +61,10 @@ final class SearchView: UIView, SearchViewLogic {
     // MARK: - Public Methods
     func update(viewModel: SearchViewModel) {
         self.viewModel = viewModel
+        backgroundColor = viewModel.backColor
         backView.layer.backgroundColor = viewModel.backColor.cgColor
-
         searchBar.searchTextField.attributedPlaceholder = viewModel.searchBarAttributedPlaceholder
-
-        searchBar.text = viewModel.searchText
+//        searchBar.text = viewModel.searchText
         searchBar.backgroundImage = UIImage() //fixes topSeparator problem
 
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
@@ -82,20 +83,19 @@ final class SearchView: UIView, SearchViewLogic {
             textfield.rightView = searchIconView
             textfield.clearButtonMode = .never
             textfield.rightViewMode = .always
+            searchIconView.tintColor = UIHelper.Color.cyanSome
 
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapAtSearchIcon(_:)))
             searchIconView.isUserInteractionEnabled = true
             searchIconView.addGestureRecognizer(tapGestureRecognizer)
-
         }
-        updateConstraints(insets: viewModel.insets)
     }
 
     // MARK: - Actions
 
     @objc private func didTapAtSearchIcon(_ sender: UITapGestureRecognizer) {
         if let text = searchBar.text {
-            output?.didTapAtSearchIconInSearchView(searchText: text.lowercased())
+            output?.doSearchFor(searchText: text.lowercased())
         }
     }
 
@@ -115,27 +115,13 @@ final class SearchView: UIView, SearchViewLogic {
         let view = self
 
         backView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalToSuperview()
-            $0.height.equalTo(UIHelper.Margins.huge56px)
+            $0.top.leading.bottom.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(UIHelper.Margins.medium8px)
         }
 
         searchBar.snp.makeConstraints {
-            $0.top.equalTo(backView.snp.top)
-            $0.leading.equalTo(backView.snp.leading)
-            $0.trailing.equalTo(backView.snp.trailing)
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(UIHelper.Margins.large24px)
-        }
-    }
-
-    private func updateConstraints(insets: UIEdgeInsets) {
-        backView.snp.updateConstraints {
-            $0.top.equalToSuperview().offset(insets.top)
-            $0.leading.equalToSuperview().offset(insets.left)
-            $0.bottom.equalToSuperview().inset(insets.bottom)
-            $0.trailing.equalToSuperview().inset(insets.right)
+            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight48px)
         }
     }
 }
@@ -146,11 +132,12 @@ extension SearchView: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBar.text = searchText
+        output?.doSearchFor(searchText: searchText.lowercased())
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        output?.didTapAtSearchIconInSearchView(searchText: searchText.lowercased())
+        output?.doSearchFor(searchText: searchText.lowercased())
         searchBar.resignFirstResponder()
     }
 }

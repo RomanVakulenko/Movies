@@ -10,18 +10,46 @@ import UIKit
 
 enum OneFilmDetailsFlow {
 
-    enum Update {
+    enum UpdateAllButStills {
 
         struct Request { }
 
         struct Response {
             let film: DetailsFilm
-            let stills: [OneStill]?
         }
 
         typealias ViewModel = OneFilmDetailsModel.ViewModel
     }
 
+    enum UpdateStills {
+
+        struct Request { }
+
+        struct Response {
+            let stills: [OneStill]?
+        }
+
+        typealias ViewModel = StillsViewModel
+    }
+
+
+    enum OnLoadRequest {
+
+        struct Request {}
+
+        struct Response {}
+
+        struct ViewModel {}
+    }
+
+    enum OnChevronTapped {
+
+        struct Request {}
+
+        struct Response {}
+
+        struct ViewModel {}
+    }
 
     enum RoutePayload {
 
@@ -36,9 +64,7 @@ enum OneFilmDetailsFlow {
 
         struct Request {}
 
-        struct Response {
-            let webUrl: String
-        }
+        struct Response {}
 
         struct ViewModel {}
     }
@@ -58,10 +84,12 @@ enum OneFilmDetailsFlow {
 
         struct Response {
             let isShow: Bool
+            let type: SpinnerPlace
         }
 
         struct ViewModel {
             let isShow: Bool
+            let type: SpinnerPlace
         }
     }
 

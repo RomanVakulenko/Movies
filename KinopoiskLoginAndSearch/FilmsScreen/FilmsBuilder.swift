@@ -8,19 +8,24 @@
 import UIKit
 
 protocol FilmsBuilderProtocol: AnyObject {
-    func getController() -> UIViewController
+    func getController(delegate: FilmsDelegate?) -> UIViewController
 }
 
 
+@available(iOS 13.4, *)
 final class FilmsBuilder: FilmsBuilderProtocol {
 
-    func getController() -> UIViewController {
-        let viewController = FilmsController()
+    func getController(delegate: FilmsDelegate?) -> UIViewController {
+        let viewController = FilmsController(delegate: delegate)
 
-        let networkManager = NetworkManager(networkService: NetworkService(), 
+        let coreDataManager = StorageDataManager()
+        //когда загружаем картинки из сети по film.posterUrlPreview, то сохраняем картинки в FileManager, а при следующей попытке загрузить картинки обращаемся к кешМенеджеру(он спрашивает у БД есть ли в ней путь до сохраненной data, если нет, то загружаем из сети и сохраняем в FileManager)
+        let networkManager = NetworkManager(networkService: NetworkService(),
                                             mapper: DataMapper(), 
-                                            cacheManager: CacheManager())
+                                            cacheManager: CacheManager(coreDataManager: coreDataManager))
         let worker = FilmsWorker(networkManager: networkManager)
+
+        let storageManager = StorageDataManager.shared
         let interactor = FilmsInteractor()
 
         let presenter = FilmsPresenter()

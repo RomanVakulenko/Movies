@@ -16,6 +16,8 @@ enum UIHelper {
 
         static let whiteInterBold18: [NSAttributedString.Key: Any] = [.font: Font.InterBold18, .foregroundColor: UIColor.white]
 
+        static let whiteInterBold22: [NSAttributedString.Key: Any] = [.font: Font.InterBold22, .foregroundColor: UIColor.white]
+
         static let cyanSomeBold18: [NSAttributedString.Key: Any] = [.font: Font.InterBold18, .foregroundColor: Color.cyanSome]
 
         static let cyanSomeBold22: [NSAttributedString.Key: Any] = [.font: Font.InterBold22, .foregroundColor: Color.cyanSome]
@@ -65,9 +67,12 @@ enum UIHelper {
         //system images
 //        magnifyingglass
 //        chevron.down
+//        chevron.backward
+//        link
 
         static let logOffCyan24px = UIImage(named: "logOff24px") ?? UIImage()
         static let sortCyan24px = UIImage(named: "sortCyan") ?? UIImage()
+        static let imagePlaceholder100px = UIImage(named: "imagePlaceholder100px") ?? UIImage()
 
     }
 }

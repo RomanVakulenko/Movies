@@ -14,19 +14,16 @@ struct SearchViewModel {
     let backColor: UIColor
 
     let searchBarAttributedPlaceholder: NSAttributedString
-    let searchText: String
     let searchTextColor: UIColor
     let searchIcon: UIImage
-    let insets: UIEdgeInsets
 
-    init(id: AnyHashable, backColor: UIColor, searchBarAttributedPlaceholder: NSAttributedString, searchText: String, searchIcon: UIImage, searchTextColor: UIColor, insets: UIEdgeInsets) {
+    init(id: AnyHashable, backColor: UIColor, searchBarAttributedPlaceholder: NSAttributedString, searchIcon: UIImage, searchTextColor: UIColor) {
         self.id = id
         self.backColor = backColor
         self.searchBarAttributedPlaceholder = searchBarAttributedPlaceholder
-        self.searchText = searchText
+//        self.searchText = searchText
         self.searchIcon = searchIcon
         self.searchTextColor = searchTextColor
-        self.insets = insets
     }
 }
 
@@ -38,10 +35,9 @@ extension SearchViewModel: Differentiable {
     func isContentEqual(to source: SearchViewModel) -> Bool {
         source.backColor == backColor &&
         source.searchBarAttributedPlaceholder == searchBarAttributedPlaceholder &&
-        source.searchText == searchText &&
+//        source.searchText == searchText &&
         source.searchIcon == searchIcon &&
-        source.searchTextColor == searchTextColor &&
-        source.insets == insets
+        source.searchTextColor == searchTextColor
     }
 }
 

@@ -22,8 +22,10 @@ protocol FilmsDisplayLogic: AnyObject {
 final class FilmsController: UIViewController, AlertDisplayable, NavigationBarControllable {
 
     var interactor: FilmsBusinessLogic?
-    var router: (FilmsRoutingLogic & FilmsDataPassing)?
+    var router: (FilmsRoutingLogic & FilmsDataPassing & DatePickerRouterProtocol)?
     lazy var contentView: FilmsViewLogic = FilmsView()
+    
+    weak var delegate: FilmsDelegate?
 
     // MARK: - Private properties
 
@@ -31,20 +33,25 @@ final class FilmsController: UIViewController, AlertDisplayable, NavigationBarCo
 
     // MARK: - Lifecycle
 
+    init(delegate: FilmsDelegate?) {
+        super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func loadView() {
         contentView.output = self
         view = contentView
+        hideNavigationBar(animated: false)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
         interactor?.onDidLoadViews(request: FilmsScreenFlow.OnDidLoadViews.Request())
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        interactor?.clearSelectionIfOnlyOneWasPickedBeforeNewEmail()
     }
 
     func leftNavBarButtonDidTapped() {
@@ -112,22 +119,26 @@ extension FilmsController: FilmsDisplayLogic {
 // MARK: - AddressBookViewOutput
 
 extension FilmsController: FilmsViewOutput {
+    func didPullToReftesh() {
+        interactor?.updateFilmsAtRefresh(request: FilmsScreenFlow.Update.Request())
+    }
+ 
     func loadNextTwentyFilms() {
-        interactor?.loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request())
+        interactor?.loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request(isRefreshRequested: false))
     }
 
-    func didTapAtSearchIconInSearchView(searchText: String) {
-        interactor?.didTapSearchBarIcon(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request(searchText: searchText))
+    func doSearchFor(searchText: String) {
+        interactor?.doSearchFor(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request(searchText: searchText))
     }
-    
 
     func didTapSortIcon() {
-        interactor?.didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request(
-            isSorredByIncreasing: <#Bool#>))
+        interactor?.didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request())
     }
 
     func yearButtonTapped() {
-//        <#code#>
+        router?.presentYearPicker(from: self) { [weak self] selectedYear in
+            self?.interactor?.filterByYear(request: FilmsScreenFlow.OnYearButtonTap.Request(year: selectedYear))
+        }
     }
 
     func didTapAOneFilm(_ viewModel: FilmsTableCellViewModel) {

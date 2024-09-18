@@ -12,7 +12,7 @@ enum OneFilmDetailsModel {
 
     struct ViewModel {
         let backViewColor: UIColor
-        let backArrow: UIImage
+        let backChevron: UIImage
         let coverView: UIImage
         let linkIcon: UIImage
 
@@ -25,9 +25,6 @@ enum OneFilmDetailsModel {
         let yearsAndCountries: NSAttributedString
 
         let stillTitle: NSAttributedString
-
-        let views: [AnyDifferentiable]
-        let items: [AnyDifferentiable]
     }
 
 }

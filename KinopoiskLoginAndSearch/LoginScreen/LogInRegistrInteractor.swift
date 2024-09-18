@@ -11,6 +11,8 @@ protocol LogInRegistrBusinessLogic {
     func onDidLoadViews(request: LogInRegistrFlow.OnDidLoadViews.Request)
     func useCurrent(loginText: String, passwordText: String)
     func enterButtonTapped(request: LogInRegistrFlow.OnEnterButtonTap.Request)
+    func doLoginAndPasswordEmpty(request: LogInRegistrFlow.OnDidLoadViews.Request)
+    func logOut()
 }
 
 protocol LogInRegistrDataStore: AnyObject {}
@@ -23,13 +25,11 @@ final class LogInRegistrInteractor: LogInRegistrBusinessLogic, LogInRegistrDataS
     var worker: LogInRegistrWorkingLogic?
 
     // MARK: - Private properties
-    var loginText: String?
-    var passwordText: String?
+    var loginText: String? = ""
+    var passwordText: String? = ""
 
-    // MARK: - Lifecycle
-    deinit {}
-
-    // MARK: - Public methods
+    private let keychain = KeychainKino.shared
+    private let userPreferences = UserPreferences.shared
 
     func onDidLoadViews(request: LogInRegistrFlow.OnDidLoadViews.Request) {
         presenter?.presentUpdate(response: LogInRegistrFlow.Update.Response())
@@ -40,9 +40,39 @@ final class LogInRegistrInteractor: LogInRegistrBusinessLogic, LogInRegistrDataS
         self.passwordText = passwordText
     }
 
+    func doLoginAndPasswordEmpty(request: LogInRegistrFlow.OnDidLoadViews.Request) {
+        presenter?.presentUpdate(response: LogInRegistrFlow.Update.Response())
+    }
+
     func enterButtonTapped(request: LogInRegistrFlow.OnEnterButtonTap.Request) {
-//        worker?.//save or do smth
-        presenter?.presentRouteToFilmsScreen(response: LogInRegistrFlow.RoutePayload.Response())
+        guard let login = loginText, !login.isEmpty,
+              let password = passwordText, !password.isEmpty else {
+            presenter?.presentAlert(response: LogInRegistrFlow.AlertInfo.Response(alertAt: .someFieldIsEmpty))
+            return
+        }
+
+        if userPreferences.isRegistered && userPreferences.username == login {
+            if let savedPassword = keychain.password, savedPassword == password {
+                presenter?.presentRouteToFilmsScreen(response: LogInRegistrFlow.RoutePayload.Response())
+            } else {
+                presenter?.presentAlert(response: LogInRegistrFlow.AlertInfo.Response(alertAt: .invalidPassword))
+            }
+        } else {
+            // Регистрация
+            userPreferences.isRegistered = true
+            userPreferences.username = login
+            keychain.username = login
+            keychain.password = password
+            presenter?.presentRouteToFilmsScreen(response: LogInRegistrFlow.RoutePayload.Response())
+        }
+    }
+
+    func logOut() {
+        userPreferences.isRegistered = false
+        userPreferences.username = nil
+        keychain.username = nil
+        keychain.password = nil
+        userPreferences.hasLoggedInOnce = false
     }
 
 }

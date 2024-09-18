@@ -9,15 +9,17 @@ import Foundation
 import UIKit
 
 protocol FilmsBusinessLogic {
-    func onDidLoadViews(request: FilmsScreenFlow.OnDidLoadViews.Request)
     func didTapLogOff(request: FilmsScreenFlow.OnLogOffBarItemTap.Request)
+    func onDidLoadViews(request: FilmsScreenFlow.OnDidLoadViews.Request)
+    func updateFilmsAtRefresh(request: FilmsScreenFlow.Update.Request)
 
     func didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request)
-    func didTapSearchBarIcon(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request)
+    func doSearchFor(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request)
 
     func filterByYear(request: FilmsScreenFlow.OnYearButtonTap.Request)
     func onCellTap(request: FilmsScreenFlow.OnSelectItem.Request)
     func loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request)
+
 }
 
 protocol FilmsDataStore: AnyObject {
@@ -27,91 +29,126 @@ protocol FilmsDataStore: AnyObject {
 final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
 
     // MARK: - Public properties
+    enum Constants {
+        static let defaultYear = 1900
+    }
 
     var presenter: FilmsPresentationLogic?
     var worker: FilmsWorkingLogic?
     var idOfSelectedFilm: Int?
 
     // MARK: - Private properties
-    private var isSearchingAtSearchField = false
 
-    private var filmsSortedFiltered: [OneFilm] = []
-    private var isSortedDescending = true
+    private var filmsToDisplay: [OneFilm] = []
+    private var filteredFilms: [OneFilm] = []
+    private var allFetchedUnicFilms: [OneFilm] = []
+
+    private var yearForFilter = Constants.defaultYear
+    private var isSortedDescending = true //по убыванию
     private var isFilteredByYear = false
-    private var yearForFilter = 0
+    private var isSearching = false
+    private var isAtSearchingOrFilteredYearOrSortedAscending: Bool {
+        if isSortedDescending && !isFilteredByYear && !isSearching {
+            return false
+        } else {
+            return true
+        }
+    }
 
     // MARK: - Public methods
 
     func onDidLoadViews(request: FilmsScreenFlow.OnDidLoadViews.Request) {
-        presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: true))
-        
-        worker?.loadFilms{ [weak self] result in
-            guard let self = self else { return }
-            presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
+        workerLoadFilms(isRefreshRequested: false) { filmsToDisplay in
+            self.presenter?.presentSearchBar(response: FilmsScreenFlow.UpdateSearch.Response())
+            self.presenterDoUpdate()
 
-            switch result {
-            case .success(let films):
-                filmsSortedFiltered = films.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 }
-                presenterDoUpdate()
-
-            case .failure(let failure):
-                presenter?.presentAlert(response: FilmsScreenFlow.AlertInfo.Response(error: failure))
+            self.loadAvatarsFor(films: filmsToDisplay) { _ in
+                self.presenterDoUpdate()
             }
         }
     }
 
     func loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request) {
+        workerLoadFilms(isRefreshRequested: false) { films in
+            self.loadAvatarsFor(films: films) { _ in
+                self.presenterDoUpdate()
+            }
+        }
+    }
 
+    func updateFilmsAtRefresh(request: FilmsScreenFlow.Update.Request) {
+        allFetchedUnicFilms = []
+        isSortedDescending = true
+        isFilteredByYear = false
+        isSearching = false
+        yearForFilter = Constants.defaultYear
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let self = self else {return}
+            workerLoadFilms(isRefreshRequested: true) { films in
+                self.loadAvatarsFor(films: films) { _ in
+                    self.presenterDoUpdate()
+                }
+            }
+        }
     }
 
     func didTapSortIcon(request: FilmsScreenFlow.OnSortIconTap.Request) {
         isSortedDescending.toggle()
-        sortOrFilterFilms()
+
+        sortOrFilterFilmsByYear() { sortedAndFiltered in
+            self.filmsToDisplay = sortedAndFiltered
+            self.presenterDoUpdate()
+        }
     }
 
     func filterByYear(request: FilmsScreenFlow.OnYearButtonTap.Request) {
         yearForFilter = request.year
         isFilteredByYear = true
-        sortOrFilterFilms()
+
+        sortOrFilterFilmsByYear() { sortedAndFiltered in
+            self.filmsToDisplay = sortedAndFiltered
+            self.presenterDoUpdate()
+
+            self.filmsToDisplay = self.allFetchedUnicFilms
+        }
     }
 
 
-    func didTapSearchBarIcon(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request) {
-        guard let searchingText = request.searchText else { return }
+    func doSearchFor(request: FilmsScreenFlow.OnSearchBarGlassIconTap.Request) {
+        if let searchingText = request.searchText?.lowercased(),
+            !searchingText.trimmingCharacters(in: .whitespaces).isEmpty {
+            
+            isSearching = true
 
-//        if !searchingText.isEmpty {
-//            presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: true))
-//
-//            worker?.searchContacts(by: searchingText) { [weak self] result in
-//                guard let self = self else { return }
-//                presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
-//
-//                switch result {
-//                case .success(let filteredEmails):
-//                    Log.i("Contacts found successfully")
-//                    self.filteredEmails = filteredEmails
-//                    isSearchingAtSearchField = true
-//                    isMultiPickingMode = doesAllEmailsContainPickedEmails
-//
-//                    presenterDoUpdate()
-//
-//                case .failure(let failure):
-//                    Log.e(failure.localizedDescription)
-//                    presenter?.presentAlert(response: FilmsScreenFlow.AlertInfo.Response(error: failure))
-//                }
-//            }
-//        } else if searchingText == "" {
-//            isSearchingAtSearchField = false
-//            presenterDoUpdate()
-//        }
+            filteredFilms = filmsToDisplay.filter { film in
+                let matchesNameOriginal = film.nameOriginal?.lowercased().contains(searchingText) ?? false
+
+                let matchesCountries = film.countries.contains { country in
+                    return country.country.lowercased().contains(searchingText)
+                }
+
+                let matchesGenres = film.genres.contains { genre in
+                    return genre.genre.lowercased().contains(searchingText)
+                }
+
+                return matchesNameOriginal || matchesCountries || matchesGenres
+            }
+            filmsToDisplay = filteredFilms
+        } else {
+            isSearching = false
+            isFilteredByYear = false // так как показаны все что были загружены и мы можем продолжить скачивать новые, если сортировка по убыванию
+            yearForFilter = Constants.defaultYear
+            filmsToDisplay = allFetchedUnicFilms
+        }
+
+        presenterDoUpdate()
     }
 
     func onCellTap(request: FilmsScreenFlow.OnSelectItem.Request) {
-        idOfSelectedFilm
-//        if let oneFilmDetails = allContactsSet.first(where: { $0.uid == request.id }) {
-//            oneContactInfoForOpenDetails = oneContactDetails
-//            presenter?.presentRouteToOneFilmDetails(response: FilmsScreenFlow.RoutePayload.Response())
-//        }
+        idOfSelectedFilm = Int(request.id)
+        presenter?.presentRouteToOneFilmDetails(response: FilmsScreenFlow.RoutePayload.Response())
+
     }
 
     func didTapLogOff(request: FilmsScreenFlow.OnLogOffBarItemTap.Request) {
@@ -120,15 +157,54 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
 
     //MARK: - Private methods
 
-    private func sortOrFilterFilms() {
+    private func workerLoadFilms(isRefreshRequested: Bool, completion: @escaping ([OneFilm]) -> Void) {
+        presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: true))
+
+        worker?.loadFilms(isRefreshRequested: isRefreshRequested) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let films):
+
+                let setOfExistingFilmIDs = Set(allFetchedUnicFilms.map { $0.kinopoiskId })
+                let updatedFilms = films.filter { !setOfExistingFilmIDs.contains($0.kinopoiskId) }
+                allFetchedUnicFilms.append(contentsOf: updatedFilms)
+
+                filmsToDisplay = allFetchedUnicFilms.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 } // для корректного показа по порядку со склелетонами
+                allFetchedUnicFilms = filmsToDisplay //для сохранения всех фильмов и проверки на уникальные
+                //здесь картинки еще не загрузили
+                completion(filmsToDisplay)
+            case .failure(let failure):
+                presenter?.presentAlert(response: FilmsScreenFlow.AlertInfo.Response(error: failure))
+            }
+        }
+    }
+
+    private func loadAvatarsFor(films: [OneFilm], completion: @escaping ([OneFilm]) -> Void) {
+        presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: true))
+
+        worker?.loadAvatarsFor(films: films) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let filmsWithStringAvatar):
+                allFetchedUnicFilms = filmsWithStringAvatar
+                filmsToDisplay = allFetchedUnicFilms.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 }
+
+                presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
+                completion(filmsToDisplay)
+            case .failure(let failure):
+                presenter?.presentAlert(response: FilmsScreenFlow.AlertInfo.Response(error: failure))
+            }
+        }
+    }
+
+    private func sortOrFilterFilmsByYear(completion: @escaping ([OneFilm]) -> Void) {
         var sortedAndFiltered: [OneFilm]
 
         if isFilteredByYear {
-            sortedAndFiltered = filmsSortedFiltered.filter { film in
-                film.year == yearForFilter
-            }
+            sortedAndFiltered = filmsToDisplay.filter { $0.year == yearForFilter }
         } else {
-            sortedAndFiltered = filmsSortedFiltered
+            sortedAndFiltered = filmsToDisplay
         }
 
         sortedAndFiltered.sort { film1, film2 in
@@ -136,17 +212,19 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
             let rating2 = film2.ratingKinopoisk ?? 0.0
 
             if rating1 == rating2 {
-                return film1.nameOriginal < film2.nameOriginal
+                return film1.nameOriginal ?? "" < film2.nameOriginal ?? ""
             }
             return isSortedDescending ? rating1 > rating2 : rating1 < rating2
         }
-        presenterDoUpdate()
+        completion(sortedAndFiltered)
     }
 
 
     private func presenterDoUpdate() {
         presenter?.presentUpdate(response: FilmsScreenFlow.Update.Response(
-            filmsSortedFiltered: filmsSortedFiltered,
+            isNowFilteringAtSearchOrYearOrSortedDescending: isAtSearchingOrFilteredYearOrSortedAscending,
+            filmsSortedFiltered: filmsToDisplay,
             yearForFilterAt: yearForFilter))
+
     }
 }

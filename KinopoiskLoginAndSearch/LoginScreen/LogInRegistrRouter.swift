@@ -16,6 +16,7 @@ protocol LogInRegistrDataPassing {
 }
 
 
+@available(iOS 13.4, *)
 final class LogInRegistrRouter: LogInRegistrRoutingLogic, LogInRegistrDataPassing {
 
     // MARK: - Public properties
@@ -25,9 +26,10 @@ final class LogInRegistrRouter: LogInRegistrRoutingLogic, LogInRegistrDataPassin
     // MARK: - Public methods
     func routeToFilmsScreen() {
 
-        let controller = FilmsBuilder().getController()
+        let controller = FilmsBuilder().getController(delegate: viewController)
+
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.navigationController?.pushViewController(controller, animated: true)
+            self?.viewController?.navigationController?.pushViewController(controller, animated: false)
         }
 
 

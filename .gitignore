@@ -27,4 +27,4 @@ DerivedData/
 .idea/
 
 *.DS_Store
-Pods/
+# Pods/

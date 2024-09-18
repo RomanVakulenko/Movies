@@ -7,23 +7,152 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3EF5E43F22B3B6F8CAF4D6B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DDBB694264A54A0A73F6B17 /* Pods_KinopoiskLoginAndSearch.framework */; };
+		AD2251C52C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */; };
+		AD2251C72C9AB1C200CD1847 /* StorageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */; };
+		AD2251C92C9AB2EE00CD1847 /* StorageWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */; };
+		AD5FA29C2C9AA7F9001E2D7E /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FA29B2C9AA7F8001E2D7E /* CoreDataService.swift */; };
+		AD6BA6E72C960039002458CF /* FilmsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6E62C960039002458CF /* FilmsTableCell.swift */; };
+		AD6BA6EA2C960073002458CF /* FilmsTableCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6E92C960073002458CF /* FilmsTableCellViewModel.swift */; };
+		AD6BA6EC2C96013B002458CF /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6EB2C96013B002458CF /* SearchView.swift */; };
+		AD6BA6F02C96052B002458CF /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6EF2C96052B002458CF /* SearchViewModel.swift */; };
+		AD6BA6F72C9609E2002458CF /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6F52C9609E2002458CF /* BaseTableViewCell.swift */; };
+		AD6BA6F82C9609E2002458CF /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6F62C9609E2002458CF /* BaseCollectionViewCell.swift */; };
+		AD6BA6FA2C96E854002458CF /* NetServiceErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6F92C96E854002458CF /* NetServiceErrors.swift */; };
 		ADB40B202C95987600AAAAE9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B1F2C95987600AAAAE9 /* AppDelegate.swift */; };
 		ADB40B222C95987600AAAAE9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B212C95987600AAAAE9 /* SceneDelegate.swift */; };
-		ADB40B242C95987600AAAAE9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B232C95987600AAAAE9 /* ViewController.swift */; };
-		ADB40B272C95987600AAAAE9 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ADB40B262C95987600AAAAE9 /* Base */; };
 		ADB40B292C95987800AAAAE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADB40B282C95987800AAAAE9 /* Assets.xcassets */; };
 		ADB40B2C2C95987800AAAAE9 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ADB40B2B2C95987800AAAAE9 /* Base */; };
+		ADB40B342C959D2B00AAAAE9 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B332C959D2B00AAAAE9 /* Endpoint.swift */; };
+		ADB40B372C95A45C00AAAAE9 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B362C95A45C00AAAAE9 /* DataMapper.swift */; };
+		ADB40B392C95A48700AAAAE9 /* DataMapperError.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B382C95A48700AAAAE9 /* DataMapperError.swift */; };
+		ADB40B402C95A4E100AAAAE9 /* AlertDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B3D2C95A4E100AAAAE9 /* AlertDisplayable.swift */; };
+		ADB40B412C95A4E100AAAAE9 /* NavigationBarControllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B3E2C95A4E100AAAAE9 /* NavigationBarControllable.swift */; };
+		ADB40B422C95A4E100AAAAE9 /* SpinnerDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B3F2C95A4E100AAAAE9 /* SpinnerDisplayable.swift */; };
+		ADB40B442C95A57900AAAAE9 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B432C95A57900AAAAE9 /* NetworkService.swift */; };
+		ADB40B462C95A59900AAAAE9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B452C95A59900AAAAE9 /* NetworkManager.swift */; };
+		ADB40B482C95A5AD00AAAAE9 /* NetworkManagerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B472C95A5AD00AAAAE9 /* NetworkManagerErrors.swift */; };
+		ADB40B4D2C95A68000AAAAE9 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B4C2C95A68000AAAAE9 /* Crypto.swift */; };
+		ADB40B522C95A6F000AAAAE9 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B4F2C95A6F000AAAAE9 /* CustomNavBar.swift */; };
+		ADB40B532C95A6F000AAAAE9 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B502C95A6F000AAAAE9 /* UIHelper.swift */; };
+		ADB40B542C95A6F000AAAAE9 /* Print global.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B512C95A6F000AAAAE9 /* Print global.swift */; };
+		ADB40B562C95AB4100AAAAE9 /* KeychainKino.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B552C95AB4100AAAAE9 /* KeychainKino.swift */; };
+		ADB40B582C95AB6C00AAAAE9 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B572C95AB6C00AAAAE9 /* UserPreferences.swift */; };
+		ADB40B5A2C95AB8A00AAAAE9 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B592C95AB8A00AAAAE9 /* UserDefaultsWrapper.swift */; };
+		ADB40B5C2C95ABB000AAAAE9 /* KeyсhainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B5B2C95ABB000AAAAE9 /* KeyсhainWrapper.swift */; };
+		ADB40B5E2C95AC7600AAAAE9 /* KeychainQueryConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B5D2C95AC7600AAAAE9 /* KeychainQueryConfig.swift */; };
+		ADB40B6C2C95BFEF00AAAAE9 /* LogInRegistrInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B632C95BFEF00AAAAE9 /* LogInRegistrInteractor.swift */; };
+		ADB40B6D2C95BFEF00AAAAE9 /* LogInRegistrBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B642C95BFEF00AAAAE9 /* LogInRegistrBuilder.swift */; };
+		ADB40B6E2C95BFEF00AAAAE9 /* LogInRegistrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B652C95BFEF00AAAAE9 /* LogInRegistrView.swift */; };
+		ADB40B6F2C95BFEF00AAAAE9 /* LogInRegistrFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B662C95BFEF00AAAAE9 /* LogInRegistrFlow.swift */; };
+		ADB40B702C95BFEF00AAAAE9 /* LogInRegistrRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B672C95BFEF00AAAAE9 /* LogInRegistrRouter.swift */; };
+		ADB40B722C95BFEF00AAAAE9 /* LogInRegistrController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B692C95BFEF00AAAAE9 /* LogInRegistrController.swift */; };
+		ADB40B732C95BFEF00AAAAE9 /* LogInRegistrModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B6A2C95BFEF00AAAAE9 /* LogInRegistrModel.swift */; };
+		ADB40B742C95BFEF00AAAAE9 /* LogInRegistrPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B6B2C95BFEF00AAAAE9 /* LogInRegistrPresenter.swift */; };
+		ADB40B7E2C95C35600AAAAE9 /* FilmsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B752C95C35500AAAAE9 /* FilmsWorker.swift */; };
+		ADB40B7F2C95C35600AAAAE9 /* FilmsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B762C95C35600AAAAE9 /* FilmsRouter.swift */; };
+		ADB40B802C95C35600AAAAE9 /* FilmsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B772C95C35600AAAAE9 /* FilmsController.swift */; };
+		ADB40B812C95C35600AAAAE9 /* FilmsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B782C95C35600AAAAE9 /* FilmsFlow.swift */; };
+		ADB40B822C95C35600AAAAE9 /* FilmsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B792C95C35600AAAAE9 /* FilmsBuilder.swift */; };
+		ADB40B832C95C35600AAAAE9 /* FilmsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B7A2C95C35600AAAAE9 /* FilmsInteractor.swift */; };
+		ADB40B842C95C35600AAAAE9 /* FilmsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B7B2C95C35600AAAAE9 /* FilmsPresenter.swift */; };
+		ADB40B852C95C35600AAAAE9 /* FilmsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B7C2C95C35600AAAAE9 /* FilmsView.swift */; };
+		ADB40B862C95C35600AAAAE9 /* FilmsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B7D2C95C35600AAAAE9 /* FilmsModels.swift */; };
+		ADB40B912C95C3FE00AAAAE9 /* OneFilmDetailsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B882C95C3FE00AAAAE9 /* OneFilmDetailsWorker.swift */; };
+		ADB40B922C95C3FE00AAAAE9 /* OneFilmDetailsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B892C95C3FE00AAAAE9 /* OneFilmDetailsModels.swift */; };
+		ADB40B932C95C3FE00AAAAE9 /* OneFilmDetailsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B8A2C95C3FE00AAAAE9 /* OneFilmDetailsInteractor.swift */; };
+		ADB40B942C95C3FE00AAAAE9 /* OneFilmDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B8B2C95C3FE00AAAAE9 /* OneFilmDetailsController.swift */; };
+		ADB40B952C95C3FE00AAAAE9 /* OneFilmDetailsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B8C2C95C3FE00AAAAE9 /* OneFilmDetailsRouter.swift */; };
+		ADB40B962C95C3FE00AAAAE9 /* OneFilmDetailsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B8D2C95C3FE00AAAAE9 /* OneFilmDetailsBuilder.swift */; };
+		ADB40B972C95C3FE00AAAAE9 /* OneFilmDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B8E2C95C3FE00AAAAE9 /* OneFilmDetailsView.swift */; };
+		ADB40B982C95C3FE00AAAAE9 /* OneFilmDetailsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B8F2C95C3FE00AAAAE9 /* OneFilmDetailsFlow.swift */; };
+		ADB40B992C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B902C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift */; };
+		ADB40B9C2C95DAAC00AAAAE9 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B9B2C95DAAC00AAAAE9 /* GlobalConstants.swift */; };
+		ADB40B9E2C95EF4700AAAAE9 /* LogInRegistrWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B9D2C95EF4700AAAAE9 /* LogInRegistrWorker.swift */; };
+		ADF8855B2C974E99000E24DD /* StillCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8855A2C974E99000E24DD /* StillCollectionCell.swift */; };
+		ADF8855D2C974EEE000E24DD /* StillCollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */; };
+		ADF885642C978241000E24DD /* Films.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF885632C978241000E24DD /* Films.swift */; };
+		ADF885672C9782CD000E24DD /* Stills.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF885662C9782CD000E24DD /* Stills.swift */; };
+		ADF8856B2C982DB9000E24DD /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8856A2C982DB9000E24DD /* CacheManager.swift */; };
+		ADF8856D2C98C83D000E24DD /* StillsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8856C2C98C83D000E24DD /* StillsView.swift */; };
+		ADF8856F2C98C952000E24DD /* StillsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8856E2C98C952000E24DD /* StillsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3EFFEBA4FD4B2E8763B0B288 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.release.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.release.xcconfig"; sourceTree = "<group>"; };
+		5D07905A954FB64557FF9BF6 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.debug.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		8DDBB694264A54A0A73F6B17 /* Pods_KinopoiskLoginAndSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KinopoiskLoginAndSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KinopoiskLoginAndSearch.xcdatamodel; sourceTree = "<group>"; };
+		AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageDataManager.swift; sourceTree = "<group>"; };
+		AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageWorker.swift; sourceTree = "<group>"; };
+		AD5FA29B2C9AA7F8001E2D7E /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		AD6BA6E62C960039002458CF /* FilmsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsTableCell.swift; sourceTree = "<group>"; };
+		AD6BA6E92C960073002458CF /* FilmsTableCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsTableCellViewModel.swift; sourceTree = "<group>"; };
+		AD6BA6EB2C96013B002458CF /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		AD6BA6EF2C96052B002458CF /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		AD6BA6F52C9609E2002458CF /* BaseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		AD6BA6F62C9609E2002458CF /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		AD6BA6F92C96E854002458CF /* NetServiceErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetServiceErrors.swift; sourceTree = "<group>"; };
+		AD80F84B2C9997C000928387 /* DifferenceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DifferenceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADB40B1C2C95987600AAAAE9 /* KinopoiskLoginAndSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KinopoiskLoginAndSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADB40B1F2C95987600AAAAE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADB40B212C95987600AAAAE9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		ADB40B232C95987600AAAAE9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		ADB40B262C95987600AAAAE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		ADB40B282C95987800AAAAE9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADB40B2B2C95987800AAAAE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ADB40B2D2C95987800AAAAE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADB40B332C959D2B00AAAAE9 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		ADB40B362C95A45C00AAAAE9 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
+		ADB40B382C95A48700AAAAE9 /* DataMapperError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapperError.swift; sourceTree = "<group>"; };
+		ADB40B3D2C95A4E100AAAAE9 /* AlertDisplayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertDisplayable.swift; sourceTree = "<group>"; };
+		ADB40B3E2C95A4E100AAAAE9 /* NavigationBarControllable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationBarControllable.swift; sourceTree = "<group>"; };
+		ADB40B3F2C95A4E100AAAAE9 /* SpinnerDisplayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerDisplayable.swift; sourceTree = "<group>"; };
+		ADB40B432C95A57900AAAAE9 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		ADB40B452C95A59900AAAAE9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		ADB40B472C95A5AD00AAAAE9 /* NetworkManagerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerErrors.swift; sourceTree = "<group>"; };
+		ADB40B4C2C95A68000AAAAE9 /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
+		ADB40B4F2C95A6F000AAAAE9 /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
+		ADB40B502C95A6F000AAAAE9 /* UIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		ADB40B512C95A6F000AAAAE9 /* Print global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Print global.swift"; sourceTree = "<group>"; };
+		ADB40B552C95AB4100AAAAE9 /* KeychainKino.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKino.swift; sourceTree = "<group>"; };
+		ADB40B572C95AB6C00AAAAE9 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		ADB40B592C95AB8A00AAAAE9 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
+		ADB40B5B2C95ABB000AAAAE9 /* KeyсhainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyсhainWrapper.swift"; sourceTree = "<group>"; };
+		ADB40B5D2C95AC7600AAAAE9 /* KeychainQueryConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainQueryConfig.swift; sourceTree = "<group>"; };
+		ADB40B632C95BFEF00AAAAE9 /* LogInRegistrInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrInteractor.swift; sourceTree = "<group>"; };
+		ADB40B642C95BFEF00AAAAE9 /* LogInRegistrBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrBuilder.swift; sourceTree = "<group>"; };
+		ADB40B652C95BFEF00AAAAE9 /* LogInRegistrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrView.swift; sourceTree = "<group>"; };
+		ADB40B662C95BFEF00AAAAE9 /* LogInRegistrFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrFlow.swift; sourceTree = "<group>"; };
+		ADB40B672C95BFEF00AAAAE9 /* LogInRegistrRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrRouter.swift; sourceTree = "<group>"; };
+		ADB40B692C95BFEF00AAAAE9 /* LogInRegistrController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrController.swift; sourceTree = "<group>"; };
+		ADB40B6A2C95BFEF00AAAAE9 /* LogInRegistrModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrModel.swift; sourceTree = "<group>"; };
+		ADB40B6B2C95BFEF00AAAAE9 /* LogInRegistrPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInRegistrPresenter.swift; sourceTree = "<group>"; };
+		ADB40B752C95C35500AAAAE9 /* FilmsWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsWorker.swift; sourceTree = "<group>"; };
+		ADB40B762C95C35600AAAAE9 /* FilmsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsRouter.swift; sourceTree = "<group>"; };
+		ADB40B772C95C35600AAAAE9 /* FilmsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsController.swift; sourceTree = "<group>"; };
+		ADB40B782C95C35600AAAAE9 /* FilmsFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsFlow.swift; sourceTree = "<group>"; };
+		ADB40B792C95C35600AAAAE9 /* FilmsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsBuilder.swift; sourceTree = "<group>"; };
+		ADB40B7A2C95C35600AAAAE9 /* FilmsInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsInteractor.swift; sourceTree = "<group>"; };
+		ADB40B7B2C95C35600AAAAE9 /* FilmsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsPresenter.swift; sourceTree = "<group>"; };
+		ADB40B7C2C95C35600AAAAE9 /* FilmsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsView.swift; sourceTree = "<group>"; };
+		ADB40B7D2C95C35600AAAAE9 /* FilmsModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmsModels.swift; sourceTree = "<group>"; };
+		ADB40B882C95C3FE00AAAAE9 /* OneFilmDetailsWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsWorker.swift; sourceTree = "<group>"; };
+		ADB40B892C95C3FE00AAAAE9 /* OneFilmDetailsModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsModels.swift; sourceTree = "<group>"; };
+		ADB40B8A2C95C3FE00AAAAE9 /* OneFilmDetailsInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsInteractor.swift; sourceTree = "<group>"; };
+		ADB40B8B2C95C3FE00AAAAE9 /* OneFilmDetailsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsController.swift; sourceTree = "<group>"; };
+		ADB40B8C2C95C3FE00AAAAE9 /* OneFilmDetailsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsRouter.swift; sourceTree = "<group>"; };
+		ADB40B8D2C95C3FE00AAAAE9 /* OneFilmDetailsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsBuilder.swift; sourceTree = "<group>"; };
+		ADB40B8E2C95C3FE00AAAAE9 /* OneFilmDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsView.swift; sourceTree = "<group>"; };
+		ADB40B8F2C95C3FE00AAAAE9 /* OneFilmDetailsFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsFlow.swift; sourceTree = "<group>"; };
+		ADB40B902C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsPresenter.swift; sourceTree = "<group>"; };
+		ADB40B9B2C95DAAC00AAAAE9 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		ADB40B9D2C95EF4700AAAAE9 /* LogInRegistrWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInRegistrWorker.swift; sourceTree = "<group>"; };
+		ADF8855A2C974E99000E24DD /* StillCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillCollectionCell.swift; sourceTree = "<group>"; };
+		ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillCollectionCellViewModel.swift; sourceTree = "<group>"; };
+		ADF885632C978241000E24DD /* Films.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Films.swift; sourceTree = "<group>"; };
+		ADF885662C9782CD000E24DD /* Stills.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stills.swift; sourceTree = "<group>"; };
+		ADF8856A2C982DB9000E24DD /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		ADF8856C2C98C83D000E24DD /* StillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillsView.swift; sourceTree = "<group>"; };
+		ADF8856E2C98C952000E24DD /* StillsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +160,70 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EF5E43F22B3B6F8CAF4D6B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		735386548A78EB4E92EE08BE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5D07905A954FB64557FF9BF6 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */,
+				3EFFEBA4FD4B2E8763B0B288 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		AD2251C22C9AAD2600CD1847 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */,
+				AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */,
+				AD5FA29B2C9AA7F8001E2D7E /* CoreDataService.swift */,
+				AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		AD6BA6E82C96004D002458CF /* FilmsTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				AD6BA6E62C960039002458CF /* FilmsTableCell.swift */,
+				AD6BA6E92C960073002458CF /* FilmsTableCellViewModel.swift */,
+			);
+			path = FilmsTableCell;
+			sourceTree = "<group>";
+		};
+		AD6BA6F12C960535002458CF /* SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				AD6BA6EB2C96013B002458CF /* SearchView.swift */,
+				AD6BA6EF2C96052B002458CF /* SearchViewModel.swift */,
+			);
+			path = SearchView;
+			sourceTree = "<group>";
+		};
+		AD6BA6F42C9609A5002458CF /* Cells and Views */ = {
+			isa = PBXGroup;
+			children = (
+				AD6BA6F62C9609E2002458CF /* BaseCollectionViewCell.swift */,
+				AD6BA6F52C9609E2002458CF /* BaseTableViewCell.swift */,
+				AD6BA6F12C960535002458CF /* SearchView */,
+				AD6BA6E82C96004D002458CF /* FilmsTableCell */,
+				ADF885702C98C9F5000E24DD /* StillsView */,
+			);
+			path = "Cells and Views";
+			sourceTree = "<group>";
+		};
 		ADB40B132C95987600AAAAE9 = {
 			isa = PBXGroup;
 			children = (
 				ADB40B1E2C95987600AAAAE9 /* KinopoiskLoginAndSearch */,
 				ADB40B1D2C95987600AAAAE9 /* Products */,
+				735386548A78EB4E92EE08BE /* Pods */,
+				F20F306115A47F5503883782 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,13 +240,163 @@
 			children = (
 				ADB40B1F2C95987600AAAAE9 /* AppDelegate.swift */,
 				ADB40B212C95987600AAAAE9 /* SceneDelegate.swift */,
-				ADB40B232C95987600AAAAE9 /* ViewController.swift */,
-				ADB40B252C95987600AAAAE9 /* Main.storyboard */,
+				ADB40B5F2C95B02800AAAAE9 /* KeychainAndPreferences */,
+				ADB40B3C2C95A4B800AAAAE9 /* Protocols */,
+				ADB40B352C95A41B00AAAAE9 /* NetworkLayer */,
+				AD2251C22C9AAD2600CD1847 /* CoreData */,
+				AD6BA6F42C9609A5002458CF /* Cells and Views */,
+				ADF885622C97820F000E24DD /* Models */,
+				ADB40B622C95BF6200AAAAE9 /* LoginScreen */,
+				ADB40B872C95C35C00AAAAE9 /* FilmsScreen */,
+				ADB40B9A2C95C40C00AAAAE9 /* FilmDetailsScreen */,
+				ADB40B4E2C95A68700AAAAE9 /* Helpers */,
 				ADB40B282C95987800AAAAE9 /* Assets.xcassets */,
 				ADB40B2A2C95987800AAAAE9 /* LaunchScreen.storyboard */,
 				ADB40B2D2C95987800AAAAE9 /* Info.plist */,
 			);
 			path = KinopoiskLoginAndSearch;
+			sourceTree = "<group>";
+		};
+		ADB40B352C95A41B00AAAAE9 /* NetworkLayer */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B452C95A59900AAAAE9 /* NetworkManager.swift */,
+				ADB40B432C95A57900AAAAE9 /* NetworkService.swift */,
+				ADB40B332C959D2B00AAAAE9 /* Endpoint.swift */,
+				ADB40B362C95A45C00AAAAE9 /* DataMapper.swift */,
+				ADF8856A2C982DB9000E24DD /* CacheManager.swift */,
+				ADB40B4B2C95A60D00AAAAE9 /* Errors */,
+			);
+			path = NetworkLayer;
+			sourceTree = "<group>";
+		};
+		ADB40B3C2C95A4B800AAAAE9 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B3D2C95A4E100AAAAE9 /* AlertDisplayable.swift */,
+				ADB40B3E2C95A4E100AAAAE9 /* NavigationBarControllable.swift */,
+				ADB40B3F2C95A4E100AAAAE9 /* SpinnerDisplayable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		ADB40B4B2C95A60D00AAAAE9 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B472C95A5AD00AAAAE9 /* NetworkManagerErrors.swift */,
+				AD6BA6F92C96E854002458CF /* NetServiceErrors.swift */,
+				ADB40B382C95A48700AAAAE9 /* DataMapperError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		ADB40B4E2C95A68700AAAAE9 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B502C95A6F000AAAAE9 /* UIHelper.swift */,
+				ADB40B4C2C95A68000AAAAE9 /* Crypto.swift */,
+				ADB40B4F2C95A6F000AAAAE9 /* CustomNavBar.swift */,
+				ADB40B9B2C95DAAC00AAAAE9 /* GlobalConstants.swift */,
+				ADB40B512C95A6F000AAAAE9 /* Print global.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		ADB40B5F2C95B02800AAAAE9 /* KeychainAndPreferences */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B552C95AB4100AAAAE9 /* KeychainKino.swift */,
+				ADB40B572C95AB6C00AAAAE9 /* UserPreferences.swift */,
+				ADB40B592C95AB8A00AAAAE9 /* UserDefaultsWrapper.swift */,
+				ADB40B5B2C95ABB000AAAAE9 /* KeyсhainWrapper.swift */,
+				ADB40B5D2C95AC7600AAAAE9 /* KeychainQueryConfig.swift */,
+			);
+			path = KeychainAndPreferences;
+			sourceTree = "<group>";
+		};
+		ADB40B622C95BF6200AAAAE9 /* LoginScreen */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B642C95BFEF00AAAAE9 /* LogInRegistrBuilder.swift */,
+				ADB40B662C95BFEF00AAAAE9 /* LogInRegistrFlow.swift */,
+				ADB40B6A2C95BFEF00AAAAE9 /* LogInRegistrModel.swift */,
+				ADB40B652C95BFEF00AAAAE9 /* LogInRegistrView.swift */,
+				ADB40B692C95BFEF00AAAAE9 /* LogInRegistrController.swift */,
+				ADB40B632C95BFEF00AAAAE9 /* LogInRegistrInteractor.swift */,
+				ADB40B9D2C95EF4700AAAAE9 /* LogInRegistrWorker.swift */,
+				ADB40B6B2C95BFEF00AAAAE9 /* LogInRegistrPresenter.swift */,
+				ADB40B672C95BFEF00AAAAE9 /* LogInRegistrRouter.swift */,
+			);
+			path = LoginScreen;
+			sourceTree = "<group>";
+		};
+		ADB40B872C95C35C00AAAAE9 /* FilmsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B792C95C35600AAAAE9 /* FilmsBuilder.swift */,
+				ADB40B782C95C35600AAAAE9 /* FilmsFlow.swift */,
+				ADB40B7D2C95C35600AAAAE9 /* FilmsModels.swift */,
+				ADB40B7C2C95C35600AAAAE9 /* FilmsView.swift */,
+				ADB40B772C95C35600AAAAE9 /* FilmsController.swift */,
+				ADB40B7A2C95C35600AAAAE9 /* FilmsInteractor.swift */,
+				ADB40B752C95C35500AAAAE9 /* FilmsWorker.swift */,
+				ADB40B7B2C95C35600AAAAE9 /* FilmsPresenter.swift */,
+				ADB40B762C95C35600AAAAE9 /* FilmsRouter.swift */,
+			);
+			path = FilmsScreen;
+			sourceTree = "<group>";
+		};
+		ADB40B9A2C95C40C00AAAAE9 /* FilmDetailsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				ADB40B8D2C95C3FE00AAAAE9 /* OneFilmDetailsBuilder.swift */,
+				ADB40B8F2C95C3FE00AAAAE9 /* OneFilmDetailsFlow.swift */,
+				ADB40B892C95C3FE00AAAAE9 /* OneFilmDetailsModels.swift */,
+				ADB40B8E2C95C3FE00AAAAE9 /* OneFilmDetailsView.swift */,
+				ADB40B8B2C95C3FE00AAAAE9 /* OneFilmDetailsController.swift */,
+				ADB40B8A2C95C3FE00AAAAE9 /* OneFilmDetailsInteractor.swift */,
+				ADB40B882C95C3FE00AAAAE9 /* OneFilmDetailsWorker.swift */,
+				ADB40B902C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift */,
+				ADB40B8C2C95C3FE00AAAAE9 /* OneFilmDetailsRouter.swift */,
+			);
+			path = FilmDetailsScreen;
+			sourceTree = "<group>";
+		};
+		ADF8855E2C9750AE000E24DD /* OneFilmCollectionCell */ = {
+			isa = PBXGroup;
+			children = (
+				ADF8855A2C974E99000E24DD /* StillCollectionCell.swift */,
+				ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */,
+			);
+			path = OneFilmCollectionCell;
+			sourceTree = "<group>";
+		};
+		ADF885622C97820F000E24DD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ADF885632C978241000E24DD /* Films.swift */,
+				ADF885662C9782CD000E24DD /* Stills.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		ADF885702C98C9F5000E24DD /* StillsView */ = {
+			isa = PBXGroup;
+			children = (
+				ADF8856C2C98C83D000E24DD /* StillsView.swift */,
+				ADF8856E2C98C952000E24DD /* StillsViewModel.swift */,
+				ADF8855E2C9750AE000E24DD /* OneFilmCollectionCell */,
+			);
+			path = StillsView;
+			sourceTree = "<group>";
+		};
+		F20F306115A47F5503883782 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AD80F84B2C9997C000928387 /* DifferenceKit.framework */,
+				8DDBB694264A54A0A73F6B17 /* Pods_KinopoiskLoginAndSearch.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +406,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADB40B302C95987800AAAAE9 /* Build configuration list for PBXNativeTarget "KinopoiskLoginAndSearch" */;
 			buildPhases = (
+				82BD42644035A979FCB3FC05 /* [CP] Check Pods Manifest.lock */,
 				ADB40B182C95987600AAAAE9 /* Sources */,
 				ADB40B192C95987600AAAAE9 /* Frameworks */,
 				ADB40B1A2C95987600AAAAE9 /* Resources */,
+				EABB24F1486168A3DACE4748 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -127,34 +461,130 @@
 			files = (
 				ADB40B292C95987800AAAAE9 /* Assets.xcassets in Resources */,
 				ADB40B2C2C95987800AAAAE9 /* Base in Resources */,
-				ADB40B272C95987600AAAAE9 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		82BD42644035A979FCB3FC05 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KinopoiskLoginAndSearch-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EABB24F1486168A3DACE4748 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		ADB40B182C95987600AAAAE9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADB40B242C95987600AAAAE9 /* ViewController.swift in Sources */,
+				ADB40B702C95BFEF00AAAAE9 /* LogInRegistrRouter.swift in Sources */,
+				AD2251C92C9AB2EE00CD1847 /* StorageWorker.swift in Sources */,
+				ADB40B422C95A4E100AAAAE9 /* SpinnerDisplayable.swift in Sources */,
+				ADB40B952C95C3FE00AAAAE9 /* OneFilmDetailsRouter.swift in Sources */,
+				AD2251C72C9AB1C200CD1847 /* StorageDataManager.swift in Sources */,
+				ADB40B482C95A5AD00AAAAE9 /* NetworkManagerErrors.swift in Sources */,
+				AD6BA6F72C9609E2002458CF /* BaseTableViewCell.swift in Sources */,
+				ADB40B742C95BFEF00AAAAE9 /* LogInRegistrPresenter.swift in Sources */,
+				ADB40B982C95C3FE00AAAAE9 /* OneFilmDetailsFlow.swift in Sources */,
+				AD5FA29C2C9AA7F9001E2D7E /* CoreDataService.swift in Sources */,
+				ADB40B412C95A4E100AAAAE9 /* NavigationBarControllable.swift in Sources */,
+				AD6BA6EC2C96013B002458CF /* SearchView.swift in Sources */,
+				ADB40B932C95C3FE00AAAAE9 /* OneFilmDetailsInteractor.swift in Sources */,
+				ADB40B462C95A59900AAAAE9 /* NetworkManager.swift in Sources */,
+				ADB40B7F2C95C35600AAAAE9 /* FilmsRouter.swift in Sources */,
+				ADF8856D2C98C83D000E24DD /* StillsView.swift in Sources */,
 				ADB40B202C95987600AAAAE9 /* AppDelegate.swift in Sources */,
+				ADB40B6C2C95BFEF00AAAAE9 /* LogInRegistrInteractor.swift in Sources */,
+				AD6BA6F82C9609E2002458CF /* BaseCollectionViewCell.swift in Sources */,
+				ADB40B9E2C95EF4700AAAAE9 /* LogInRegistrWorker.swift in Sources */,
+				ADB40B522C95A6F000AAAAE9 /* CustomNavBar.swift in Sources */,
+				ADB40B7E2C95C35600AAAAE9 /* FilmsWorker.swift in Sources */,
+				AD6BA6F02C96052B002458CF /* SearchViewModel.swift in Sources */,
+				AD6BA6FA2C96E854002458CF /* NetServiceErrors.swift in Sources */,
+				ADB40B402C95A4E100AAAAE9 /* AlertDisplayable.swift in Sources */,
+				ADB40B852C95C35600AAAAE9 /* FilmsView.swift in Sources */,
+				ADF8856F2C98C952000E24DD /* StillsViewModel.swift in Sources */,
+				AD6BA6EA2C960073002458CF /* FilmsTableCellViewModel.swift in Sources */,
+				ADB40B6F2C95BFEF00AAAAE9 /* LogInRegistrFlow.swift in Sources */,
+				ADF8855B2C974E99000E24DD /* StillCollectionCell.swift in Sources */,
+				ADF885642C978241000E24DD /* Films.swift in Sources */,
+				ADF8856B2C982DB9000E24DD /* CacheManager.swift in Sources */,
+				ADB40B562C95AB4100AAAAE9 /* KeychainKino.swift in Sources */,
+				ADB40B532C95A6F000AAAAE9 /* UIHelper.swift in Sources */,
+				ADB40B812C95C35600AAAAE9 /* FilmsFlow.swift in Sources */,
+				ADB40B862C95C35600AAAAE9 /* FilmsModels.swift in Sources */,
+				ADB40B922C95C3FE00AAAAE9 /* OneFilmDetailsModels.swift in Sources */,
+				ADB40B802C95C35600AAAAE9 /* FilmsController.swift in Sources */,
+				ADB40B842C95C35600AAAAE9 /* FilmsPresenter.swift in Sources */,
+				AD2251C52C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */,
+				ADB40B442C95A57900AAAAE9 /* NetworkService.swift in Sources */,
+				ADB40B392C95A48700AAAAE9 /* DataMapperError.swift in Sources */,
+				ADB40B722C95BFEF00AAAAE9 /* LogInRegistrController.swift in Sources */,
+				ADB40B972C95C3FE00AAAAE9 /* OneFilmDetailsView.swift in Sources */,
+				ADB40B832C95C35600AAAAE9 /* FilmsInteractor.swift in Sources */,
+				ADB40B542C95A6F000AAAAE9 /* Print global.swift in Sources */,
+				ADB40B992C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift in Sources */,
+				ADB40B582C95AB6C00AAAAE9 /* UserPreferences.swift in Sources */,
+				ADB40B4D2C95A68000AAAAE9 /* Crypto.swift in Sources */,
+				ADB40B342C959D2B00AAAAE9 /* Endpoint.swift in Sources */,
+				ADB40B5A2C95AB8A00AAAAE9 /* UserDefaultsWrapper.swift in Sources */,
+				ADB40B5C2C95ABB000AAAAE9 /* KeyсhainWrapper.swift in Sources */,
+				ADB40B732C95BFEF00AAAAE9 /* LogInRegistrModel.swift in Sources */,
+				ADB40B942C95C3FE00AAAAE9 /* OneFilmDetailsController.swift in Sources */,
+				ADF885672C9782CD000E24DD /* Stills.swift in Sources */,
+				ADB40B822C95C35600AAAAE9 /* FilmsBuilder.swift in Sources */,
+				ADB40B6D2C95BFEF00AAAAE9 /* LogInRegistrBuilder.swift in Sources */,
+				ADF8855D2C974EEE000E24DD /* StillCollectionCellViewModel.swift in Sources */,
+				ADB40B5E2C95AC7600AAAAE9 /* KeychainQueryConfig.swift in Sources */,
+				AD6BA6E72C960039002458CF /* FilmsTableCell.swift in Sources */,
+				ADB40B6E2C95BFEF00AAAAE9 /* LogInRegistrView.swift in Sources */,
+				ADB40B372C95A45C00AAAAE9 /* DataMapper.swift in Sources */,
 				ADB40B222C95987600AAAAE9 /* SceneDelegate.swift in Sources */,
+				ADB40B9C2C95DAAC00AAAAE9 /* GlobalConstants.swift in Sources */,
+				ADB40B962C95C3FE00AAAAE9 /* OneFilmDetailsBuilder.swift in Sources */,
+				ADB40B912C95C3FE00AAAAE9 /* OneFilmDetailsWorker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		ADB40B252C95987600AAAAE9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ADB40B262C95987600AAAAE9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		ADB40B2A2C95987800AAAAE9 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -218,7 +648,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -275,7 +705,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -287,17 +717,18 @@
 		};
 		ADB40B312C95987800AAAAE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D07905A954FB64557FF9BF6 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 994K78QDG8;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = KinopoiskLoginAndSearch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -316,17 +747,18 @@
 		};
 		ADB40B322C95987800AAAAE9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3EFFEBA4FD4B2E8763B0B288 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 994K78QDG8;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = KinopoiskLoginAndSearch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -365,6 +797,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */,
+			);
+			currentVersion = AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */;
+			name = KinopoiskLoginAndSearch.xcdatamodeld;
+			path = /Users/vakula_48/Documents/iOS/KinopoiskLoginAndSearch/KinopoiskLoginAndSearch/CoreData/KinopoiskLoginAndSearch.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = ADB40B142C95987600AAAAE9 /* Project object */;
 }

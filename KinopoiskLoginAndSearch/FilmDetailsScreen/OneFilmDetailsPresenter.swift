@@ -9,22 +9,23 @@ import UIKit
 import DifferenceKit
 
 protocol OneFilmDetailsPresentationLogic {
-    func presentUpdate(response: OneFilmDetailsFlow.Update.Response)
+    func presentUpdateAllButStills(response: OneFilmDetailsFlow.UpdateAllButStills.Response)
+    func presentUpdateStills(response: OneFilmDetailsFlow.UpdateStills.Response)
+
     func presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response)
     func presentAlert(response: OneFilmDetailsFlow.AlertInfo.Response)
 
-    func presentRouteBack(response: OneFilmDetailsFlow.RoutePayload.Response)
+    func presentRouteToWeb(response: OneFilmDetailsFlow.OnWebLinkTap.Response)
+
 }
 
 
 final class OneFilmDetailsPresenter: OneFilmDetailsPresentationLogic {
 
     enum Constants {
-        static let estimatedStackWidth: CGFloat = 16 + 45 + 8 + 2 + 16 + 16 //space for stack
         static let mainImageWidthHeight: CGFloat = 45
         static let leftRightInset: CGFloat = 8
-        static let insideCellSpacingAndBorderWidth: CGFloat = 4
-        static let iconExtWidth: CGFloat = 12
+        static let idForStillsVM: CGFloat = 8
     }
 
     // MARK: - Public properties
@@ -32,204 +33,132 @@ final class OneFilmDetailsPresenter: OneFilmDetailsPresentationLogic {
     weak var viewController: OneFilmDetailsDisplayLogic?
 
     // MARK: - Public methods
-    func presentRouteBack(response: OneFilmDetailsFlow.OnAttachedFileOrImageTapped.Response) {
+    func presentRouteToWeb(response: OneFilmDetailsFlow.OnWebLinkTap.Response) {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayRouteToOpenData(viewModel: OneFilmDetailsFlow.RoutePayload.ViewModel())
+            self?.viewController?.displayRouteToWeb(viewModel: OneFilmDetailsFlow.OnWebLinkTap.ViewModel())
         }
     }
 
-    func presentUpdate(response: OneFilmDetailsFlow.Update.Response) {
-        let backColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
-        let navBarTitle = TabBarManager.makeTitleImageAndSelectedImageForTabItem(messageType: response.messageTypeFromSideMenu).0
-        let title = NSMutableAttributedString(
-            string: navBarTitle,
-            attributes: Theme.shared.isLight ? UIHelper.Attributed.blackStrongLRobotoMedium18 : UIHelper.Attributed.whiteStrongRobotoMedium18)
-
-        var views: [AnyDifferentiable] = []
-
-        let group = DispatchGroup()
-        group.enter()
-        self.makeUpperVMWith(oneEmailModel: response.emailModelWithNeededProperties) { upperView in
-            views.append(upperView)
-            group.leave()
-        }
-
-        group.notify(queue: DispatchQueue.global()) { [weak self] in
+    func presentUpdateAllButStills(response: OneFilmDetailsFlow.UpdateAllButStills.Response) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            if response.emailModelWithNeededProperties.isAttachmentIconDisplaying == true,
-               let namesOfAttachedFiles = response.emailModelWithNeededProperties.arrayOfAttachmentNamesAndExt {
-                views.append(makeAttachmentVM(fileNamesWithExt: namesOfAttachedFiles))
-            }
+            let film = response.film
 
-            if response.shouldUpdateButtons {
-                views.append(makeReplyReplyToAllForwardButtonsVM())
-            }
+            let backColor = UIHelper.Color.almostBlack
 
-            var viewModelsOfCells: [AnyDifferentiable] = []
-            viewModelsOfCells.append(makeWebViewVM(htmlString: response.emailModelWithNeededProperties.body,
-                                                   htmlInlineAttachments: response.htmlInlineAttachments)) //for use in production
+            //потенциально долгие операции
+            let backChevron = UIImage(systemName: "chevron.backward")
+            let coverView = UIImage(contentsOfFile: film.coverUrl ?? "")
+            let linkIcon = UIImage(systemName: "link")
 
-            if response.emailModelWithNeededProperties.hasFotos == true {
-                viewModelsOfCells.append(makeSeparatorCellVM())
-                viewModelsOfCells.append(makeFotoCellTitleVM())
+            let filmTitle = NSAttributedString(string: film.nameOriginal ?? "Нет названия",
+                                               attributes: UIHelper.Attributed.whiteInterBold18)
+            let filmRating = NSAttributedString(string: String(film.ratingKinopoisk ?? 0),
+                                                attributes: UIHelper.Attributed.cyanSomeBold18)
+            let descriptionTitle = NSAttributedString(string: GlobalConstants.filmDescriptionTtile,
+                                                      attributes: UIHelper.Attributed.whiteInterBold22)
+            let descriptionText = NSAttributedString(string: film.description ?? "Нет описания",
+                                                     attributes: UIHelper.Attributed.grayMedium14)
 
-                if let attachmentsWithFotos = response.emailModelWithNeededProperties.arrayOfAttachmentNamesAndDataPreviewable {
-                    viewModelsOfCells.append(contentsOf: makeFotoCellVM(attachmentsWithFotos: attachmentsWithFotos))
-                }
-            }
+            let genres = NSAttributedString(
+                string: "\(film.genres.map { $0.genre.lowercased() }.joined(separator: ", "))",
+                attributes: UIHelper.Attributed.whiteInterBold18)
+            let yearsAndCountries = NSAttributedString(
+                string: "\(film.startYear) - \(film.endYear), \(film.countries.map { $0.country }.joined(separator: ", "))",
+                attributes: UIHelper.Attributed.whiteInterBold18)
 
-            let separatorColor = Theme.shared.isLight ? UIHelper.Color.grayLightL : UIHelper.Color.grayStrongD
-
-            let swipeInstructionText = NSAttributedString(
-                string: getString(.oneEmailDetailsSwipeInstruction),
-                attributes: Theme.shared.isLight ? UIHelper.Attributed.grayAlpha06RobotoRegular12 : UIHelper.Attributed.grayRegularDRobotoRegular12)
-
-            let trashNavBarIcon = NavBarButton(image: Theme.shared.isLight ? UIHelper.Image.trashNavBarIcon16x22L : UIHelper.Image.trashNavBarIcon16x22D)
-            let unreadNavBarIcon = NavBarButton(image: Theme.shared.isLight ? UIHelper.Image.unreadNavBarIcon20x16L : UIHelper.Image.unreadNavBarIcon20x16D)
-            let menuNavBarIcon = NavBarButton(image: Theme.shared.isLight ? UIHelper.Image.threeDotsNavBarIcon4x16L : UIHelper.Image.threeDotsNavBarIcon4x16D)
-
-            let navBar = CustomNavBar(title: title,
-                                      isLeftBarButtonEnable: true,
-                                      isLeftBarButtonCustom: false,
-                                      leftBarButtonCustom: nil,
-                                      rightBarButtons: [menuNavBarIcon, unreadNavBarIcon, trashNavBarIcon])
+            let stillTitle = NSAttributedString(string: GlobalConstants.stills,
+                                                attributes: UIHelper.Attributed.whiteInterBold22)
 
             DispatchQueue.main.async { [weak self] in
-                self?.viewController?.displayUpdate(viewModel: OneFilmDetailsFlow.Update.ViewModel(
-                    navBarBackground: backColor,
+                self?.viewController?.displayUpdateAllButStills(viewModel: OneFilmDetailsFlow.UpdateAllButStills.ViewModel(
                     backViewColor: backColor,
-                    navBar: navBar,
-                    separatorColor: separatorColor,
-                    hasAttachment: response.emailModelWithNeededProperties.isAttachmentIconDisplaying ?? false,
-                    hasFotos: response.emailModelWithNeededProperties.hasFotos,
-                    views: views,
-                    items: viewModelsOfCells,
-                    swipeInstructionTextLabel: swipeInstructionText)
-                )
+                    backChevron: backChevron ?? UIImage(),
+                    coverView: coverView ?? UIImage(),
+                    linkIcon: linkIcon ?? UIImage(),
+                    filmTitle: filmTitle,
+                    filmRating: filmRating,
+                    descriptionTitle: descriptionTitle,
+                    descriptionText: descriptionText,
+                    genres: genres,
+                    yearsAndCountries: yearsAndCountries,
+                    stillTitle: stillTitle))
             }
+        }
+    }
+
+    func presentUpdateStills(response: OneFilmDetailsFlow.UpdateStills.Response) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self,
+                  let stills = response.stills else { return }
+
+            var views: [AnyDifferentiable] = []
+
+            let stillsViewModel = self.makeStillsVM(stills: stills)
+            views.append(stillsViewModel)
+
+            DispatchQueue.main.async { [weak self] in
+                self?.viewController?.displayUpdateStills(viewModel: OneFilmDetailsFlow.UpdateStills.ViewModel(
+                    id: stillsViewModel.differenceIdentifier,
+                    items: views))
+            }
+
         }
     }
 
 
     func presentAlert(response: OneFilmDetailsFlow.AlertInfo.Response) {
-        let title = getString(.error)
+        let title = GlobalConstants.error
         let text = response.error.localizedDescription
-        let buttonTitle = getString(.closeAction)
+        let buttonTitle = GlobalConstants.ok
 
         DispatchQueue.main.async { [weak self] in
             self?.viewController?.displayAlert(
                 viewModel: OneFilmDetailsFlow.AlertInfo.ViewModel(title: title,
-                                                                   text: text,
-                                                                   buttonTitle: buttonTitle))
+                                                                  text: text,
+                                                                  buttonTitle: buttonTitle))
         }
     }
 
     func presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response) {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel(isShow: response.isShow))
+            self?.viewController?.displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel(
+                isShow: response.isShow,
+                type: response.type))
         }
     }
 
     // MARK: - Private methods
 
-    private func makeCellForCollection(fileNameWithExt: String,
-                                     cloudBackColor: UIColor,
-                                     attributesForString: [NSAttributedString.Key : Any]) -> (AnyDifferentiable, CGFloat) {
+    private func makeStillsVM(stills: [OneStill]) -> AnyDifferentiable {
 
-        let nameWithoutExtension = fileNameWithExt.components(separatedBy: ".").first ?? ""
-        let name = NSAttributedString(string: nameWithoutExtension, attributes: attributesForString)
-        var textLenght = CGFloat()
+        var collectionOfStills: [AnyDifferentiable] = []
 
-        if fileNameWithExt.count > GlobalConstants.cloudAttachmentTextLength20Сhars {
-            textLenght = GlobalConstants.cloudAttachmentTextWidthPoints
-        } else {
-            textLenght = CGFloat(name.size().width)
+        for oneStill in stills {
+            let oneStillCellVM = makeCellForCollection(id: oneStill.previewURL,
+                                                       urlInCache: oneStill.cachedPreview)
+            collectionOfStills.append(oneStillCellVM)
         }
-        let oneCellWidht = (Constants.leftRightInset * 2) + Constants.iconExtWidth + Constants.insideCellSpacingAndBorderWidth + textLenght
 
-        let fileExtension = fileNameWithExt.components(separatedBy: ".").last ?? ""
-        let iconOfFileExtension = ImageManager.getFileIcon(for: fileExtension)
+        let stillsVM = StillsViewModel(
+            id: Constants.idForStillsVM,
+            //                insets:  UIEdgeInsets(top: UIHelper.Margins.medium8px,
+            //                                      left: UIHelper.Margins.medium16px,
+            //                                      bottom: UIHelper.Margins.medium8px,
+            //                                      right: UIHelper.Margins.medium16px),
+            items: collectionOfStills)
 
-        let attachmentsVM = CloudEmailAttachmentViewModel(
-            id: fileNameWithExt,
-            filenameWithoutExt: name,
-            filenameWithExt: fileNameWithExt,
-            backColor: cloudBackColor,
-            borderColor: Theme.shared.isLight ? UIHelper.Color.grayLightL : UIHelper.Color.grayStrongD,
-            attachmentIconOfCloud: iconOfFileExtension,
-            insets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        return AnyDifferentiable(stillsVM)
 
-        return (AnyDifferentiable(attachmentsVM), oneCellWidht)
     }
 
-    private func makeCollectionVM(fileNamesWithExt: [String]) -> AnyDifferentiable {
-        let backColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
-        let title = NSAttributedString(
-            string: getString(.oneEmailDetailsAttachedFilesTitle),
-            attributes: Theme.shared.isLight ? UIHelper.Attributed.blackMiddleLRobotoSemiBold14 : UIHelper.Attributed.whiteStrongRobotoSemiBold14)
-        let attributesForAttachmentName = Theme.shared.isLight ? UIHelper.Attributed.grayAlpha06RobotoRegular14 : UIHelper.Attributed.grayRegularDRobotoRegular14
 
-        var collectionOfAttachments: [AnyDifferentiable] = []
-        var widthsOfAttachmentsFileNames = [CGFloat]()
-
-        for nameWithExt in fileNamesWithExt {
-            let (oneAttachmentCell, width) = makeCellForCollection(
-                fileNameWithExt: nameWithExt,
-                cloudBackColor: backColor,
-                attributesForString: attributesForAttachmentName)
-
-            collectionOfAttachments.append(oneAttachmentCell)
-            widthsOfAttachmentsFileNames.append(width)
-        }
-
-        let attachmentVM = OneEmailAttachmentViewModel(
-            id: 0,
-            backColor: backColor,
-            attachmentTitle: title,
-            insets:  UIEdgeInsets(top: UIHelper.Margins.medium8px,
-                                  left: UIHelper.Margins.medium16px,
-                                  bottom: UIHelper.Margins.medium8px,
-                                  right: UIHelper.Margins.medium16px),
-            items: collectionOfAttachments,
-            widths: widthsOfAttachmentsFileNames)
-
-        return AnyDifferentiable(attachmentVM)
-    }
-
-    private func makeFotoCellVM(attachmentsWithFotos: [AttachmentModel]) -> [AnyDifferentiable] {
-        let backColor = Theme.shared.isLight ? UIHelper.Color.white : UIHelper.Color.blackLightD
-        let downloadIcon = Theme.shared.isLight ? UIHelper.Image.oneEmailDetailsDownloadL : UIHelper.Image.oneEmailDetailsDownloadD
-        let quattroIcon = Theme.shared.isLight ? UIHelper.Image.oneEmailDetailsQuattroL :UIHelper.Image.oneEmailDetailsQuattroD
-        let separatorAndBorderColor = Theme.shared.isLight ? UIHelper.Color.grayLightL : UIHelper.Color.grayStrongD
-
-        var fotoCellVMs: [AnyDifferentiable] = [] //[] to silence warning of return AnyDifferentiable
-
-        for (id, attachmentModel) in attachmentsWithFotos.enumerated() {
-            let fileExtension = attachmentModel.filename.components(separatedBy: ".").last ?? ""
-            let iconOfFileExtension = ImageManager.getFileIcon(for: fileExtension)
-
-            let name = NSAttributedString(
-                string: attachmentModel.filename,
-                attributes: Theme.shared.isLight ? UIHelper.Attributed.grayAlpha06RobotoRegular14 : UIHelper.Attributed.grayRegularDRobotoRegular14)
-
-            let image = UIImage(data: attachmentModel.content) ?? UIImage()
-            let fotoCellVM = FotoCellViewModel(id: id,
-                                               backColor: backColor,
-                                               borderColor: separatorAndBorderColor,
-                                               fotoImage: image,
-                                               fileIcon: iconOfFileExtension,
-                                               fileName: name,
-                                               downloadIcon: downloadIcon,
-                                               quattroIcon: quattroIcon,
-                                               insets: UIEdgeInsets(
-                                                top: UIHelper.Margins.medium8px,
-                                                left: UIHelper.Margins.medium16px,
-                                                bottom: 0,
-                                                right: UIHelper.Margins.medium16px))
-            fotoCellVMs.append(AnyDifferentiable(fotoCellVM))
-
-        }
-        return fotoCellVMs
+    private func makeCellForCollection(id: String?, urlInCache: String?) -> AnyDifferentiable {
+        let stillImage = UIImage(contentsOfFile: urlInCache ?? "")
+        let oneStillCellVM = StillCollectionCellViewModel(id: id ?? "",
+                                                          stillImage: stillImage)
+        return AnyDifferentiable(oneStillCellVM)
     }
 
 }
+

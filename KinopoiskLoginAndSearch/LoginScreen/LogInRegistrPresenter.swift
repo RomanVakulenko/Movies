@@ -9,7 +9,6 @@ import UIKit
 
 protocol LogInRegistrPresentationLogic {
     func presentUpdate(response: LogInRegistrFlow.Update.Response)
-//    func presentWaitIndicator(response: LogInRegistrFlow.OnWaitIndicator.Response)
     func presentAlert(response: LogInRegistrFlow.AlertInfo.Response)
     func presentRouteToFilmsScreen(response: LogInRegistrFlow.RoutePayload.Response)
 }
@@ -17,7 +16,6 @@ protocol LogInRegistrPresentationLogic {
 
 final class LogInRegistrPresenter: LogInRegistrPresentationLogic {
 
-    enum Constants {}
 
     // MARK: - Public properties
     weak var viewController: LogInRegistrDisplayLogic?
@@ -26,11 +24,20 @@ final class LogInRegistrPresenter: LogInRegistrPresentationLogic {
     func presentUpdate(response: LogInRegistrFlow.Update.Response) {
         let backColor = UIHelper.Color.almostBlack
 
+        let placeholderAttributes: [NSAttributedString.Key: Any] = [ .foregroundColor: UIColor.white ]
+        let attributedPlaceholderForLogin = NSAttributedString(
+            string: GlobalConstants.loginPlaceholder,
+            attributes: placeholderAttributes)
+
+        let attributedPlaceholderForPassword = NSAttributedString(
+            string: GlobalConstants.passwordPlaceholder,
+            attributes: placeholderAttributes)
+
         let appTitle = NSAttributedString(string: GlobalConstants.appTitle,
                                           attributes: UIHelper.Attributed.cyanSomeBold22)
 
         let enterButton = NSAttributedString(string: GlobalConstants.enterButton,
-                                             attributes: UIHelper.Attributed.whiteMedium16)
+                                             attributes: UIHelper.Attributed.whiteInterBold18)
         let enterButtonBackground = UIHelper.Color.cyanSome
 
         let insets = UIEdgeInsets(top: 0,
@@ -38,7 +45,10 @@ final class LogInRegistrPresenter: LogInRegistrPresentationLogic {
                                   bottom: UIHelper.Margins.medium16px,
                                   right: UIHelper.Margins.medium16px)
         let viewModel = LogInRegistrFlow.Update.ViewModel(
-            backColor: backColor,
+            backColor: backColor, 
+            emptyForLoginAndPasswordAtLogOff: "",
+            attributedPlaceholderForLogin: attributedPlaceholderForLogin,
+            attributedPlaceholderForPassword: attributedPlaceholderForPassword,
             appTitle: appTitle,
             enterButton: enterButton,
             enterButtonBackground: enterButtonBackground,
@@ -50,23 +60,26 @@ final class LogInRegistrPresenter: LogInRegistrPresentationLogic {
     }
 
     func presentAlert(response: LogInRegistrFlow.AlertInfo.Response) {
-        let title = GlobalConstants.error
-        let text = GlobalConstants.alertWrongPassword
+        var title = GlobalConstants.attention
+        var text = ""
+
+        switch response.alertAt {
+        case .someFieldIsEmpty:
+            text = GlobalConstants.someFieldIsEmpty
+        case .invalidPassword:
+            text = GlobalConstants.invalidPassword
+        }
         let buttonTitle = GlobalConstants.ok
 
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.displayAlert(viewModel: LogInRegistrFlow.AlertInfo.ViewModel(
-                title: title,
-                text: text,
-                firstButtonTitle: buttonTitle))
+            self?.viewController?.displayAlert(
+                viewModel: LogInRegistrFlow.AlertInfo.ViewModel(title: title,
+                                                                text: text,
+                                                                firstButtonTitle: buttonTitle))
+
+
         }
     }
-
-    //    func presentWaitIndicator(response: LogInRegistrFlow.OnWaitIndicator.Response) {
-    //        DispatchQueue.main.async { [weak self] in
-    //            self?.viewController?.displayWaitIndicator(viewModel: LogInRegistrFlow.OnWaitIndicator.ViewModel(isShow: response.isShow))
-    //        }
-    //    }
 
     func presentRouteToFilmsScreen(response: LogInRegistrFlow.RoutePayload.Response) {
         DispatchQueue.main.async { [weak self] in

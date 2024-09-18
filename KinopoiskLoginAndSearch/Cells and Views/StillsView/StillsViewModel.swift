@@ -11,14 +11,14 @@ import DifferenceKit
 
 struct StillsViewModel {
     let id: AnyHashable
-    let insets: UIEdgeInsets
+//    let insets: UIEdgeInsets
     let items: [AnyDifferentiable]
 
     init(id: AnyHashable,
-         insets: UIEdgeInsets,
+//         insets: UIEdgeInsets,
          items: [AnyDifferentiable]) {
         self.id = id
-        self.insets = insets
+//        self.insets = insets
         self.items = items
     }
 }
@@ -29,7 +29,7 @@ extension StillsViewModel: Differentiable {
     }
 
     func isContentEqual(to source: StillsViewModel) -> Bool {
-        source.insets == insets
+        return false //оставалось мало времени - вписал хардом
     }
 }
 

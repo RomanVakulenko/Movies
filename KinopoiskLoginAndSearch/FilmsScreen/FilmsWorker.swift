@@ -8,7 +8,8 @@
 import Foundation
 
 protocol FilmsWorkingLogic {
-    func loadFilms(completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void)
+    func loadFilms(isRefreshRequested: Bool, completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void)
+    func loadAvatarsFor(films: [OneFilm], completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void)
 }
 
 
@@ -24,9 +25,12 @@ final class FilmsWorker: FilmsWorkingLogic {
         self.networkManager = networkManager
     }
 
-    func loadFilms(completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
+    func loadFilms(isRefreshRequested: Bool, completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
         guard !isFetching else { return }
         isFetching = true
+        if isRefreshRequested {
+            currentPage = 1
+        }
 
         networkManager.loadFilms(page: currentPage) { [weak self] result in
             guard let self = self else { return }
@@ -36,6 +40,23 @@ final class FilmsWorker: FilmsWorkingLogic {
             case .success(let films):
                 self.currentPage += 1
                 completion(.success(films))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func loadAvatarsFor(films: [OneFilm], completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
+        guard !isFetching else { return }
+        isFetching = true
+
+        networkManager.downloadAndCacheAvatarsFor(films: films) { [weak self] result in
+            guard let self = self else { return }
+            self.isFetching = false
+
+            switch result {
+            case .success(let filmsWithPaths):
+                completion(.success(filmsWithPaths))
             case .failure(let error):
                 completion(.failure(error))
             }

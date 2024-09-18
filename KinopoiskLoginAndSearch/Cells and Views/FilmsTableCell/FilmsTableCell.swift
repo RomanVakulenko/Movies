@@ -14,7 +14,7 @@ final class FilmsTableCell: BaseTableViewCell<FilmsTableCellViewModel> {
 
     // MARK: - SubTypes
     private enum Constants {
-        static let mainImageWidthHeight: CGFloat = UIScreen.main.bounds.width / 2.5
+        static let mainImageWidthHeight: CGFloat = UIScreen.main.bounds.width / 3
     }
 
     private(set) lazy var backView: UIView = {
@@ -95,7 +95,7 @@ final class FilmsTableCell: BaseTableViewCell<FilmsTableCellViewModel> {
             $0.top.equalToSuperview()
             $0.leading.equalTo(filmImageView.snp.trailing).offset(UIHelper.Margins.medium8px)
             $0.trailing.equalToSuperview()
-//            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+//            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight48px)
         }
 
         subtitle.snp.makeConstraints {
@@ -109,7 +109,7 @@ final class FilmsTableCell: BaseTableViewCell<FilmsTableCellViewModel> {
             $0.bottom.equalTo(filmImageView.snp.bottom)
             $0.trailing.equalToSuperview()
             $0.width.equalTo(UIHelper.Margins.huge42px)
-            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight48px)
         }
     }
 

@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 protocol OneFilmDetailsRoutingLogic {
-    func routeBack()
+    func routeBackToFilmsScreen()
     func routeToWeb()
 }
 
@@ -26,14 +26,29 @@ final class OneFilmDetailsRouter: OneFilmDetailsRoutingLogic, OneFilmDetailsData
 
     // MARK: - Public methods
 
-    func routeBack() {
+    func routeBackToFilmsScreen() {
         DispatchQueue.main.async { [weak self] in
             self?.viewController?.navigationController?.popViewController(animated: false)
         }
     }
 
     func routeToWeb() {
+        if let filmWebUrl = dataStore?.filmWebUrl {
+            guard let url = URL(string: filmWebUrl) else {
+                print("Invalid URL string: \(filmWebUrl)")
+                return
+            }
+
+            UIApplication.shared.open(url, options: [:]) { success in
+                if success {
+                    print("URL opened successfully.")
+                } else {
+                    print("Failed to open URL.")
+                }
+            }
+
+        }
 
     }
-    
+
 }

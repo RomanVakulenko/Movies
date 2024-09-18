@@ -8,10 +8,12 @@
 import Foundation
 
 final class UserPreferences {
-
     private enum Keys {
         static let rememberMe = "kinopoisk_remember"
         static let userName = "kinopoisk_username"
+        static let isRegistered = "kinopoisk_is_registered"
+        static let hasLoggedInOnce = "kinopoisk_has_logged_in_once"
+        static let avatarPaths = "kinopoisk_avatar_paths"
     }
 
     let storage: KeyValueStorage
@@ -31,7 +33,6 @@ final class UserPreferences {
             } else {
                 storage.removeValue(forKey: Keys.rememberMe)
             }
-
         }
     }
 
@@ -45,7 +46,37 @@ final class UserPreferences {
             } else {
                 storage.removeValue(forKey: Keys.userName)
             }
+        }
+    }
 
+    var isRegistered: Bool {
+        get {
+            return storage.bool(forKey: Keys.isRegistered) ?? false
+        }
+        set {
+            storage.set(newValue, key: Keys.isRegistered)
+        }
+    }
+
+    var hasLoggedInOnce: Bool {
+        get {
+            return storage.bool(forKey: Keys.hasLoggedInOnce) ?? false
+        }
+        set {
+            storage.set(newValue, key: Keys.hasLoggedInOnce)
+        }
+    }
+
+    var avatarPaths: [String]? {
+        get {
+            return storage.array(forKey: Keys.avatarPaths)
+        }
+        set {
+            if let newValue = newValue {
+                storage.set(newValue, key: Keys.avatarPaths)
+            } else {
+                storage.removeValue(forKey: Keys.avatarPaths)
+            }
         }
     }
 }

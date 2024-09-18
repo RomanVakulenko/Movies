@@ -41,13 +41,11 @@ final class OneFilmDetailsWorker: OneFilmDetailsWorkingLogic {
         }
     }
 
-    func loadFilmImages(id: Int,
-                        completion: @escaping (Result<[OneStill], NetworkManagerErrors>) -> Void) {
+    func loadFilmImages(id: Int, completion: @escaping (Result<[OneStill], NetworkManagerErrors>) -> Void) {
         guard !isFetching else { return }
         isFetching = true
 
-        networkManager.loadFilmImages(id: id, 
-                                      pageForStills: currentPageForStills) { [weak self] result in
+        networkManager.loadFilmImages(id: id, pageForStills: currentPageForStills) { [weak self] result in
             guard let self = self else { return }
             self.isFetching = false
 

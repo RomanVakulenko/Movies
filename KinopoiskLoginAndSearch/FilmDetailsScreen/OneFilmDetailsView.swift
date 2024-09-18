@@ -9,12 +9,16 @@ import UIKit
 import SnapKit
 
 protocol OneFilmDetailsViewOutput: AnyObject,
-                                   StillsViewOutput { }
+                                   StillsViewOutput { 
+    func didTapChevronBack()
+    func didTapWebLink()
+}
 
 protocol OneFilmDetailsViewLogic: UIView {
-    func update(viewModel: OneFilmDetailsModel.ViewModel)
+    func updateAllButStills(viewModel: OneFilmDetailsModel.ViewModel)
+    func updateStills(viewModel: StillsViewModel)
     func displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel)
-    
+
     var output: OneFilmDetailsViewOutput? { get set }
 }
 
@@ -32,7 +36,7 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
         return view
     }()
 
-    private lazy var backArrowView: UIImageView = {
+    private lazy var backChevronView: UIImageView = {
         let view = UIImageView()
         return view
     }()
@@ -96,6 +100,7 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
     }()
 
     private(set) var viewModel: OneFilmDetailsModel.ViewModel?
+    private(set) var stillsViewModel: StillsViewModel?
 
 
     // MARK: - Init
@@ -115,43 +120,68 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
     
     // MARK: - Public Methods
     
-    func update(viewModel: OneFilmDetailsModel.ViewModel) {
+    func updateAllButStills(viewModel: OneFilmDetailsModel.ViewModel) {
         self.viewModel = viewModel
         backgroundColor = viewModel.backViewColor
         backView.backgroundColor = viewModel.backViewColor
+    }
 
-        for (i, _) in viewModel.views.enumerated() {
-            let viewModel = viewModel.views[i].base
+    func updateStills(viewModel: StillsViewModel) {
+        self.stillsViewModel = viewModel
+
+        for (i, _) in viewModel.items.enumerated() {
+            let viewModel = viewModel.items[i].base
 
             switch viewModel {
             case let vm as StillsViewModel:
                 stillsView.viewModel = vm
                 stillsView.update(viewModel: vm)
                 stillsView.output = output
-
             default:
                 break
             }
         }
     }
-    
+
     func displayWaitIndicator(viewModel: OneFilmDetailsFlow.OnWaitIndicator.ViewModel) {
         if viewModel.isShow {
-            showSpinner()
+            showSpinner(type: viewModel.type)
         } else {
             hideSpinner()
         }
     }
+
+
+
+    // MARK: - Actions
+    @objc private func didTapChevronBack(_ sender: UITapGestureRecognizer) {
+        output?.didTapChevronBack()
+    }
+
+    @objc private func didTapWebLink(_ sender: UITapGestureRecognizer) {
+        output?.didTapWebLink()
+    }
+
+
       // MARK: - Private Methods
 
     private func configure() {
         addSubviews()
         configureConstraints()
+
     }
     
     private func addSubviews() {
         self.addSubview(backView)
-        [backArrowView, coverView, filmTitle, filmRating, descriptionTitle, linkIcon, descriptionText, genres, yearsAndCountries, stillsTitle, stillsView].forEach { backView.addSubview($0) }
+        [backChevronView, coverView, filmTitle, filmRating, descriptionTitle, linkIcon, descriptionText, genres, yearsAndCountries, stillsTitle, stillsView].forEach { backView.addSubview($0) }
+
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapChevronBack(_:)))
+        backChevronView.isUserInteractionEnabled = true
+        backChevronView.addGestureRecognizer(tapGestureRecognizer)
+
+        let tapGestureRecognizerAtIcon = UITapGestureRecognizer(target: self, action: #selector(didTapWebLink(_:)))
+        linkIcon.isUserInteractionEnabled = true
+        linkIcon.addGestureRecognizer(tapGestureRecognizerAtIcon)
     }
 
     private func configureConstraints() {
@@ -159,7 +189,7 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
 
-        backArrowView.snp.makeConstraints {
+        backChevronView.snp.makeConstraints {
             $0.top.equalTo(backView.snp.top).offset(UIHelper.Margins.large22px)
             $0.leading.equalToSuperview().offset(UIHelper.Margins.small6px)
             $0.height.width.equalTo(UIHelper.Margins.large24px)

@@ -23,7 +23,6 @@ final class LogInRegistrController: UIViewController, AlertDisplayable {
 
     lazy var contentView: LogInRegistrViewLogic = LogInRegistrView()
 
-
     // MARK: - Lifecycle
 
     override func loadView() {
@@ -36,8 +35,12 @@ final class LogInRegistrController: UIViewController, AlertDisplayable {
         interactor?.onDidLoadViews(request: LogInRegistrFlow.OnDidLoadViews.Request())
     }
 
-    // MARK: - Private methods
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        interactor?.doLoginAndPasswordEmpty(request: LogInRegistrFlow.OnDidLoadViews.Request())
+    }
 
+    // MARK: - Private methods
 
     private func configure() {
         contentView.output = self
@@ -87,3 +90,13 @@ extension LogInRegistrController: LogInRegistrViewOutput {
     }
 
 }
+
+
+// MARK: - FilmsDelegate
+extension LogInRegistrController: FilmsDelegate {
+    func doLogOut() {
+        interactor?.logOut()
+    }
+}
+
+

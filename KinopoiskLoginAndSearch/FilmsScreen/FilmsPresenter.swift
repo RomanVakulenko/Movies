@@ -56,7 +56,6 @@ final class FilmsPresenter: FilmsPresentationLogic {
                 string: GlobalConstants.searchBarPlaceholder,
                 attributes: UIHelper.Attributed.grayMedium14)
 
-            let searchText = response.searchText ?? ""
             let searchTextColor = UIHelper.Color.gray
             let searchIcon = UIImage(systemName: "magnifyingglass")
 
@@ -65,13 +64,8 @@ final class FilmsPresenter: FilmsPresentationLogic {
                     id: Constants.searchViewId,
                     backColor: backColor,
                     searchBarAttributedPlaceholder: searchBarAttributedPlaceholder,
-                    searchText: searchText,
                     searchIcon: searchIcon ?? UIImage(),
-                    searchTextColor: searchTextColor,
-                    insets: UIEdgeInsets(top: UIHelper.Margins.medium16px,
-                                         left: 0,
-                                         bottom: 0,
-                                         right: 0)))
+                    searchTextColor: searchTextColor))
             }
         }
     }
@@ -83,32 +77,18 @@ final class FilmsPresenter: FilmsPresentationLogic {
                   let films = response.filmsSortedFiltered else { return }
 
             let backColor = UIHelper.Color.almostBlack
-            var textForScreenTitle = GlobalConstants.appTitle
+            let textForScreenTitle = GlobalConstants.appTitle
             let screenTitle = NSAttributedString(
                 string: textForScreenTitle,
                 attributes: UIHelper.Attributed.cyanSomeBold22)
 
 
-            var rightNavBarItem = NavBarButton(image: UIHelper.Images.logOffCyan24px)
-            var navBar = CustomNavBar(title: screenTitle,
+            let rightNavBarItem = NavBarButton(image: UIHelper.Images.logOffCyan24px)
+            let navBar = CustomNavBar(title: screenTitle,
                                       isLeftBarButtonEnable: true,
                                       isLeftBarButtonCustom: false,
                                       leftBarButtonCustom: nil,
                                       rightBarButtons: [rightNavBarItem])
-
-
-            let attachmentFilter = NSTextAttachment()
-            attachmentFilter.image = UIImage(systemName: "chevron.down")
-            attachmentFilter.bounds = CGRect(x: 0,
-                                              y: -UIHelper.Margins.small2px,
-                                              width: UIHelper.Margins.large20px,
-                                              height: UIHelper.Margins.large20px)
-
-            let filterAndChevron = NSAttributedString(attachment: attachmentFilter)
-            let filterMutableAttributedString = NSMutableAttributedString(
-                string: String(response.yearForFilterAt) + " ",
-                attributes: UIHelper.Attributed.grayMedium14)
-            filterMutableAttributedString.append(filterAndChevron)
 
             let sortIcon = UIHelper.Images.sortCyan24px
 
@@ -129,27 +109,33 @@ final class FilmsPresenter: FilmsPresentationLogic {
             }
 
             group.notify(queue: DispatchQueue.global()) {
-                for index in 0...dictEmailMessage.count - 1 {
-                    if let contactCellVM = dictEmailMessage[index] {
-                        tableItems.append(AnyDifferentiable(contactCellVM))
+                if dictEmailMessage.count > 0 {
+                    for index in 0...dictEmailMessage.count - 1 {
+                        if let contactCellVM = dictEmailMessage[index] {
+                            tableItems.append(AnyDifferentiable(contactCellVM))
+                        }
                     }
                 }
+                print(response.isNowFilteringAtSearchOrYearOrSortedDescending)
                 self.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
 
                 DispatchQueue.main.async { [weak self] in
-                    self?.viewController?.displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel(
+                    guard let self = self else { return }
+                    self.viewController?.displayUpdate(viewModel: FilmsScreenFlow.Update.ViewModel(
                         backViewColor: backColor,
                         navBarBackground: backColor,
                         navBar: navBar,
-                        yearButtonText: filterMutableAttributedString,
+                        yearButtonText: self.makeFilterButton(year: response.yearForFilterAt),
                         sortIcon: sortIcon,
-                        items: tableItems,
+                        items: tableItems,  
+                        isNowFilteringAtSearchOrYearOrSortedDescending: response.isNowFilteringAtSearchOrYearOrSortedDescending,
                         insets: UIEdgeInsets(top: 0,
                                              left: UIHelper.Margins.medium16px,
                                              bottom: 0,
                                              right: UIHelper.Margins.medium16px)))
                 }
             }
+
         }
     }
 
@@ -179,19 +165,23 @@ final class FilmsPresenter: FilmsPresentationLogic {
                                  completion: @escaping (FilmsTableCellViewModel, Int) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
 
-            var avatarImage = UIImage()
-            if let image = UIImage(contentsOfFile: film.cachedAvatarPath ?? "") {
-                avatarImage = image
-            } else {
-                avatarImage = UIImage()
-            }
+            var avatarImage: UIImage?
 
+            if let path = film.cachedAvatarPath,
+               path != "" {
+                // Если файл существует, загружаем изображение из файла
+                if let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {// или так доставать data из FileManager.default.contents(atPath: path)
+                    avatarImage = UIImage(data: data) ?? UIHelper.Images.imagePlaceholder100px
+                }
+            } else {
+                avatarImage = UIHelper.Images.imagePlaceholder100px
+            }
 
             let genres = film.genres
             let countries = film.countries
             let genresYearCountries = "\(genres.map { $0.genre.lowercased() }.joined(separator: ", ")), \(film.year), \(countries.map { $0.country }.joined(separator: ", "))"
 
-            let filmTitle = NSAttributedString(string: film.nameOriginal,
+            let filmTitle = NSAttributedString(string: film.nameOriginal ?? "",
                                                attributes: UIHelper.Attributed.whiteInterBold18)
 
             let subtitle = NSAttributedString(string: genresYearCountries,
@@ -212,5 +202,23 @@ final class FilmsPresenter: FilmsPresentationLogic {
                                      right: 0))
             completion(oneFilmCell, index)
         }
+
     }
+
+    private func makeFilterButton(year: Int) -> NSAttributedString {
+        let attachmentFilter = NSTextAttachment()
+        attachmentFilter.image = UIImage(systemName: "chevron.down")?.withRenderingMode(.alwaysTemplate) // Используем режим шаблона
+        attachmentFilter.bounds = CGRect(x: 0,
+                                         y: -UIHelper.Margins.small2px,
+                                         width: UIHelper.Margins.large20px,
+                                         height: UIHelper.Margins.medium12px)
+
+        let filterAndChevron = NSAttributedString(attachment: attachmentFilter)
+        let filterMutableAttributedString = NSMutableAttributedString(
+            string: String(year) + " ",
+            attributes: UIHelper.Attributed.grayMedium14)
+        filterMutableAttributedString.append(filterAndChevron)
+        return filterMutableAttributedString
+    }
+
 }

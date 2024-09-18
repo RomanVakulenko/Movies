@@ -15,10 +15,11 @@ final class OneFilmDetailsBuilder: OneFilmDetailsBuilderProtocol {
 
     func getControllerFor(filmId: Int) -> UIViewController {
         let viewController = OneFilmDetailsController()
-
+        let coreDataManager = StorageDataManager()
+        
         let networkManager = NetworkManager(networkService: NetworkService(),
                                             mapper: DataMapper(),
-                                            cacheManager: CacheManager())
+                                            cacheManager: CacheManager(coreDataManager: coreDataManager))
         let worker = OneFilmDetailsWorker(networkManager: networkManager)
         let interactor = OneFilmDetailsInteractor(filmId: filmId)
 

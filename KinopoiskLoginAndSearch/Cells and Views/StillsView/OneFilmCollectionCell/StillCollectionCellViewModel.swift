@@ -10,8 +10,9 @@ import DifferenceKit
 
 
 // MARK: - StillCollectionCellViewModelOutput
+
 protocol StillCollectionCellViewModelOutput: AnyObject {
-    func didTapAtCell(_ viewModel: StillCollectionCellViewModel)
+    func didTapAtOneStill(_ viewModel: StillCollectionCellViewModel)
 }
 
 struct StillCollectionCellViewModel {
@@ -26,8 +27,8 @@ struct StillCollectionCellViewModel {
         self.output = output
     }
 
-    func didTapStill() {
-        output?.didTapAtCell(self)
+    func didTapAtOneStill() {
+        output?.didTapAtOneStill(self)
     }
 }
 

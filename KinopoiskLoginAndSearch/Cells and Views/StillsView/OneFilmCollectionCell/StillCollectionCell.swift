@@ -65,7 +65,7 @@ final class StillCollectionCell: BaseCollectionViewCell<StillCollectionCellViewM
     // MARK: - Private methods
 
     @objc private func didTapAtStill(_ sender: UITapGestureRecognizer) {
-        viewModel?.didTapStill()
+        viewModel?.didTapAtOneStill()
     }
     ///Must have the same set of constraints as makeConstraints method
     private func updateConstraints(insets: UIEdgeInsets) {

@@ -10,21 +10,14 @@ import UIKit
 
 protocol OneFilmDetailsBusinessLogic {
     func onDidLoadViews(request: OneFilmDetailsFlow.OnDidLoadViews.Request)
-    func markAsUnread(request: OneFilmDetailsFlow.OnEnvelopNavBarButton.Request)
-    func didTapTrashNavBarIcon(request: OneFilmDetailsFlow.OnTrashNavBarIcon.Request)
-
-    func didTapChevronAdresses(request: OneFilmDetailsFlow.OnChevronTapped.Request)
-    func didTapAtFileOrFoto(request: OneFilmDetailsFlow.OnAttachedFileOrImageTapped.Request)
-    func didTapDownloadIcon(request: OneFilmDetailsFlow.OnDownloadIconOrToSaveAttachedFile.Request)
-    func didTapQuattroIcon(request: OneFilmDetailsFlow.OnQuattroIcon.Request)
-
-    func didTapReplyButton(request: OneFilmDetailsFlow.OnReplyButton.Request)
-    func didTapReplyToAllButton(request: OneFilmDetailsFlow.OnReplyToAllButton.Request)
-    func didTapForwardButton(request: OneFilmDetailsFlow.OnForwardButton.Request)
+    func loadNextTwentyStills(request: OneFilmDetailsFlow.OnLoadRequest.Request)
+    func didTapWebLink(request: OneFilmDetailsFlow.OnWebLinkTap.Request)
 }
 
 
-protocol OneFilmDetailsDataStore: AnyObject { }
+protocol OneFilmDetailsDataStore: AnyObject { 
+    var filmWebUrl: String { get }
+}
 
 
 final class OneFilmDetailsInteractor: OneFilmDetailsBusinessLogic, OneFilmDetailsDataStore {
@@ -33,13 +26,12 @@ final class OneFilmDetailsInteractor: OneFilmDetailsBusinessLogic, OneFilmDetail
 
     var presenter: OneFilmDetailsPresentationLogic?
     var worker: OneFilmDetailsWorkingLogic?
+    var filmWebUrl = ""
 
     // MARK: - Private properties
 
     private var filmId: Int
     private var film: DetailsFilm?
-    private var stills: [OneStill]?
-
 
     // MARK: - Lifecycle
     deinit {}
@@ -51,50 +43,88 @@ final class OneFilmDetailsInteractor: OneFilmDetailsBusinessLogic, OneFilmDetail
     // MARK: - Public methods
 
     func onDidLoadViews(request: OneFilmDetailsFlow.OnDidLoadViews.Request) {
-        presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: true))
+        let group = DispatchGroup()
 
-        worker?.getFilmDetails(id: filmId) { [weak self] result in
-            guard let self = self else { return }
-            presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: false))
-
-            switch result {
-            case .success(let film):
-                self.film = film
-
-                worker?.loadFilmImages(id: film.kinopoiskId) { [weak self] result in
-                    guard let self = self else { return }
-                    switch result {
-                    case .success(let stills):
-                        self.stills = stills
-                        presenterDoUpdate()
-
-                    case .failure(let failure):
-                        presenter?.presentAlert(response: OneFilmDetailsFlow.AlertInfo.Response(error: failure))
-                    }
-                }
-
-            case .failure(let failure):
-                presenter?.presentAlert(response: OneFilmDetailsFlow.AlertInfo.Response(error: failure))
-            }
+        group.enter()
+        fetchFilmDetails(filmId: filmId) {
+            self.updateAllButStills()
+            group.leave()
         }
+
+        group.enter()
+        loadFilmImages(filmId: filmId) {
+            group.leave()
+        }
+
+        group.notify(queue: .global()) {
+            self.updateStills()
+        }
+
+    }
+
+    func loadNextTwentyStills(request: OneFilmDetailsFlow.OnLoadRequest.Request) {
+        loadFilmImages(filmId: filmId) {}
     }
 
 
 
     func didTapWebLink(request: OneFilmDetailsFlow.OnWebLinkTap.Request) {
         if let film = film {
-            presenter?.presentRouteToSaveDialog(response: OneFilmDetailsFlow.OnWebLinkTap.Response(webUrl: film.webUrl))
+            presenter?.presentRouteToWeb(response: OneFilmDetailsFlow.OnWebLinkTap.Response())
         }
     }
 
 
     // MARK: - Private methods
 
-    private func presenterDoUpdate() {
+    private func fetchFilmDetails(filmId: Int, completion: @escaping () -> Void) {
+        presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: true, type: .upper))
+        //пока не загрузились можно показывать скелетон
+
+        worker?.getFilmDetails(id: filmId) { [weak self] result in
+            guard let self = self else { return }
+            presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: false, type: .upper))
+
+            switch result {
+            case .success(let film):
+                self.film = film
+                if let webUrl = film.webUrl {
+                    self.filmWebUrl = webUrl
+                }
+            case .failure(let error):
+                presenter?.presentAlert(response: OneFilmDetailsFlow.AlertInfo.Response(error: error))
+            }
+            completion()
+        }
+    }
+
+    private func loadFilmImages(filmId: Int, completion: @escaping () -> Void) {
+        presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: true, type: .lower))
+        //пока не загрузились можно показывать скелетон
+
+        worker?.loadFilmImages(id: filmId) { [weak self] result in
+            guard let self = self else { return }
+            presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: false, type: .lower))
+
+            switch result {
+            case .success(let stills):
+                self.film?.stills = stills
+            case .failure(let error):
+                presenter?.presentAlert(response: OneFilmDetailsFlow.AlertInfo.Response(error: error))
+            }
+            completion()
+        }
+    }
+
+    private func updateAllButStills() {
         if let film = film {
-            presenter?.presentUpdate(response: OneFilmDetailsFlow.Update.Response(
-                film: film,
-                stills: stills))
+            presenter?.presentUpdateAllButStills(response: OneFilmDetailsFlow.UpdateAllButStills.Response(film: film))
+        }
+    }
+
+    private func updateStills() {
+        if let film = film {
+            presenter?.presentUpdateStills(response: OneFilmDetailsFlow.UpdateStills.Response(stills: film.stills))
         }
     }
 }

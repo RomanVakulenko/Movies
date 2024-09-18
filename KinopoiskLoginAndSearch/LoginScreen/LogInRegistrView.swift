@@ -16,7 +16,6 @@ protocol LogInRegistrViewOutput: AnyObject {
 
 protocol LogInRegistrViewLogic: UIView {
     func update(viewModel: LogInRegistrModel.ViewModel)
-//    func displayWaitIndicator(viewModel: LogInRegistrFlow.OnWaitIndicator.ViewModel)
 
     var output: LogInRegistrViewOutput? { get set }
 }
@@ -44,7 +43,7 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
         let textField = UITextField()
         textField.textColor = UIHelper.Color.gray
         textField.placeholder = GlobalConstants.loginPlaceholder
-        textField.font = UIFont(name: "SFUIDisplay-Regular", size: GlobalConstants.fieldFontSize16px)
+             textField.font = UIFont(name: "SFUIDisplay-Regular", size: GlobalConstants.fieldFontSize16px)
         textField.layer.borderColor = UIHelper.Color.gray.cgColor
         textField.layer.borderWidth = GlobalConstants.borderWidth
         textField.layer.cornerRadius = GlobalConstants.cornerRadius
@@ -80,8 +79,6 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
         return btn
     }()
 
-    
-
     // MARK: - Init
 
     private(set) var viewModel: LogInRegistrModel.ViewModel?
@@ -89,7 +86,6 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         configure()
-        backgroundColor = .none
     }
 
     required init?(coder _: NSCoder) {
@@ -110,7 +106,13 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
 
     func update(viewModel: LogInRegistrModel.ViewModel) {
         self.viewModel = viewModel
-        backView.backgroundColor = viewModel.backColor
+        backgroundColor = viewModel.backColor
+        backView.backgroundColor = .none
+        loginTextField.attributedPlaceholder = viewModel.attributedPlaceholderForLogin
+        passwordTextField.attributedPlaceholder = viewModel.attributedPlaceholderForPassword
+
+        loginTextField.text = viewModel.emptyForLoginAndPasswordAtLogOff
+        passwordTextField.text = viewModel.emptyForLoginAndPasswordAtLogOff
         appTitle.attributedText = viewModel.appTitle
         enterButton.setAttributedTitle(viewModel.enterButton, for: .normal)
         enterButton.layer.backgroundColor = viewModel.enterButtonBackground.cgColor
@@ -142,19 +144,19 @@ final class LogInRegistrView: UIView, LogInRegistrViewLogic {
         loginTextField.snp.makeConstraints {
             $0.centerY.equalTo(backView.snp.centerY)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight48px)
         }
 
         passwordTextField.snp.makeConstraints {
             $0.top.equalTo(loginTextField.snp.bottom).offset(UIHelper.Margins.medium8px)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight48px)
         }
 
         enterButton.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField.snp.bottom).offset(-Constants.appTitleOffset)
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(Constants.appTitleOffset)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight48px)
         }
     }
 
@@ -190,17 +192,17 @@ extension LogInRegistrView: UITextFieldDelegate {
             loginText: self.loginTextField.text ?? "",
             passwordText: self.passwordTextField.text ?? "")
 
-        // Вычисляем новое положение курсора
+        // Вычисляем новое расположение
         let currentCursorPosition = textField.offset(from: textField.beginningOfDocument, to: cursorPosition.start)
         let newCursorPosition: Int
 
-        if string.isEmpty { // Если удаляем символ
+        if string.isEmpty { // Если удаляем
             newCursorPosition = max(currentCursorPosition - 1, 0)
-        } else { // Если вводим символ
+        } else { // Если вводим
             newCursorPosition = currentCursorPosition + string.count
         }
 
-        // Устанавливаем новое положение курсора
+        // Устанавливаем новое расположение курсора
         if let newPosition = textField.position(from: textField.beginningOfDocument, offset: newCursorPosition) {
             textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
         }

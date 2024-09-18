@@ -14,6 +14,7 @@ enum FilmsScreenFlow {
         struct Request {}
 
         struct Response {
+            let isNowFilteringAtSearchOrYearOrSortedDescending: Bool
             let filmsSortedFiltered: [OneFilm]?
             let yearForFilterAt: Int
         }
@@ -25,9 +26,7 @@ enum FilmsScreenFlow {
 
         struct Request {}
 
-        struct Response {
-            let searchText: String?
-        }
+        struct Response {}
 
         typealias ViewModel = SearchViewModel
     }
@@ -43,9 +42,7 @@ enum FilmsScreenFlow {
 
     enum OnSortIconTap {
 
-        struct Request {
-            let isSorredByIncreasing: Bool
-        }
+        struct Request {}
 
         struct Response {}
 
@@ -55,7 +52,9 @@ enum FilmsScreenFlow {
 
     enum OnLoadRequest {
 
-        struct Request {}
+        struct Request {
+            let isRefreshRequested: Bool
+        }
 
         struct Response {}
 
@@ -68,9 +67,7 @@ enum FilmsScreenFlow {
             let searchText: String?
         }
 
-        struct Response {
-            let searchText: String?
-        }
+        struct Response {}
 
         typealias ViewModel = SearchViewModel
     }

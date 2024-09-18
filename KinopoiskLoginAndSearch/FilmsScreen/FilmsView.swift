@@ -11,6 +11,7 @@ import SnapKit
 protocol FilmsViewOutput: AnyObject,
                           SearchViewOutput,
                           FilmsTableCellViewModelOutput {
+    func didPullToReftesh()
     func didTapSortIcon()
     func yearButtonTapped()
     func loadNextTwentyFilms()
@@ -30,32 +31,45 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
 
     private lazy var backView: UIView = {
         let view = UIView()
+        view.backgroundColor = .none
         return view
     }()
 
     private(set) lazy var sortView: UIImageView = {
         let view = UIImageView()
         view.isUserInteractionEnabled = true
+        view.backgroundColor = .none
         return view
     }()
 
     private lazy var searchView: SearchView = {
         let view = SearchView()
+        view.backgroundColor = .none
         return view
     }()
 
     private lazy var yearButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.backgroundColor = .clear
-        btn.layer.cornerRadius = GlobalConstants.cornerRadius
-        btn.layer.borderColor = UIHelper.Color.gray.cgColor
+        btn.backgroundColor = .none
         btn.addTarget(self, action: #selector(yearButton_touchUpInside(_:)), for: .touchUpInside)
+
         return btn
     }()
 
-    private let tableView = UITableView()
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .none
+        return tableView
+    }()
 
     private(set) var viewModel: FilmsModel.ViewModel?
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.attributedTitle = NSAttributedString(string: GlobalConstants.fetchingFilms)
+        control.addTarget(self, action: #selector(didPullToRefresh_valueChanged), for: .valueChanged)
+        return control
+    }()
 
 
     // MARK: - Init
@@ -66,6 +80,7 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
         super.init(frame: frame)
         configure()
         backgroundColor = .none
+        tableView.refreshControl = self.refreshControl
     }
 
     required init?(coder _: NSCoder) {
@@ -88,17 +103,23 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
         backView.layer.backgroundColor = viewModel.backViewColor.cgColor
         sortView.image = viewModel.sortIcon
 
-        if yearButton.titleLabel?.attributedText != viewModel.yearButtonText { //fixes flashing at update
+        if yearButton.titleLabel?.attributedText?.string != viewModel.yearButtonText.string { //fixes flashing at update
+            yearButton.tintColor = UIHelper.Color.cyanSome // Для шеврона
             yearButton.setAttributedTitle(viewModel.yearButtonText, for: .normal)
+            yearButton.layer.cornerRadius = GlobalConstants.cornerRadius
+            yearButton.layer.borderColor = UIHelper.Color.gray.cgColor
+            yearButton.layer.borderWidth = UIHelper.Margins.small1px
         }
         updateConstraints(insets: viewModel.insets)
 
+        tableView.backgroundColor = viewModel.backViewColor
         tableView.reloadData()
+        refreshControl.endRefreshing()
     }
 
     func displayWaitIndicator(viewModel: FilmsScreenFlow.OnWaitIndicator.ViewModel) {
         if viewModel.isShow {
-            showSpinner()
+            showSpinner(type: .center)
         } else {
             hideSpinner()
         }
@@ -106,6 +127,9 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
 
 
     // MARK: - Actions
+    @objc func didPullToRefresh_valueChanged() {
+        output?.didPullToReftesh()
+    }
 
     @objc func didTapSort_touchUpInside(_ sender: UIButton) {
         output?.didTapSortIcon()
@@ -114,6 +138,8 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
     @objc func yearButton_touchUpInside(_ sender: UIButton) {
         output?.yearButtonTapped()
     }
+
+    
 
     // MARK: - Private Methods
 
@@ -140,27 +166,28 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
     }
 
     private func configureConstraints() {
-        let view = self
         backView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.top.equalTo(self.safeAreaLayoutGuide.snp.top)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
             $0.leading.trailing.equalToSuperview()
         }
 
         sortView.snp.makeConstraints {
-            $0.top.leading.equalToSuperview()
-            $0.height.width.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+            $0.top.equalToSuperview().offset(UIHelper.Margins.medium16px)
+            $0.leading.equalToSuperview()
+            $0.height.width.equalTo(UIHelper.Margins.large26px)
         }
 
         searchView.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
             $0.leading.equalTo(sortView.snp.trailing).offset(UIHelper.Margins.small4px)
+            $0.height.equalTo(UIHelper.Margins.huge56px)
         }
 
         yearButton.snp.makeConstraints {
             $0.top.equalTo(searchView.snp.bottom).offset(UIHelper.Margins.medium8px)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight24px)
+            $0.height.equalTo(GlobalConstants.fieldsAndButtonHeight48px)
         }
 
         tableView.snp.makeConstraints {
@@ -172,9 +199,9 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
     ///Must have the same set of constraints as makeConstraints method
     private func updateConstraints(insets: UIEdgeInsets) {
         backView.snp.updateConstraints {
-            $0.top.equalToSuperview().offset(insets.top)
+            $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(insets.top)
             $0.leading.equalToSuperview().offset(insets.left)
-            $0.bottom.equalToSuperview().inset(insets.bottom)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(insets.bottom)
             $0.trailing.equalToSuperview().inset(insets.right)
         }
     }
@@ -203,7 +230,6 @@ extension FilmsView: UITableViewDataSource {
             return UITableViewCell()
         }
     }
-
 }
 
 
@@ -215,11 +241,13 @@ extension FilmsView: UITableViewDelegate {
         let visibleRows = tableView.indexPathsForVisibleRows?.count ?? 0
         let totalRows = tableView.numberOfRows(inSection: 0)
 
-        if totalRows > 0 && visibleRows > 0 {
+        if totalRows > 0 && visibleRows > 0,
+           let viewModel = viewModel {
             let lastVisibleIndex = tableView.indexPathsForVisibleRows?.last?.row ?? 0
 
-            // Проверяем, если 11 ячейка из каждых 20 показана
-            if lastVisibleIndex >= totalRows - (totalRows / 2) || (lastVisibleIndex % 20 == 10) {
+            // Проверяем, если последняя видимая ячейка является пятнадцатой с конца и мы не нажимали на фильтр по году и в серчБаре ничего не введено сортировано по убыванию(стандартно), тогда подгружаем еще
+            if lastVisibleIndex >= totalRows - 15,
+               !viewModel.isNowFilteringAtSearchOrYearOrSortedDescending {
                 output?.loadNextTwentyFilms()
             }
         }

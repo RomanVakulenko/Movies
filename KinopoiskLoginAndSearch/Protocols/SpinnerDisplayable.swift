@@ -9,13 +9,17 @@ import UIKit
 import SnapKit
 
 protocol SpinnerDisplayable {
-    func showSpinner()
+    func showSpinner(type: SpinnerPlace)
     func hideSpinner()
+}
+
+enum SpinnerPlace {
+    case center, upper, lower
 }
 
 extension SpinnerDisplayable where Self: UIView {
 
-    func showSpinner() {
+    func showSpinner(type: SpinnerPlace) {
         let spinner: UIActivityIndicatorView
 
         if #available(iOS 13.0, *) {
@@ -25,10 +29,23 @@ extension SpinnerDisplayable where Self: UIView {
         }
 
         spinner.startAnimating()
+        spinner.color = .white
 
         self.addSubview(spinner)
-        spinner.snp.makeConstraints {
-            $0.center.equalTo(self)
+
+        switch type {
+        case .center:
+            spinner.snp.makeConstraints {
+                $0.center.equalTo(self)
+            }
+        case .upper:
+            spinner.snp.makeConstraints {
+                $0.center.equalTo(self).offset(-UIHelper.Margins.huge36px)
+            }
+        case .lower:
+            spinner.snp.makeConstraints {
+                $0.center.equalTo(self).offset(UIHelper.Margins.huge56px)
+            }
         }
     }
 

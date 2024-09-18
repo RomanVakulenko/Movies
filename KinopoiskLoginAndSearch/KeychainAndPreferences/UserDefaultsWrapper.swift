@@ -1,5 +1,5 @@
 //
-//  UserPreferencesWraper.swift
+//  UserDefaultsWrapper.swift
 //  KinopoiskLoginAndSearch
 //
 //  Created by Roman Vakulenko on 14.09.2024.
@@ -7,8 +7,7 @@
 
 import Foundation
 
-final class UserPreferences {
-
+final class UserDefaultsWrapper {
     let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults = .standard) {
@@ -17,7 +16,7 @@ final class UserPreferences {
 }
 
 // MARK: - Extension
-extension UserPreferences: KeyValueStorage {
+extension UserDefaultsWrapper: KeyValueStorage {
     func set(_ value: Data, key: String) {
         userDefaults.setValue(value, forKey: key)
     }
@@ -54,5 +53,19 @@ extension UserPreferences: KeyValueStorage {
         userDefaults.dictionaryRepresentation().keys.forEach {
             userDefaults.removeObject(forKey: $0)
         }
+    }
+
+    // MARK: - Array Support
+    func set(_ value: [String], key: String) {
+        let data = try? JSONEncoder().encode(value)
+        userDefaults.set(data, forKey: key)
+    }
+
+    func array(forKey key: String) -> [String]? {
+        guard let data = userDefaults.data(forKey: key),
+              let array = try? JSONDecoder().decode([String].self, from: data) else {
+            return nil
+        }
+        return array
     }
 }

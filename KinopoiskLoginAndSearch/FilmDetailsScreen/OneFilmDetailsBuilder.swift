@@ -22,7 +22,6 @@ final class OneFilmDetailsBuilder: OneFilmDetailsBuilderProtocol {
                                             cacheManager: CacheManager(coreDataManager: coreDataManager))
         let worker = OneFilmDetailsWorker(networkManager: networkManager)
         let interactor = OneFilmDetailsInteractor(filmId: filmId)
-
         let presenter = OneFilmDetailsPresenter()
         let router = OneFilmDetailsRouter()
 

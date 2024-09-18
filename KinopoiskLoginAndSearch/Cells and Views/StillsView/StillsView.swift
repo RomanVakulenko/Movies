@@ -24,6 +24,10 @@ protocol StillsViewLogic: UIView {
 
 final class StillsView: UIView, StillsViewLogic {
 
+    enum Constants {
+        static let cellWidthHeight: CGFloat = 104
+    }
+
     // MARK: - Public properties
 
     weak var output: StillsViewOutput?
@@ -33,12 +37,14 @@ final class StillsView: UIView, StillsViewLogic {
 
     private lazy var backView: UIView = {
         let view = UIView()
+        view.backgroundColor = UIHelper.Color.almostBlack
         return view
     }()
 
     private(set) lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = UIHelper.Margins.small4px
         return layout
     }()
 
@@ -49,6 +55,7 @@ final class StillsView: UIView, StillsViewLogic {
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isScrollEnabled = true
+        collectionView.backgroundColor = UIHelper.Color.almostBlack
         return collectionView
     }()
 
@@ -57,7 +64,7 @@ final class StillsView: UIView, StillsViewLogic {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         configure()
-        backgroundColor = .none
+        backgroundColor = UIHelper.Color.almostBlack
     }
 
     required init?(coder _: NSCoder) {
@@ -68,6 +75,8 @@ final class StillsView: UIView, StillsViewLogic {
 
     func update(viewModel: StillsViewModel) {
         self.viewModel = viewModel
+        backView.backgroundColor = UIHelper.Color.almostBlack
+        collectionView.backgroundColor = UIHelper.Color.almostBlack
 //        updateConstraints(insets: viewModel.insets)
         collectionView.reloadData()
     }
@@ -90,7 +99,7 @@ final class StillsView: UIView, StillsViewLogic {
         }
 
         collectionView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.leading.trailing.bottom.equalToSuperview()
         }
     }
 
@@ -110,16 +119,15 @@ final class StillsView: UIView, StillsViewLogic {
 
 extension StillsView: UICollectionViewDelegateFlowLayout {
 
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-//
-//        guard indexPath.item < cellWidths.count else { return CGSize.zero }
-//        let cellWidth = cellWidths[indexPath.item]
-//
-//        return CGSize(width: cellWidth, height: Constants.collectionViewHeght)
-//    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let cellWidthHeight = collectionView.bounds.height - UIHelper.Margins.medium8px
+        return CGSize(width: cellWidthHeight, height: cellWidthHeight)
+    }
 }
+
 
 
 // MARK: - UICollectionViewDataSource

@@ -120,6 +120,7 @@ struct DetailsFilm {
     let genres: [Genre]
     let startYear: Int?
     let endYear: Int?
+    var cachedCoverPath: String?
     var stills: [OneStill]?
 
     init(from dto: DetailsFilmDTO) {
@@ -130,12 +131,13 @@ struct DetailsFilm {
         self.coverUrl = dto.coverURL
         self.ratingKinopoisk = dto.ratingKinopoisk
         self.webUrl = dto.webURL
-        self.description = dto.description
+        self.description = dto.description ?? dto.shortDescription
         self.shortDescription = dto.shortDescription
         self.countries = dto.countries
         self.genres = dto.genres
         self.startYear = dto.startYear
         self.endYear = dto.endYear
+        self.cachedCoverPath = nil
         self.stills = nil
     }
 }

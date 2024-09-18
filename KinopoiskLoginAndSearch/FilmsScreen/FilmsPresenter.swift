@@ -93,30 +93,29 @@ final class FilmsPresenter: FilmsPresentationLogic {
             let sortIcon = UIHelper.Images.sortCyan24px
 
             var tableItems: [AnyDifferentiable] = []
-            var dictEmailMessage: Dictionary<Int,FilmsTableCellViewModel> = [:]
+            var dictFilmViewModels: Dictionary<Int,FilmsTableCellViewModel> = [:]
 
             let group = DispatchGroup()
             var lock = os_unfair_lock_s()
 
             for (index, film) in films.enumerated() {
                 group.enter()
-                makeOneFilmCell(film: film, index: index) { (makeOneFilmCellViewModel, index) in
+                makeOneFilmCell(film: film, index: index) { (oneFilmCellViewModel, index) in
                     os_unfair_lock_lock(&lock)
-                    dictEmailMessage[index] = makeOneFilmCellViewModel //чтобы одновременного обращения к словарю не было
+                    dictFilmViewModels[index] = oneFilmCellViewModel //чтобы одновременного обращения к словарю не было
                     os_unfair_lock_unlock(&lock)
                     group.leave()
                 }
             }
 
             group.notify(queue: DispatchQueue.global()) {
-                if dictEmailMessage.count > 0 {
-                    for index in 0...dictEmailMessage.count - 1 {
-                        if let contactCellVM = dictEmailMessage[index] {
+                if dictFilmViewModels.count > 0 {
+                    for index in 0...dictFilmViewModels.count - 1 {
+                        if let contactCellVM = dictFilmViewModels[index] {
                             tableItems.append(AnyDifferentiable(contactCellVM))
                         }
                     }
                 }
-                print(response.isNowFilteringAtSearchOrYearOrSortedDescending)
                 self.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
 
                 DispatchQueue.main.async { [weak self] in
@@ -202,7 +201,6 @@ final class FilmsPresenter: FilmsPresentationLogic {
                                      right: 0))
             completion(oneFilmCell, index)
         }
-
     }
 
     private func makeFilterButton(year: Int) -> NSAttributedString {

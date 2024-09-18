@@ -18,6 +18,7 @@ enum NetServiceError: Error, LocalizedError {
     case movieNotFound
     case tooManyRequests
     case noData
+    case noURLForFetchingCover
 
     var errorDescription: String? {
         switch self {
@@ -39,6 +40,8 @@ enum NetServiceError: Error, LocalizedError {
             return "Error 429: Too many requests. Please wait and try again."
         case .noData:
             return "No data available."
+        case .noURLForFetchingCover:
+            return "No url for fetching cover."
         }
     }
 }

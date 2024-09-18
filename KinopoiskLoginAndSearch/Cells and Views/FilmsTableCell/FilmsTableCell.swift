@@ -24,6 +24,7 @@ final class FilmsTableCell: BaseTableViewCell<FilmsTableCellViewModel> {
 
     private(set) lazy var filmImageView: UIImageView = {
         let view = UIImageView()
+        view.contentMode = .scaleAspectFit
         return view
     }()
 

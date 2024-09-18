@@ -24,7 +24,7 @@ enum OneFilmDetailsModel {
         let genres: NSAttributedString
         let yearsAndCountries: NSAttributedString
 
-        let stillTitle: NSAttributedString
+        let stillsTitle: NSAttributedString
     }
 
 }

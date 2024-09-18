@@ -40,11 +40,13 @@ extension SpinnerDisplayable where Self: UIView {
             }
         case .upper:
             spinner.snp.makeConstraints {
-                $0.center.equalTo(self).offset(-UIHelper.Margins.huge36px)
+                $0.centerX.equalTo(self)
+                $0.centerY.equalTo(self).offset(-UIHelper.Margins.huge36px)
             }
         case .lower:
             spinner.snp.makeConstraints {
-                $0.center.equalTo(self).offset(UIHelper.Margins.huge56px)
+                $0.centerX.equalTo(self)
+                $0.centerY.equalTo(self).offset(GlobalConstants.spinnerOffset)
             }
         }
     }

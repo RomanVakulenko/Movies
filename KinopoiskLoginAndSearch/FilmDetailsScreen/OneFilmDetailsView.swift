@@ -44,6 +44,7 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
     private lazy var coverView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
         return view
     }()
 
@@ -96,6 +97,7 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
 
     private lazy var stillsView: StillsView = {
         let view = StillsView()
+        view.backgroundColor = UIHelper.Color.almostBlack
         return view
     }()
 
@@ -124,6 +126,19 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
         self.viewModel = viewModel
         backgroundColor = viewModel.backViewColor
         backView.backgroundColor = viewModel.backViewColor
+        coverView.image = viewModel.coverView
+        linkIcon.image = viewModel.linkIcon
+        linkIcon.tintColor = UIHelper.Color.cyanSome
+        filmTitle.attributedText = viewModel.filmTitle
+        filmRating.attributedText = viewModel.filmRating
+        descriptionTitle.attributedText = viewModel.descriptionTitle
+        descriptionText.attributedText = viewModel.descriptionText
+        genres.attributedText = viewModel.genres
+        yearsAndCountries.attributedText = viewModel.yearsAndCountries
+        stillsTitle.attributedText = viewModel.stillsTitle
+//        bringSubviewToFront(backChevronView)
+        backChevronView.image = viewModel.backChevron
+        backChevronView.tintColor = .white
     }
 
     func updateStills(viewModel: StillsViewModel) {
@@ -173,7 +188,8 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
     
     private func addSubviews() {
         self.addSubview(backView)
-        [backChevronView, coverView, filmTitle, filmRating, descriptionTitle, linkIcon, descriptionText, genres, yearsAndCountries, stillsTitle, stillsView].forEach { backView.addSubview($0) }
+        [coverView, backChevronView, filmTitle, filmRating, descriptionTitle, linkIcon, descriptionText, genres, yearsAndCountries, stillsTitle, stillsView].forEach { backView.addSubview($0) }
+//        coverView.addSubview(backChevronView)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapChevronBack(_:)))
         backChevronView.isUserInteractionEnabled = true
@@ -189,26 +205,29 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
 
-        backChevronView.snp.makeConstraints {
-            $0.top.equalTo(backView.snp.top).offset(UIHelper.Margins.large22px)
-            $0.leading.equalToSuperview().offset(UIHelper.Margins.small6px)
-            $0.height.width.equalTo(UIHelper.Margins.large24px)
-        }
-
         coverView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(UIScreen.main.bounds.height * 0.6)
         }
 
+        backChevronView.snp.makeConstraints {
+            $0.top.equalTo(coverView.snp.top).offset(UIHelper.Margins.huge56px)
+            $0.leading.equalToSuperview().offset(UIHelper.Margins.medium10px)
+            $0.height.equalTo(UIHelper.Margins.large24px)
+            $0.width.equalTo(UIHelper.Margins.medium16px)
+        }
+
         filmTitle.snp.makeConstraints {
             $0.bottom.equalTo(coverView.snp.bottom).offset(-UIHelper.Margins.medium16px)
             $0.leading.equalTo(coverView.snp.leading).offset(UIHelper.Margins.medium16px)
+            $0.trailing.equalTo(filmRating.snp.leading).offset(-UIHelper.Margins.small4px)
         }
         filmTitle.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         filmRating.snp.makeConstraints {
             $0.bottom.equalTo(coverView.snp.bottom).offset(-UIHelper.Margins.medium16px)
             $0.trailing.equalTo(coverView.snp.trailing).offset(-UIHelper.Margins.medium16px)
+            $0.width.equalTo(UIHelper.Margins.large32px)
         }
 
         descriptionTitle.snp.makeConstraints {
@@ -224,33 +243,34 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
         }
 
         descriptionText.snp.makeConstraints {
-            $0.top.equalTo(descriptionTitle.snp.bottom).offset(UIHelper.Margins.medium16px)
+            $0.top.equalTo(descriptionTitle.snp.bottom).offset(UIHelper.Margins.medium10px)
             $0.leading.equalToSuperview().offset(UIHelper.Margins.medium16px)
             $0.trailing.equalToSuperview().offset(-UIHelper.Margins.medium16px)
         }
 
         genres.snp.makeConstraints {
-            $0.top.equalTo(descriptionText.snp.bottom).offset(UIHelper.Margins.medium16px)
+            $0.top.equalTo(descriptionText.snp.bottom).offset(UIHelper.Margins.medium10px)
             $0.leading.equalToSuperview().offset(UIHelper.Margins.medium16px)
             $0.trailing.equalToSuperview().offset(-UIHelper.Margins.medium16px)
         }
 
         yearsAndCountries.snp.makeConstraints {
-            $0.top.equalTo(genres.snp.bottom).offset(UIHelper.Margins.medium16px)
+            $0.top.equalTo(genres.snp.bottom).offset(UIHelper.Margins.medium10px)
             $0.leading.equalToSuperview().offset(UIHelper.Margins.medium16px)
             $0.trailing.equalToSuperview().offset(-UIHelper.Margins.medium16px)
         }
 
         stillsTitle.snp.makeConstraints {
-            $0.top.equalTo(yearsAndCountries.snp.bottom).offset(UIHelper.Margins.large22px)
+            $0.top.equalTo(yearsAndCountries.snp.bottom).offset(UIHelper.Margins.large20px)
             $0.leading.equalToSuperview().offset(UIHelper.Margins.medium16px)
             $0.trailing.equalToSuperview().offset(-UIHelper.Margins.medium16px)
         }
 
         stillsView.snp.makeConstraints {
-            $0.top.equalTo(yearsAndCountries.snp.bottom).offset(UIHelper.Margins.medium16px)
+            $0.top.equalTo(stillsTitle.snp.bottom).offset(UIHelper.Margins.small6px)
             $0.leading.equalToSuperview().offset(UIHelper.Margins.medium16px)
-            $0.bottom.equalToSuperview().offset(UIHelper.Margins.medium16px)
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-UIHelper.Margins.medium8px)
         }
     }
 }

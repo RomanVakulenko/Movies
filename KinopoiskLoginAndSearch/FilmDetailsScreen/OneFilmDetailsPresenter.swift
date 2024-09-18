@@ -16,7 +16,6 @@ protocol OneFilmDetailsPresentationLogic {
     func presentAlert(response: OneFilmDetailsFlow.AlertInfo.Response)
 
     func presentRouteToWeb(response: OneFilmDetailsFlow.OnWebLinkTap.Response)
-
 }
 
 
@@ -40,38 +39,69 @@ final class OneFilmDetailsPresenter: OneFilmDetailsPresentationLogic {
     }
 
     func presentUpdateAllButStills(response: OneFilmDetailsFlow.UpdateAllButStills.Response) {
+        let group = DispatchGroup()
+        var coverView: UIImage?
+
+        group.enter()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else {
+                group.leave()
+                return
+            }
             let film = response.film
-
             let backColor = UIHelper.Color.almostBlack
-
-            //потенциально долгие операции
             let backChevron = UIImage(systemName: "chevron.backward")
-            let coverView = UIImage(contentsOfFile: film.coverUrl ?? "")
-            let linkIcon = UIImage(systemName: "link")
 
-            let filmTitle = NSAttributedString(string: film.nameOriginal ?? "Нет названия",
-                                               attributes: UIHelper.Attributed.whiteInterBold18)
-            let filmRating = NSAttributedString(string: String(film.ratingKinopoisk ?? 0),
-                                                attributes: UIHelper.Attributed.cyanSomeBold18)
-            let descriptionTitle = NSAttributedString(string: GlobalConstants.filmDescriptionTtile,
-                                                      attributes: UIHelper.Attributed.whiteInterBold22)
-            let descriptionText = NSAttributedString(string: film.description ?? "Нет описания",
-                                                     attributes: UIHelper.Attributed.grayMedium14)
+            if let path = film.cachedCoverPath, !path.isEmpty {
+                DispatchQueue.global(qos: .background).async {
+                    if let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {
+                        coverView = UIImage(data: data) ?? UIHelper.Images.imagePlaceholder100px
+                    } else {
+                        coverView = UIHelper.Images.imagePlaceholder100px
+                    }
+                    group.leave()
+                }
+            } else {
+                coverView = UIHelper.Images.imagePlaceholder100px
+                group.leave()
+            }
 
-            let genres = NSAttributedString(
-                string: "\(film.genres.map { $0.genre.lowercased() }.joined(separator: ", "))",
-                attributes: UIHelper.Attributed.whiteInterBold18)
-            let yearsAndCountries = NSAttributedString(
-                string: "\(film.startYear) - \(film.endYear), \(film.countries.map { $0.country }.joined(separator: ", "))",
-                attributes: UIHelper.Attributed.whiteInterBold18)
+            group.notify(queue: .main) {
+                let linkIcon = UIImage(systemName: "link")
+                let filmTitle = NSAttributedString(
+                    string: film.nameOriginal ?? film.nameRu ?? film.nameEn ?? "Нет названия",
+                    attributes: UIHelper.Attributed.whiteInterBold18)
 
-            let stillTitle = NSAttributedString(string: GlobalConstants.stills,
-                                                attributes: UIHelper.Attributed.whiteInterBold22)
+                let filmRating = NSAttributedString(
+                    string: String(film.ratingKinopoisk ?? 0),
+                    attributes: UIHelper.Attributed.cyanSomeBold18)
 
-            DispatchQueue.main.async { [weak self] in
-                self?.viewController?.displayUpdateAllButStills(viewModel: OneFilmDetailsFlow.UpdateAllButStills.ViewModel(
+                let descriptionTitle = NSAttributedString(
+                    string: GlobalConstants.filmDescriptionTtile,
+                    attributes: UIHelper.Attributed.whiteInterBold22)
+
+                let descriptionText = NSAttributedString(
+                    string: film.description ?? "Нет описания",
+                    attributes: UIHelper.Attributed.grayMedium14)
+
+                let genres = NSAttributedString(
+                    string: "\(film.genres.map { $0.genre.lowercased() }.joined(separator: ", "))",
+                    attributes: UIHelper.Attributed.whiteInterBold18)
+
+                var textForYears = ""
+                if let start = film.startYear, let end = film.endYear {
+                    textForYears = "\(start) - \(end), "
+                }
+
+                let yearsAndCountries = NSAttributedString(
+                    string: textForYears + "\(film.countries.map { $0.country }.joined(separator: ", "))",
+                    attributes: UIHelper.Attributed.whiteInterBold18)
+
+                let stillsTitle = NSAttributedString(
+                    string: GlobalConstants.stills,
+                    attributes: UIHelper.Attributed.whiteInterBold22)
+
+                self.viewController?.displayUpdateAllButStills(viewModel: OneFilmDetailsFlow.UpdateAllButStills.ViewModel(
                     backViewColor: backColor,
                     backChevron: backChevron ?? UIImage(),
                     coverView: coverView ?? UIImage(),
@@ -82,27 +112,29 @@ final class OneFilmDetailsPresenter: OneFilmDetailsPresentationLogic {
                     descriptionText: descriptionText,
                     genres: genres,
                     yearsAndCountries: yearsAndCountries,
-                    stillTitle: stillTitle))
+                    stillsTitle: stillsTitle))
             }
         }
     }
+
+
 
     func presentUpdateStills(response: OneFilmDetailsFlow.UpdateStills.Response) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self,
                   let stills = response.stills else { return }
 
-            var views: [AnyDifferentiable] = []
+            var items: [AnyDifferentiable] = []
 
-            let stillsViewModel = self.makeStillsVM(stills: stills)
-            views.append(stillsViewModel)
+            makeStillsVM(stills: stills) { stillsViewModel in
+                items.append(stillsViewModel)
 
-            DispatchQueue.main.async { [weak self] in
-                self?.viewController?.displayUpdateStills(viewModel: OneFilmDetailsFlow.UpdateStills.ViewModel(
-                    id: stillsViewModel.differenceIdentifier,
-                    items: views))
+                DispatchQueue.main.async { [weak self] in
+                    self?.viewController?.displayUpdateStills(viewModel: OneFilmDetailsFlow.UpdateStills.ViewModel(
+                        id: stillsViewModel.differenceIdentifier,
+                        items: items))
+                }
             }
-
         }
     }
 
@@ -130,34 +162,68 @@ final class OneFilmDetailsPresenter: OneFilmDetailsPresentationLogic {
 
     // MARK: - Private methods
 
-    private func makeStillsVM(stills: [OneStill]) -> AnyDifferentiable {
+    private func makeStillsVM(stills: [OneStill], completion: @escaping (AnyDifferentiable) -> Void) {
 
         var collectionOfStills: [AnyDifferentiable] = []
+        var dictStillsViewModels: Dictionary<Int, StillCollectionCellViewModel> = [:]
 
-        for oneStill in stills {
-            let oneStillCellVM = makeCellForCollection(id: oneStill.previewURL,
-                                                       urlInCache: oneStill.cachedPreview)
-            collectionOfStills.append(oneStillCellVM)
+        let group = DispatchGroup()
+        let queueForDict = DispatchQueue(label: "com.stills.queueForDict", attributes: .concurrent)
+
+        for (index, still) in stills.enumerated() {
+            group.enter()
+            makeCellForCollection(id: still.previewURL,
+                                  index: index,
+                                  urlInCache: still.cachedPreview) { (oneStillViewModel, index) in
+                queueForDict.async(flags: .barrier) { // //чтобы одновременного обращения к словарю не было
+                    dictStillsViewModels[index] = oneStillViewModel
+                    group.leave()
+                }
+            }
         }
 
-        let stillsVM = StillsViewModel(
-            id: Constants.idForStillsVM,
-            //                insets:  UIEdgeInsets(top: UIHelper.Margins.medium8px,
-            //                                      left: UIHelper.Margins.medium16px,
-            //                                      bottom: UIHelper.Margins.medium8px,
-            //                                      right: UIHelper.Margins.medium16px),
-            items: collectionOfStills)
+        group.notify(queue: DispatchQueue.global()) {
+            queueForDict.sync { // Последовательное чтение словаря после завершения всех операций записи
+                if dictStillsViewModels.count > 0 {
+                    for index in 0..<dictStillsViewModels.count {
+                        if let contactCellVM = dictStillsViewModels[index] {
+                            collectionOfStills.append(AnyDifferentiable(contactCellVM))
+                        }
+                    }
+                }
+            }
 
-        return AnyDifferentiable(stillsVM)
+            let stillsVM = StillsViewModel(
+                id: Constants.idForStillsVM,
+                //                insets:  UIEdgeInsets(top: UIHelper.Margins.medium8px,
+                //                                      left: UIHelper.Margins.medium16px,
+                //                                      bottom: UIHelper.Margins.medium8px,
+                //                                      right: UIHelper.Margins.medium16px),
+                items: collectionOfStills)
 
+            completion(AnyDifferentiable(stillsVM))
+        }
     }
 
 
-    private func makeCellForCollection(id: String?, urlInCache: String?) -> AnyDifferentiable {
-        let stillImage = UIImage(contentsOfFile: urlInCache ?? "")
-        let oneStillCellVM = StillCollectionCellViewModel(id: id ?? "",
-                                                          stillImage: stillImage)
-        return AnyDifferentiable(oneStillCellVM)
+
+    private func makeCellForCollection(id: String?,
+                                       index: Int,
+                                       urlInCache: String?,
+                                       completion: @escaping  (StillCollectionCellViewModel, Int) -> Void) {
+
+        var stillImage: UIImage?
+        if let path = urlInCache,
+           path != "" {
+            if let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {// или так доставать data из FileManager.default.contents(atPath: path)
+                stillImage = UIImage(data: data) ?? UIHelper.Images.imagePlaceholder100px
+            }
+        } else {
+            stillImage = UIHelper.Images.imagePlaceholder100px
+        }
+
+        let oneStillCellVM = StillCollectionCellViewModel(id: id ?? "", stillImage: stillImage)
+        completion(oneStillCellVM, index)
     }
 
 }

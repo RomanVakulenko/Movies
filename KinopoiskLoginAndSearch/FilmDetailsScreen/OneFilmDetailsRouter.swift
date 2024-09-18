@@ -28,7 +28,7 @@ final class OneFilmDetailsRouter: OneFilmDetailsRoutingLogic, OneFilmDetailsData
 
     func routeBackToFilmsScreen() {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.navigationController?.popViewController(animated: false)
+            self?.viewController?.navigationController?.popViewController(animated: true)
         }
     }
 

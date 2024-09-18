@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3EF5E43F22B3B6F8CAF4D6B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DDBB694264A54A0A73F6B17 /* Pods_KinopoiskLoginAndSearch.framework */; };
+		3A43E34B52289BD4D14C95B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F251B68CDAB47C1FD9EB6324 /* Pods_KinopoiskLoginAndSearch.framework */; };
 		AD2251C52C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */; };
 		AD2251C72C9AB1C200CD1847 /* StorageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */; };
 		AD2251C92C9AB2EE00CD1847 /* StorageWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */; };
@@ -79,9 +79,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3EFFEBA4FD4B2E8763B0B288 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.release.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.release.xcconfig"; sourceTree = "<group>"; };
-		5D07905A954FB64557FF9BF6 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.debug.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.debug.xcconfig"; sourceTree = "<group>"; };
-		8DDBB694264A54A0A73F6B17 /* Pods_KinopoiskLoginAndSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KinopoiskLoginAndSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5414A38A5B7452ECBC677D04 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.debug.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		8491E82B83B180CE34FC44DD /* Pods-KinopoiskLoginAndSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.release.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.release.xcconfig"; sourceTree = "<group>"; };
 		AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KinopoiskLoginAndSearch.xcdatamodel; sourceTree = "<group>"; };
 		AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageDataManager.swift; sourceTree = "<group>"; };
 		AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageWorker.swift; sourceTree = "<group>"; };
@@ -153,6 +152,7 @@
 		ADF8856A2C982DB9000E24DD /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		ADF8856C2C98C83D000E24DD /* StillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillsView.swift; sourceTree = "<group>"; };
 		ADF8856E2C98C952000E24DD /* StillsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillsViewModel.swift; sourceTree = "<group>"; };
+		F251B68CDAB47C1FD9EB6324 /* Pods_KinopoiskLoginAndSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KinopoiskLoginAndSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EF5E43F22B3B6F8CAF4D6B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */,
+				3A43E34B52289BD4D14C95B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,8 +170,8 @@
 		735386548A78EB4E92EE08BE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5D07905A954FB64557FF9BF6 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */,
-				3EFFEBA4FD4B2E8763B0B288 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */,
+				5414A38A5B7452ECBC677D04 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */,
+				8491E82B83B180CE34FC44DD /* Pods-KinopoiskLoginAndSearch.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -394,7 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				AD80F84B2C9997C000928387 /* DifferenceKit.framework */,
-				8DDBB694264A54A0A73F6B17 /* Pods_KinopoiskLoginAndSearch.framework */,
+				F251B68CDAB47C1FD9EB6324 /* Pods_KinopoiskLoginAndSearch.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -406,11 +406,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADB40B302C95987800AAAAE9 /* Build configuration list for PBXNativeTarget "KinopoiskLoginAndSearch" */;
 			buildPhases = (
-				82BD42644035A979FCB3FC05 /* [CP] Check Pods Manifest.lock */,
+				C9094BB4D0742D4EA2AAFAF2 /* [CP] Check Pods Manifest.lock */,
 				ADB40B182C95987600AAAAE9 /* Sources */,
 				ADB40B192C95987600AAAAE9 /* Frameworks */,
 				ADB40B1A2C95987600AAAAE9 /* Resources */,
-				EABB24F1486168A3DACE4748 /* [CP] Embed Pods Frameworks */,
+				B345C6B000E68B4B1990F00D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -467,7 +467,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		82BD42644035A979FCB3FC05 /* [CP] Check Pods Manifest.lock */ = {
+		B345C6B000E68B4B1990F00D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C9094BB4D0742D4EA2AAFAF2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -487,23 +504,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EABB24F1486168A3DACE4748 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -717,7 +717,7 @@
 		};
 		ADB40B312C95987800AAAAE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5D07905A954FB64557FF9BF6 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */;
+			baseConfigurationReference = 5414A38A5B7452ECBC677D04 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -747,7 +747,7 @@
 		};
 		ADB40B322C95987800AAAAE9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3EFFEBA4FD4B2E8763B0B288 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */;
+			baseConfigurationReference = 8491E82B83B180CE34FC44DD /* Pods-KinopoiskLoginAndSearch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

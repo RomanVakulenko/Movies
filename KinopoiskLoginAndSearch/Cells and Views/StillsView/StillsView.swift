@@ -162,8 +162,8 @@ extension StillsView: UICollectionViewDataSource {
         if totalRows > 0 && visibleRows > 0 {
             let lastVisibleIndex = collectionView.indexPathsForVisibleRows?.last?.row ?? 0
 
-            // Проверяем, если 11 ячейка из каждых 20 показана
-            if lastVisibleIndex >= totalRows - (totalRows / 2) || (lastVisibleIndex % 20 == 10) {
+            // Проверяем, если 10 ячеек осталось до конца коллекции, то догружаем
+            if lastVisibleIndex >= totalRows - 10 {
                 output?.loadNextTwentyStills()
             }
         }

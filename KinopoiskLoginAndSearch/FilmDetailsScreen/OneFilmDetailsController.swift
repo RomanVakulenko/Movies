@@ -37,7 +37,6 @@ final class OneFilmDetailsController: UIViewController, AlertDisplayable {
     override func loadView() {
         contentView.output = self
         view = contentView
-//        hideNavigationBar(animated: false) //to hide flashing blue "< Back"
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 

@@ -136,7 +136,6 @@ final class OneFilmDetailsView: UIView, OneFilmDetailsViewLogic, SpinnerDisplaya
         genres.attributedText = viewModel.genres
         yearsAndCountries.attributedText = viewModel.yearsAndCountries
         stillsTitle.attributedText = viewModel.stillsTitle
-//        bringSubviewToFront(backChevronView)
         backChevronView.image = viewModel.backChevron
         backChevronView.tintColor = .white
     }

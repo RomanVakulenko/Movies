@@ -45,10 +45,6 @@ final class OneFilmDetailsInteractor: OneFilmDetailsBusinessLogic, OneFilmDetail
     func onDidLoadViews(request: OneFilmDetailsFlow.OnDidLoadViews.Request) {
 
         fetchFilmDetails(filmId: filmId) { filmWithoutCover in
-            self.film = filmWithoutCover
-            if let webUrl = filmWithoutCover.webUrl {
-                self.filmWebUrl = webUrl
-            }
             self.updateAllButStills() //кратковременно или показывает placeholder, если нет cover
 
             self.downloadAndCacheCover(for: filmWithoutCover) { filmDetailsWithCover in
@@ -86,10 +82,10 @@ final class OneFilmDetailsInteractor: OneFilmDetailsBusinessLogic, OneFilmDetail
 
             switch result {
             case .success(let film):
-//                self.film = film
-//                if let webUrl = film.webUrl {
-//                    self.filmWebUrl = webUrl
-//                }
+                self.film = film
+                if let webUrl = film.webUrl {
+                    self.filmWebUrl = webUrl
+                }
                 presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: false, type: .upper))
                 completion(film)
             case .failure(let error):
@@ -107,8 +103,7 @@ final class OneFilmDetailsInteractor: OneFilmDetailsBusinessLogic, OneFilmDetail
             switch result {
             case .success(let detailsFilmWithStringCover):
                 film = detailsFilmWithStringCover
-                
-//                presenter?.presentWaitIndicator(response: OneFilmDetailsFlow.OnWaitIndicator.Response(isShow: false, type: .upper))
+
                 if let film = film {
                     completion(film)
                 }

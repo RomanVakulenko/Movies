@@ -18,54 +18,47 @@ protocol LocalStorageServiceProtocol {
 
 final class CoreDataService: LocalStorageServiceProtocol {
 
-    static let shared: LocalStorageServiceProtocol = CoreDataService()
+    private let persistentContainer: NSPersistentContainer
+    private let queue = DispatchQueue(label: "com.coreDataService.queue", attributes: .concurrent)
 
-    private init() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(saveContext),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil)
-    }
-
-    var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "KinopoiskLoginAndSearch")
-        container.loadPersistentStores { (storeDescription, error) in
+    init(container: NSPersistentContainer = NSPersistentContainer(name: "KinopoiskLoginAndSearch")) {
+        self.persistentContainer = container
+        self.persistentContainer.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
-                print("Unresolved error \(error), \(error.userInfo)")
+                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
-        return container
-    }()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(saveContext),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
+    }
 
     @objc func saveContext() {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        persistentContainer.viewContext.perform {
+            let context = self.persistentContainer.viewContext
+            if context.hasChanges {
+                do {
+                    try context.save()
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
         }
     }
 
     func isContextEmpty(completion: @escaping (Bool) -> Void) {
         let context = persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<URLsExternalAndInternal> = URLsExternalAndInternal.fetchRequest()
-        fetchRequest.fetchLimit = 1
+        context.perform {
+            let fetchRequest: NSFetchRequest<URLsExternalAndInternal> = URLsExternalAndInternal.fetchRequest()
+            fetchRequest.fetchLimit = 1
 
-        DispatchQueue.global().async {
             do {
                 let count = try context.count(for: fetchRequest)
-                let isEmpty = count == 0
-                DispatchQueue.main.async {
-                    completion(isEmpty)
-                }
+                completion(count == 0)
             } catch {
-                DispatchQueue.main.async {
-                    completion(false)
-                }
+                completion(false)
             }
         }
     }

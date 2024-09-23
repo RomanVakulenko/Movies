@@ -19,7 +19,7 @@ protocol LocalStorageManagerProtocol {
 
 final class StorageDataManager: LocalStorageManagerProtocol {
     static let shared = StorageDataManager()
-    private var localStorageService: LocalStorageServiceProtocol = CoreDataService.shared
+    private var localStorageService: LocalStorageServiceProtocol = CoreDataService()
 
     func fetchURLs(completion: @escaping (Result<[String: String], Error>) -> Void) {
         localStorageService.fetchURLs { result in

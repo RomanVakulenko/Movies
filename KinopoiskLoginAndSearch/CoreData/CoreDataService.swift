@@ -35,8 +35,8 @@ final class CoreDataService: LocalStorageServiceProtocol {
     }
 
     @objc func saveContext() {
-        persistentContainer.viewContext.perform {
-            let context = self.persistentContainer.viewContext
+        let context = persistentContainer.viewContext
+        context.perform {
             if context.hasChanges {
                 do {
                     try context.save()

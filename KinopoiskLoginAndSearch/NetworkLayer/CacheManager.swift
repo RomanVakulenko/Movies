@@ -19,11 +19,7 @@ protocol CacheManagerProtocol {
 
 final class CacheManager: CacheManagerProtocol {
     private let fileManager = FileManager.default
-    private let coreDataManager: LocalStorageManagerProtocol
-
-    init(coreDataManager: LocalStorageManagerProtocol) {
-        self.coreDataManager = coreDataManager
-    }
+    private let coreDataManager = DIManager.shared.container.resolve(LocalStorageManagerProtocol.self)!
 
     func isObjectExist(forKey key: String, completion: @escaping (Bool) -> Void) {
         coreDataManager.fetchURLs { result in

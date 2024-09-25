@@ -8,7 +8,13 @@
 //import Foundation
 //
 
+
+
+
 //можно использовать один воркер общий для двух экранов, т.к. суть схожа
+
+
+
 //protocol StorageWorkerProtocol {
 //    func fetchURLsFromDataBase(completion: @escaping (Result<[String: String], Error>) -> Void)
 //    func saveURLs(_ urls: [String: String], completion: @escaping (Result<Void, Error>) -> Void)

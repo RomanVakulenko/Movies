@@ -20,9 +20,7 @@ final class FilmsBuilder: FilmsBuilderProtocol {
 
         let coreDataManager = StorageDataManager()
         //когда загружаем картинки из сети по film.posterUrlPreview, то сохраняем картинки в FileManager, а при следующей попытке загрузить картинки обращаемся к кешМенеджеру(он спрашивает у БД есть ли в ней путь до сохраненной data, если нет, то загружаем из сети и сохраняем в FileManager)
-        let networkManager = NetworkManager(networkService: NetworkService(),
-                                            mapper: DataMapper(), 
-                                            cacheManager: CacheManager(coreDataManager: coreDataManager))
+        let networkManager = NetworkManager()
         let worker = FilmsWorker(networkManager: networkManager)
         let interactor = FilmsInteractor()
         let presenter = FilmsPresenter()

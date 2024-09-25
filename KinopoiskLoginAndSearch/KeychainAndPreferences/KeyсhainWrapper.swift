@@ -29,7 +29,7 @@ extension KeychainWrapper: KeyValueStorage {
     func set(_ value: [String], key: String) {
         do {
             let data = try JSONEncoder().encode(value)
-            try set(data, key: key) // Используем правильный метод для сохранения Data
+            set(data, key: key) // Используем правильный метод для сохранения Data
         } catch {
             print("Error setting array in Keychain: \(error)")
         }
@@ -37,7 +37,7 @@ extension KeychainWrapper: KeyValueStorage {
 
     func array(forKey key: String) -> [String]? {
         do {
-            if let data = try data(forKey: key) { // Используем getData для получения Data
+            if let data = data(forKey: key) { // Используем getData для получения Data
                 let array = try JSONDecoder().decode([String].self, from: data)
                 return array
             }

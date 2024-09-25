@@ -77,7 +77,7 @@ extension NavigationBarControllable where Self: UIViewController {
     func rightNavBarButtonTapped(index: Int) {}
 
     private func addLeftBarButtonItem(image: UIImage, action: @escaping () -> Void) {
-        let barButtonItem = CustomBarButtonItem(image: image, style: .plain) { [weak self] in
+        let barButtonItem = CustomBarButtonItem(image: image, style: .plain) {
             action()
         }
         self.navigationItem.leftBarButtonItem = barButtonItem

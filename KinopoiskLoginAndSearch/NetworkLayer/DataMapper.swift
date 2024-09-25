@@ -15,7 +15,7 @@ protocol DataMapperProtocol {
 
 
 // MARK: - DataMapper
-class DataMapper: DataMapperProtocol {
+final class DataMapper: DataMapperProtocol {
     private lazy var decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         return decoder

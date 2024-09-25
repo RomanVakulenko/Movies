@@ -12,7 +12,7 @@
 - showing alerts
 
 **Stack**
-- CLEAN, dependencies injection using constructor and properties
+- CLEAN, dependencies injection using Swinject
 - abstractions 
 - CoreData, Security (Keychain)
 - DifferenceKit for optimizing updates

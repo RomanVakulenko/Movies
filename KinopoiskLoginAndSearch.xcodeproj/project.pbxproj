@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A43E34B52289BD4D14C95B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F251B68CDAB47C1FD9EB6324 /* Pods_KinopoiskLoginAndSearch.framework */; };
+		1A2FB710F0E697FCC66EB59D /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A47EBB6FF950C1C2562E726 /* Pods_KinopoiskLoginAndSearch.framework */; };
 		AD2251C52C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */; };
 		AD2251C72C9AB1C200CD1847 /* StorageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */; };
 		AD2251C92C9AB2EE00CD1847 /* StorageWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */; };
@@ -69,6 +69,7 @@
 		ADB40B992C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B902C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift */; };
 		ADB40B9C2C95DAAC00AAAAE9 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B9B2C95DAAC00AAAAE9 /* GlobalConstants.swift */; };
 		ADB40B9E2C95EF4700AAAAE9 /* LogInRegistrWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB40B9D2C95EF4700AAAAE9 /* LogInRegistrWorker.swift */; };
+		ADE9293F2CA44E8000AB4B49 /* DIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE9293E2CA44E8000AB4B49 /* DIManager.swift */; };
 		ADF8855B2C974E99000E24DD /* StillCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8855A2C974E99000E24DD /* StillCollectionCell.swift */; };
 		ADF8855D2C974EEE000E24DD /* StillCollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */; };
 		ADF885642C978241000E24DD /* Films.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF885632C978241000E24DD /* Films.swift */; };
@@ -79,8 +80,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5414A38A5B7452ECBC677D04 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.debug.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.debug.xcconfig"; sourceTree = "<group>"; };
-		8491E82B83B180CE34FC44DD /* Pods-KinopoiskLoginAndSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.release.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.release.xcconfig"; sourceTree = "<group>"; };
+		09766B7DC24A8449430B1E88 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.release.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.release.xcconfig"; sourceTree = "<group>"; };
+		4A47EBB6FF950C1C2562E726 /* Pods_KinopoiskLoginAndSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KinopoiskLoginAndSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A70FC17F339533ECD6AA2955 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.debug.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KinopoiskLoginAndSearch.xcdatamodel; sourceTree = "<group>"; };
 		AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageDataManager.swift; sourceTree = "<group>"; };
 		AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageWorker.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		ADB40B902C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneFilmDetailsPresenter.swift; sourceTree = "<group>"; };
 		ADB40B9B2C95DAAC00AAAAE9 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		ADB40B9D2C95EF4700AAAAE9 /* LogInRegistrWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInRegistrWorker.swift; sourceTree = "<group>"; };
+		ADE9293E2CA44E8000AB4B49 /* DIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIManager.swift; sourceTree = "<group>"; };
 		ADF8855A2C974E99000E24DD /* StillCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillCollectionCell.swift; sourceTree = "<group>"; };
 		ADF8855C2C974EEE000E24DD /* StillCollectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillCollectionCellViewModel.swift; sourceTree = "<group>"; };
 		ADF885632C978241000E24DD /* Films.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Films.swift; sourceTree = "<group>"; };
@@ -152,7 +155,6 @@
 		ADF8856A2C982DB9000E24DD /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		ADF8856C2C98C83D000E24DD /* StillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillsView.swift; sourceTree = "<group>"; };
 		ADF8856E2C98C952000E24DD /* StillsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillsViewModel.swift; sourceTree = "<group>"; };
-		F251B68CDAB47C1FD9EB6324 /* Pods_KinopoiskLoginAndSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KinopoiskLoginAndSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A43E34B52289BD4D14C95B3 /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */,
+				1A2FB710F0E697FCC66EB59D /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,8 +172,8 @@
 		735386548A78EB4E92EE08BE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5414A38A5B7452ECBC677D04 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */,
-				8491E82B83B180CE34FC44DD /* Pods-KinopoiskLoginAndSearch.release.xcconfig */,
+				A70FC17F339533ECD6AA2955 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */,
+				09766B7DC24A8449430B1E88 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -240,6 +242,7 @@
 			children = (
 				ADB40B1F2C95987600AAAAE9 /* AppDelegate.swift */,
 				ADB40B212C95987600AAAAE9 /* SceneDelegate.swift */,
+				ADE9293E2CA44E8000AB4B49 /* DIManager.swift */,
 				ADB40B5F2C95B02800AAAAE9 /* KeychainAndPreferences */,
 				ADB40B3C2C95A4B800AAAAE9 /* Protocols */,
 				ADB40B352C95A41B00AAAAE9 /* NetworkLayer */,
@@ -394,7 +397,7 @@
 			isa = PBXGroup;
 			children = (
 				AD80F84B2C9997C000928387 /* DifferenceKit.framework */,
-				F251B68CDAB47C1FD9EB6324 /* Pods_KinopoiskLoginAndSearch.framework */,
+				4A47EBB6FF950C1C2562E726 /* Pods_KinopoiskLoginAndSearch.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -406,17 +409,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADB40B302C95987800AAAAE9 /* Build configuration list for PBXNativeTarget "KinopoiskLoginAndSearch" */;
 			buildPhases = (
-				C9094BB4D0742D4EA2AAFAF2 /* [CP] Check Pods Manifest.lock */,
+				03CD4D1360A188E706978DDC /* [CP] Check Pods Manifest.lock */,
 				ADB40B182C95987600AAAAE9 /* Sources */,
 				ADB40B192C95987600AAAAE9 /* Frameworks */,
 				ADB40B1A2C95987600AAAAE9 /* Resources */,
-				B345C6B000E68B4B1990F00D /* [CP] Embed Pods Frameworks */,
+				ACC7D496E293FC9CEE16102C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = KinopoiskLoginAndSearch;
+			packageProductDependencies = (
+			);
 			productName = KinopoiskLoginAndSearch;
 			productReference = ADB40B1C2C95987600AAAAE9 /* KinopoiskLoginAndSearch.app */;
 			productType = "com.apple.product-type.application";
@@ -445,6 +450,9 @@
 				Base,
 			);
 			mainGroup = ADB40B132C95987600AAAAE9;
+			packageReferences = (
+				ADE929392CA44E5100AB4B49 /* XCRemoteSwiftPackageReference "Swinject" */,
+			);
 			productRefGroup = ADB40B1D2C95987600AAAAE9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -467,24 +475,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B345C6B000E68B4B1990F00D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C9094BB4D0742D4EA2AAFAF2 /* [CP] Check Pods Manifest.lock */ = {
+		03CD4D1360A188E706978DDC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -504,6 +495,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ACC7D496E293FC9CEE16102C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -551,6 +559,7 @@
 				ADB40B862C95C35600AAAAE9 /* FilmsModels.swift in Sources */,
 				ADB40B922C95C3FE00AAAAE9 /* OneFilmDetailsModels.swift in Sources */,
 				ADB40B802C95C35600AAAAE9 /* FilmsController.swift in Sources */,
+				ADE9293F2CA44E8000AB4B49 /* DIManager.swift in Sources */,
 				ADB40B842C95C35600AAAAE9 /* FilmsPresenter.swift in Sources */,
 				AD2251C52C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */,
 				ADB40B442C95A57900AAAAE9 /* NetworkService.swift in Sources */,
@@ -717,7 +726,7 @@
 		};
 		ADB40B312C95987800AAAAE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5414A38A5B7452ECBC677D04 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */;
+			baseConfigurationReference = A70FC17F339533ECD6AA2955 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -747,7 +756,7 @@
 		};
 		ADB40B322C95987800AAAAE9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8491E82B83B180CE34FC44DD /* Pods-KinopoiskLoginAndSearch.release.xcconfig */;
+			baseConfigurationReference = 09766B7DC24A8449430B1E88 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -797,6 +806,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ADE929392CA44E5100AB4B49 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCVersionGroup section */
 		AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */ = {

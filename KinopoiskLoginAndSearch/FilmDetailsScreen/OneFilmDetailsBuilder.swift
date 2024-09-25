@@ -17,9 +17,7 @@ final class OneFilmDetailsBuilder: OneFilmDetailsBuilderProtocol {
         let viewController = OneFilmDetailsController()
         let coreDataManager = StorageDataManager()
         
-        let networkManager = NetworkManager(networkService: NetworkService(),
-                                            mapper: DataMapper(),
-                                            cacheManager: CacheManager(coreDataManager: coreDataManager))
+        let networkManager = NetworkManager()
         let worker = OneFilmDetailsWorker(networkManager: networkManager)
         let interactor = OneFilmDetailsInteractor(filmId: filmId)
         let presenter = OneFilmDetailsPresenter()

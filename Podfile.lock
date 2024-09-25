@@ -11,23 +11,27 @@ PODS:
   - Reusable/Storyboard (4.1.2)
   - Reusable/View (4.1.2)
   - SnapKit (5.7.1)
+  - Swinject (2.9.1)
 
 DEPENDENCIES:
   - DifferenceKit
   - Reusable
   - SnapKit
+  - Swinject
 
 SPEC REPOS:
   trunk:
     - DifferenceKit
     - Reusable
     - SnapKit
+    - Swinject
 
 SPEC CHECKSUMS:
   DifferenceKit: ab185c4d7f9cef8af3fcf593e5b387fb81e999ca
   Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  Swinject: a827d508c6270da03ec74e558e728917a888fa9b
 
-PODFILE CHECKSUM: b285d09174790929a2343ef7da71f83c7431426b
+PODFILE CHECKSUM: f88c91bfd2a84a19090d1d7623aa109b8cfaab25
 
 COCOAPODS: 1.15.2

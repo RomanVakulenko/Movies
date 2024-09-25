@@ -13,7 +13,7 @@ protocol NetworkManagerProtocol: AnyObject {
 
     func getFilmDetails(id: Int, completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void)
     func downloadAndCacheCover(for detailsFilm: DetailsFilm,
-                                completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void)
+                               completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void)
     func loadFilmStills(filmId: Int,
                         pageForStills: Int,
                         completion: @escaping (Result<[OneStill], NetworkManagerErrors>) -> Void)
@@ -22,25 +22,15 @@ protocol NetworkManagerProtocol: AnyObject {
 
 final class NetworkManager {
 
-    private let networkService: NetworkServiceProtocol
-       private let mapper: DataMapperProtocol
-       private let cacheManager: CacheManagerProtocol
-       private var isFetching = false
-//       private let requestLimitPerSecond = 5
-       private var fetchedFilmsCount = 0
-       private var amountOfFetchedStills = 0
-       private let maxFilms = 400
-       private var maxStills = 1
-
-       // MARK: - Init
-
-       init(networkService: NetworkServiceProtocol, 
-            mapper: DataMapperProtocol,
-            cacheManager: CacheManagerProtocol) {
-           self.networkService = networkService
-           self.mapper = mapper
-           self.cacheManager = cacheManager
-       }
+    private let networkService = DIManager.shared.container.resolve(NetworkServiceProtocol.self)!
+    private let mapper = DIManager.shared.container.resolve(DataMapperProtocol.self)!
+    private let cacheManager = DIManager.shared.container.resolve(CacheManagerProtocol.self)!
+    private var isFetching = false
+    //       private let requestLimitPerSecond = 5
+    private var fetchedFilmsCount = 0
+    private var amountOfFetchedStills = 0
+    private let maxFilms = 400
+    private var maxStills = 1
 
     // MARK: - Private methods
 
@@ -100,13 +90,9 @@ final class NetworkManager {
                                 print("Image saved to temporary directory for still: \(still.previewURL ?? "")")
 
                                 let stringToGetFileFromTemp = fileURLInTemp.path
-//                                print("1.key - stringForLoadAvatarForNet - \(stringForLoadAvatarForNet)")
-//                                print("2.stringToGetFileFromTemp - \(stringToGetFileFromTemp)")
                                 stillsWithPreviews[index].cachedPreview = stringToGetFileFromTemp
 
                                 cacheManager.setObject(stringToGetFileFromTemp, forKey: stringForLoadStillFromNet) { _ in
-//                                    print("1.key - stringForLoadAvatarForNet - \(stringForLoadAvatarForNet)")
-//                                    print("2.stringToGetFileFromTemp - \(stringToGetFileFromTemp)")
                                     print("stringToGetFileFromTemp saved to coreData for still: \(still.previewURL ?? "")")
                                 }
                             } catch {
@@ -162,19 +148,15 @@ extension NetworkManager: NetworkManagerProtocol {
                             let tempDirectory = FileManager.default.temporaryDirectory
                             let fileName = UUID().uuidString + ".jpg"
                             let fileURLInTemp = tempDirectory.appendingPathComponent(fileName)
-//                            print("0.fileURLInTemp - \(fileURLInTemp)")
+                            //                            print("0.fileURLInTemp - \(fileURLInTemp)")
                             do {
                                 try data.write(to: fileURLInTemp)
                                 print("Image saved to temporary directory for film: \(film.nameOriginal ?? "")")
 
                                 let stringToGetFileFromTemp = fileURLInTemp.path
-//                                print("1.key - stringForLoadAvatarForNet - \(stringForLoadAvatarForNet)")
-//                                print("2.stringToGetFileFromTemp - \(stringToGetFileFromTemp)")
                                 filmsWithAvatars[index].cachedAvatarPath = stringToGetFileFromTemp
 
                                 cacheManager.setObject(stringToGetFileFromTemp, forKey: stringForLoadAvatarFromNet) { _ in
-//                                    print("1.key - stringForLoadAvatarForNet - \(stringForLoadAvatarForNet)")
-//                                    print("2.stringToGetFileFromTemp - \(stringToGetFileFromTemp)")
                                     print("stringToGetFileFromTemp saved to coreData for film: \(film.nameOriginal ?? "")")
                                 }
                             } catch {
@@ -195,7 +177,7 @@ extension NetworkManager: NetworkManagerProtocol {
     }
 
 
-    func loadFilms(page: Int, 
+    func loadFilms(page: Int,
                    completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
         if page == 1 {
             fetchedFilmsCount = 0
@@ -260,7 +242,7 @@ extension NetworkManager: NetworkManagerProtocol {
     }
 
     func downloadAndCacheCover(for detailsFilm: DetailsFilm,
-                                completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void) {
+                               completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void) {
         guard let stringForLoadCoverFromNet = detailsFilm.coverUrl,
               let imageUrl = URL(string: stringForLoadCoverFromNet) else {
             completion(.failure(.netServiceError(.noURLForFetchingCover)))
@@ -286,8 +268,6 @@ extension NetworkManager: NetworkManagerProtocol {
                     detailsFilmWithCover.cachedCoverPath = stringToGetFileFromTemp
 
                     cacheManager.setObject(stringToGetFileFromTemp, forKey: stringForLoadCoverFromNet) { _ in
-//            print("1.key - stringForLoadCoverFromNet - \(stringForLoadCoverFromNet)")
-//            print("2.stringToGetFileFromTemp - \(stringToGetFileFromTemp)")
                         print("stringToGetFileFromTemp saved to coreData for film: \(detailsFilm.nameOriginal ?? detailsFilm.nameEn ?? detailsFilm.nameRu)")
 
                         completion(.success(detailsFilmWithCover))
@@ -351,6 +331,9 @@ extension NetworkManager: NetworkManagerProtocol {
 
 
     //реализация с NSCache не получилась - сохраняет, но не удавалось доставать из кеша в презентере - читал, что может освободждаться...
+
+
+
     //    func downloadAndCacheAvatarsFor(films: [OneFilm], completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
     //        var filmsWithAvatars = films
     //        let group = DispatchGroup()

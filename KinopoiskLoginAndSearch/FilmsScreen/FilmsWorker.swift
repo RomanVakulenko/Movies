@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FilmsWorkingLogic {
-    func loadFilms(isRefreshRequested: Bool, completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void)
+    func loadFilms(isRefreshRequested: Bool, completion: @escaping (Result<([OneFilm],Int), NetworkManagerErrors>) -> Void)
     func loadAvatarsFor(films: [OneFilm], completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void)
 }
 
@@ -19,13 +19,14 @@ final class FilmsWorker: FilmsWorkingLogic {
     private let networkManager: NetworkManagerProtocol
     private var currentPage = 1
     private var isFetching = false
+    private let totalFetchedFilms = 0
 
     // MARK: - Init
     init(networkManager: NetworkManagerProtocol) {
         self.networkManager = networkManager
     }
 
-    func loadFilms(isRefreshRequested: Bool, completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
+    func loadFilms(isRefreshRequested: Bool, completion: @escaping (Result<([OneFilm],Int), NetworkManagerErrors>) -> Void) {
         guard !isFetching else { return }
         isFetching = true
         if isRefreshRequested {
@@ -37,9 +38,9 @@ final class FilmsWorker: FilmsWorkingLogic {
             self.isFetching = false
 
             switch result {
-            case .success(let films):
+            case .success(let filmsAndTotal):
                 self.currentPage += 1
-                completion(.success(films))
+                completion(.success(filmsAndTotal))
             case .failure(let error):
                 completion(.failure(error))
             }

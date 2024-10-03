@@ -94,22 +94,29 @@ extension KeychainWrapper: KeyValueStorage {
 
         return value
     }
-
+    //1. сначала хешируем (доп. безопасность)
     func set(_ value: String, key: String) {
-        guard let data = value.data(using: .utf8) else {
+        // Хешируем пароль перед сохранением
+        guard let hashedValue = Crypto.hash(message: value) else {
+            assertionFailure("Unable to hash password")
+            return
+        }
+
+        guard let data = hashedValue.data(using: .utf8) else {
             assertionFailure("Unable to set data in keychain: \(KeychainError.invalidData)")
             return
         }
 
         set(data, key: key)
     }
-
+    //2. потом делаем data из строки и добавялем в keyChain
     func set(_ value: Data, key: String) {
         let query = KeychainQueryFactory.makeQuery(forService: service, key: key, value: value)
 
-        // Delete anything that's already there, just in case
+        // Удаляем существующие данные
         SecItemDelete(query as CFDictionary)
 
+        ///Adds one or more items to a keychain.
         let status = SecItemAdd(query as CFDictionary, nil)
 
         if status != noErr {
@@ -138,16 +145,16 @@ extension KeychainWrapper: KeyValueStorage {
             assertionFailure("Unable to delete value for key \(key): \(KeychainError.accessError(status))")
         }
     }
-
-    func removeAll() {
-        var query: [String: Any] = [:]
-        query[kSecClass as String] = kSecClassGenericPassword
-        query[kSecAttrService as String] = service
-
-        let status = SecItemDelete(query as CFDictionary)
-
-        if status != errSecItemNotFound && status != errSecSuccess {
-            assertionFailure("Unable to delete all values in Keychain: \(KeychainError.accessError(status))")
-        }
-    }
+//
+//    func removeAll() {
+//        var query: [String: Any] = [:]
+//        query[kSecClass as String] = kSecClassGenericPassword
+//        query[kSecAttrService as String] = service
+//
+//        let status = SecItemDelete(query as CFDictionary)
+//
+//        if status != errSecItemNotFound && status != errSecSuccess {
+//            assertionFailure("Unable to delete all values in Keychain: \(KeychainError.accessError(status))")
+//        }
+//    }
 }

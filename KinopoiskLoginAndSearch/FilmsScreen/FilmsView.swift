@@ -14,7 +14,7 @@ protocol FilmsViewOutput: AnyObject,
     func didPullToReftesh()
     func didTapSortIcon()
     func yearButtonTapped()
-    func loadNextTwentyFilms()
+    func loadNextFilmsIfAvaliable()
 }
 
 protocol FilmsViewLogic: UIView {
@@ -232,24 +232,42 @@ extension FilmsView: UITableViewDataSource {
     }
 }
 
+//extension FilmsView: UITableViewDelegate {
+//
+//    // Метод вызывается перед тем, как ячейка будет отображена
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        guard let viewModel = viewModel else { return }
+//        let totalRows = tableView.numberOfRows(inSection: 0)
+//
+//            // Если текущая ячейка находится близко к концу списка (например, 15-я с конца), и не происходит фильтрация
+//            if indexPath.row >= totalRows - 15 && !viewModel.isNowFilteringAtSearchOrYearOrSortedDescending {
+//                print("Reached near the end of the list at index \(indexPath.row)")
+//                output?.loadNextFilms()
+//            }
+//    }
+//}
+
 
 extension FilmsView: UITableViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let tableView = scrollView as? UITableView else { return }
 
-        let visibleRows = tableView.indexPathsForVisibleRows?.count ?? 0
-        let totalRows = tableView.numberOfRows(inSection: 0)
+        let offsetY = scrollView.contentOffset.y // смещение от 0
+        let contentHeight = scrollView.contentSize.height // Высота всего контента (всех ячеек)
+        let scrollViewHeight = scrollView.frame.size.height // Высота видимой области таблицы
 
-        if totalRows > 0 && visibleRows > 0,
-           let viewModel = viewModel {
-            let lastVisibleIndex = tableView.indexPathsForVisibleRows?.last?.row ?? 0
+        // Проверяем, достигли ли мы 40% от высоты всего контента
+        let threshold = contentHeight * 0.4
 
-            // Проверяем, если последняя видимая ячейка является пятнадцатой с конца и мы не нажимали на фильтр по году и в серчБаре ничего не введено сортировано по убыванию(стандартно), тогда подгружаем еще
-            if lastVisibleIndex >= totalRows - 15,
-               !viewModel.isNowFilteringAtSearchOrYearOrSortedDescending {
-                output?.loadNextTwentyFilms()
-            }
+        // Если прокручено больше 40% контента
+        if offsetY + scrollViewHeight >= threshold,
+           let viewModel = viewModel,
+           !viewModel.isNowFilteringAtSearchOrYearOrSortedDescending {
+            print("Scrolled 40% of the content height")
+            output?.loadNextFilmsIfAvaliable()
         }
     }
 }
+
+

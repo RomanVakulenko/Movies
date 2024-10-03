@@ -27,7 +27,7 @@ protocol KeyValueStorage {
     func array(forKey key: String) -> [String]?
 
     func removeValue(forKey key: String)
-    func removeAll()
+//    func removeAll()
 }
 
 

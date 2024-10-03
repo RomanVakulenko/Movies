@@ -90,7 +90,7 @@ final class SearchView: UIView, SearchViewLogic {
             searchIconView.isUserInteractionEnabled = true
             searchIconView.addGestureRecognizer(tapGestureRecognizer)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in //fixes searchView appearing for a moment earlier than the view
             guard let self = self else {return}
             searchBar.isHidden = false
         }

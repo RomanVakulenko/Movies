@@ -3,6 +3,7 @@
 **KinopoiskLoginAndSearch** 
 - login and password using KeyChain and UserPreferences - wrapper above user defaults
 - fetches data from internet, concurrency for fetching films and their stills, multithreading managing with group
+- pagination
 - **custom cacheManager based on saving images to FileManager and paths [webToDownload : localSavedToFileManagerTemp]**
 - **saves paths to NSPersistentContainer (CoreData)**
 - custom Button, you can tap at title and pick year for filter films by it
@@ -24,6 +25,7 @@
 
 - Загружает из интернета список фильмов
 - В каждом фильме есть ссылка на скачивание картинки из сети
+- Пагинация и подгрузка, если некоторый % от загруженного уже пролистан, чтобы приблизиться к infinite scroll
 - Для скачивания картинок реализован кастомный CacheManager на основе CoreData и FileManager (храним словарь: ключ - ссылка на скачивание картинки из интеренета, значение - путь до data, которую сохранили в FileManager)
 - Есть скелетон или placeholder image пока не загрузились аватарки фильмов для таблицы фильмов и cover для детального экрана
 - Алерты, Сортировка, Поиск, Кастомная кнопка с выбором года и картинкой в ней

@@ -123,8 +123,8 @@ extension FilmsController: FilmsViewOutput {
         interactor?.updateFilmsAtRefresh(request: FilmsScreenFlow.Update.Request())
     }
  
-    func loadNextTwentyFilms() {
-        interactor?.loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request(isRefreshRequested: false))
+    func loadNextFilmsIfAvaliable() {
+        interactor?.loadNextFilms(request: FilmsScreenFlow.OnLoadRequest.Request(isRefreshRequested: false))
     }
 
     func doSearchFor(searchText: String) {

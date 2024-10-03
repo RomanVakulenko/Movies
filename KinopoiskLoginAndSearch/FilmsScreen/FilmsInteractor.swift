@@ -18,7 +18,7 @@ protocol FilmsBusinessLogic {
 
     func filterByYear(request: FilmsScreenFlow.OnYearButtonTap.Request)
     func onCellTap(request: FilmsScreenFlow.OnSelectItem.Request)
-    func loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request)
+    func loadNextFilms(request: FilmsScreenFlow.OnLoadRequest.Request)
 
 }
 
@@ -41,7 +41,8 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
 
     private var filmsToDisplay: [OneFilm] = []
     private var filteredFilms: [OneFilm] = []
-    private var allFetchedUnicFilms: [OneFilm] = []
+    private var allFetchedFilms: [OneFilm] = []
+    private var filmsAvailiableToFetch = 0
 
     private var yearForFilter = Constants.defaultYear
     private var isSortedDescending = true //по убыванию
@@ -52,6 +53,13 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
             return false
         } else {
             return true
+        }
+    }
+    private var isAllFilmsFetched: Bool {
+        if allFetchedFilms.count == filmsAvailiableToFetch {
+            return true
+        } else {
+            return false
         }
     }
 
@@ -68,28 +76,33 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
         }
     }
 
-    func loadNextTwentyFilms(request: FilmsScreenFlow.OnLoadRequest.Request) {
-        workerLoadFilms(isRefreshRequested: false) { films in
-            self.loadAvatarsFor(films: films) { _ in
-                self.presenterDoUpdate()
+    func loadNextFilms(request: FilmsScreenFlow.OnLoadRequest.Request) {
+        if isAllFilmsFetched == false {
+            workerLoadFilms(isRefreshRequested: false) { films in
+                self.loadAvatarsFor(films: films) { _ in
+                    self.presenterDoUpdate()
+                }
             }
+        } else {
+            //можно вывести уведомление, что все фильмы скачаны
         }
     }
-
+    
     func updateFilmsAtRefresh(request: FilmsScreenFlow.Update.Request) {
-        allFetchedUnicFilms = []
+        allFetchedFilms = []
         isSortedDescending = true
         isFilteredByYear = false
         isSearching = false
         yearForFilter = Constants.defaultYear
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            guard let self = self else {return}
+        if isAllFilmsFetched == false {
             workerLoadFilms(isRefreshRequested: true) { films in
                 self.loadAvatarsFor(films: films) { _ in
                     self.presenterDoUpdate()
                 }
             }
+        } else {
+            //можно вывести уведомление, что все фильмы скачаны
         }
     }
 
@@ -110,7 +123,7 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
             self.filmsToDisplay = sortedAndFiltered
             self.presenterDoUpdate()
 
-            self.filmsToDisplay = self.allFetchedUnicFilms
+            self.filmsToDisplay = self.allFetchedFilms
         }
     }
 
@@ -139,7 +152,7 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
             isSearching = false
             isFilteredByYear = false // так как показаны все что были загружены и мы можем продолжить скачивать новые, если сортировка по убыванию
             yearForFilter = Constants.defaultYear
-            filmsToDisplay = allFetchedUnicFilms
+            filmsToDisplay = allFetchedFilms
         }
 
         presenterDoUpdate()
@@ -157,20 +170,17 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
     //MARK: - Private methods
 
     private func workerLoadFilms(isRefreshRequested: Bool, completion: @escaping ([OneFilm]) -> Void) {
-        presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: true))
 
         worker?.loadFilms(isRefreshRequested: isRefreshRequested) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
-            case .success(let films):
+            case .success(let filmsAndTotal):
+                filmsAvailiableToFetch = filmsAndTotal.1
+                allFetchedFilms.append(contentsOf: filmsAndTotal.0)
 
-                let setOfExistingFilmIDs = Set(allFetchedUnicFilms.map { $0.kinopoiskId })
-                let updatedFilms = films.filter { !setOfExistingFilmIDs.contains($0.kinopoiskId) }
-                allFetchedUnicFilms.append(contentsOf: updatedFilms)
-
-                filmsToDisplay = allFetchedUnicFilms.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 } // для корректного показа по порядку со склелетонами
-                allFetchedUnicFilms = filmsToDisplay //для сохранения всех фильмов и проверки на уникальные
+                filmsToDisplay = allFetchedFilms.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 } // для корректного показа по порядку со склелетонами
+                allFetchedFilms = filmsToDisplay //для сохранения всех фильмов и проверки на уникальные
                 //здесь картинки еще не загрузили
                 completion(filmsToDisplay)
             case .failure(let failure):
@@ -186,11 +196,13 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
             guard let self = self else { return }
             switch result {
             case .success(let filmsWithStringAvatar):
-                allFetchedUnicFilms = filmsWithStringAvatar
-                filmsToDisplay = allFetchedUnicFilms.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 }
-
-                presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
-                completion(filmsToDisplay)
+                allFetchedFilms = filmsWithStringAvatar
+                
+                if !allFetchedFilms.isEmpty {
+                    filmsToDisplay = allFetchedFilms.sorted { $0.ratingKinopoisk ?? 0.1 > $1.ratingKinopoisk ?? 0.0 }
+                    presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
+                    completion(filmsToDisplay)
+                }
             case .failure(let failure):
                 presenter?.presentAlert(response: FilmsScreenFlow.AlertInfo.Response(error: failure))
             }

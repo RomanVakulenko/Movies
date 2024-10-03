@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NetworkManagerProtocol: AnyObject {
-    func loadFilms(page: Int, completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void)
+    func loadFilms(page: Int, completion: @escaping (Result<([OneFilm],Int), NetworkManagerErrors>) -> Void)
     func downloadAndCacheAvatarsFor(films: [OneFilm], completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void)
 
     func getFilmDetails(id: Int, completion: @escaping (Result<DetailsFilm, NetworkManagerErrors>) -> Void)
@@ -178,7 +178,7 @@ extension NetworkManager: NetworkManagerProtocol {
 
 
     func loadFilms(page: Int,
-                   completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
+                   completion: @escaping (Result<([OneFilm],Int), NetworkManagerErrors>) -> Void) {
         if page == 1 {
             fetchedFilmsCount = 0
         }
@@ -200,7 +200,7 @@ extension NetworkManager: NetworkManagerProtocol {
                     case .success(let decodedFilmsDTO):
                         let films = decodedFilmsDTO.items.map { OneFilm(from: $0) }
                         self.fetchedFilmsCount += films.count
-                        completion(.success(films))
+                        completion(.success((films, decodedFilmsDTO.total)))
 
                     case .failure:
                         completion(.failure(.dataMapperError(.failAtMapping)))

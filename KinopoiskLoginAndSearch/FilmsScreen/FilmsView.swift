@@ -251,7 +251,6 @@ extension FilmsView: UITableViewDataSource {
 extension FilmsView: UITableViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let tableView = scrollView as? UITableView else { return }
 
         let offsetY = scrollView.contentOffset.y // смещение от 0
         let contentHeight = scrollView.contentSize.height // Высота всего контента (всех ячеек)

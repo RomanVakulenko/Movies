@@ -33,15 +33,34 @@ final class FilmsWorker: FilmsWorkingLogic {
             currentPage = 1
         }
 
+        // Загрузим две страницы за один раз
+        var allFetchedFilms: [OneFilm] = []
+        var totalFilms = 0
+
+        // Запрос первой страницы
         networkManager.loadFilms(page: currentPage) { [weak self] result in
             guard let self = self else { return }
-            self.isFetching = false
 
             switch result {
             case .success(let filmsAndTotal):
+                allFetchedFilms.append(contentsOf: filmsAndTotal.0) // Добавляем фильмы первой загрузки
+                totalFilms = filmsAndTotal.1
                 self.currentPage += 1
-                completion(.success(filmsAndTotal))
+
+                // Запрос второй порции
+                self.networkManager.loadFilms(page: self.currentPage) { secondResult in
+                    self.isFetching = false
+                    switch secondResult {
+                    case .success(let secondPageFilms):
+                        allFetchedFilms.append(contentsOf: secondPageFilms.0) // Добавляем вторую порцию
+                        self.currentPage += 1
+                        completion(.success((allFetchedFilms, totalFilms)))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
             case .failure(let error):
+                self.isFetching = false
                 completion(.failure(error))
             }
         }

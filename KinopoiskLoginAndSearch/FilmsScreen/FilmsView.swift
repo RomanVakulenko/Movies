@@ -149,6 +149,7 @@ final class FilmsView: UIView, FilmsViewLogic, SpinnerDisplayable {
         tableView.register(cellType: FilmsTableCell.self)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.prefetchDataSource = self
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = true
         tableView.showsHorizontalScrollIndicator = false
@@ -232,41 +233,39 @@ extension FilmsView: UITableViewDataSource {
     }
 }
 
-//extension FilmsView: UITableViewDelegate {
-//
-//    // Метод вызывается перед тем, как ячейка будет отображена
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        guard let viewModel = viewModel else { return }
-//        let totalRows = tableView.numberOfRows(inSection: 0)
-//
-//            // Если текущая ячейка находится близко к концу списка (например, 15-я с конца), и не происходит фильтрация
-//            if indexPath.row >= totalRows - 15 && !viewModel.isNowFilteringAtSearchOrYearOrSortedDescending {
-//                print("Reached near the end of the list at index \(indexPath.row)")
-//                output?.loadNextFilms()
-//            }
-//    }
-//}
+extension FilmsView: UITableViewDataSourcePrefetching {
 
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let lastIndexPath = indexPaths.last else { return }
 
-extension FilmsView: UITableViewDelegate {
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-        let offsetY = scrollView.contentOffset.y // смещение от 0
-        let contentHeight = scrollView.contentSize.height // Высота всего контента (всех ячеек)
-        let scrollViewHeight = scrollView.frame.size.height // Высота видимой области таблицы
-
-        // Проверяем, достигли ли мы 40% от высоты всего контента
-        let threshold = contentHeight * 0.4
-
-        // Если прокручено больше 40% контента
-        if offsetY + scrollViewHeight >= threshold,
+        if lastIndexPath.row >= (viewModel?.items.count ?? 0) / 2,
            let viewModel = viewModel,
            !viewModel.isNowFilteringAtSearchOrYearOrSortedDescending {
-            print("Scrolled 40% of the content height")
+            print("prefetch starts at lastIndexPathRow = \(lastIndexPath.row)")
             output?.loadNextFilmsIfAvaliable()
         }
     }
+}
+
+extension FilmsView: UITableViewDelegate {
+
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//
+//        let offsetY = scrollView.contentOffset.y // смещение от 0
+//        let contentHeight = scrollView.contentSize.height // Высота всего контента (всех ячеек)
+//        let scrollViewHeight = scrollView.frame.size.height // Высота видимой области таблицы
+//
+//        // Проверяем, достигли ли мы 40% от высоты всего контента
+//        let threshold = contentHeight * 0.4
+//
+//        // Если прокручено больше 40% контента
+//        if offsetY + scrollViewHeight >= threshold,
+//           let viewModel = viewModel,
+//           !viewModel.isNowFilteringAtSearchOrYearOrSortedDescending {
+//            print("Scrolled 40% of the content height")
+//            output?.loadNextFilmsIfAvaliable()
+//        }
+//    }
 }
 
 

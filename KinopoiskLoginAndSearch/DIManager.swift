@@ -35,9 +35,12 @@ final class DIManager {
 
         container.register(NetworkManager.self) { _ in
             NetworkManager()
-        }.inObjectScope(.graph)
+        }.inObjectScope(.graph) //Если объект запрашивается из другого объекта, который тоже создается в этом графе, будет возвращен тот же экземпляр.
         container.register(LocalStorageManagerProtocol.self) { _ in
             StorageDataManager.shared
+        }.inObjectScope(.container)
+        container.register(FileManager.self) { _ in
+            FileManager.default
         }.inObjectScope(.container)
     }
 }

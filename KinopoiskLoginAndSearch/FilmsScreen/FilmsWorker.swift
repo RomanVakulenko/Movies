@@ -49,7 +49,7 @@ final class FilmsWorker: FilmsWorkingLogic {
 
                 // Запрос второй порции
                 self.networkManager.loadFilms(page: self.currentPage) { secondResult in
-                    self.isFetching = false
+                    self.isFetching = false // Освобождаем блокировку для запросов фильмов
                     switch secondResult {
                     case .success(let secondPageFilms):
                         allFetchedFilms.append(contentsOf: secondPageFilms.0) // Добавляем вторую порцию
@@ -67,12 +67,12 @@ final class FilmsWorker: FilmsWorkingLogic {
     }
 
     func loadAvatarsFor(films: [OneFilm], completion: @escaping (Result<[OneFilm], NetworkManagerErrors>) -> Void) {
-        guard !isFetching else { return }
-        isFetching = true
+//        guard !isFetching else { return }
+//        isFetching = true
 
-        networkManager.downloadAndCacheAvatarsFor(films: films) { [weak self] result in
-            guard let self = self else { return }
-            self.isFetching = false
+        networkManager.downloadAndCacheAvatarsFor(films: films) { result in
+//            guard let self = self else { return }
+//            self.isFetching = false
 
             switch result {
             case .success(let filmsWithPaths):

@@ -32,4 +32,7 @@ enum GlobalConstants {
     static let fieldFontSize16px: CGFloat = UIHelper.Margins.medium16px
     static let fieldsAndButtonHeight48px: CGFloat = UIHelper.Margins.huge48px
 
+    static let defaultSelectedYear: Int = 1950
+    static let currentYear: Int = Calendar.current.component(.year, from: Date())
+
 }

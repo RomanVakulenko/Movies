@@ -24,6 +24,7 @@ protocol FilmsBusinessLogic {
 
 protocol FilmsDataStore: AnyObject {
     var idOfSelectedFilm: Int? { get }
+    var yearForFilter: Int { get set }
 }
 
 final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
@@ -36,6 +37,7 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
     var presenter: FilmsPresentationLogic?
     var worker: FilmsWorkingLogic?
     var idOfSelectedFilm: Int?
+    var yearForFilter = Constants.defaultYear
 
     // MARK: - Private properties
 
@@ -44,7 +46,6 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
     private var allFetchedFilms: [OneFilm] = []
     private var filmsAvailiableToFetch = 0
 
-    private var yearForFilter = Constants.defaultYear
     private var isSortedDescending = true //по убыванию
     private var isFilteredByYear = false
     private var isSearching = false

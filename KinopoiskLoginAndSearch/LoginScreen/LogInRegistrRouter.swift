@@ -16,7 +16,7 @@ protocol LogInRegistrDataPassing {
 }
 
 
-@available(iOS 13.4, *)
+@available(iOS 13.0, *)
 final class LogInRegistrRouter: LogInRegistrRoutingLogic, LogInRegistrDataPassing {
 
     // MARK: - Public properties

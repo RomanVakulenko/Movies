@@ -12,7 +12,7 @@ protocol FilmsBuilderProtocol: AnyObject {
 }
 
 
-@available(iOS 13.4, *)
+@available(iOS 13.0, *)
 final class FilmsBuilder: FilmsBuilderProtocol {
 
     func getController(delegate: FilmsDelegate?) -> UIViewController {

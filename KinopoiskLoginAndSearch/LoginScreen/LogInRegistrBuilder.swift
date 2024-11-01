@@ -11,7 +11,7 @@ protocol LogInRegistrBuilderProtocol: AnyObject {
     func getController() -> UIViewController
 }
 
-@available(iOS 13.4, *)
+@available(iOS 13.0, *)
 final class LogInRegistrBuilder: LogInRegistrBuilderProtocol {
 
     func getController() -> UIViewController {

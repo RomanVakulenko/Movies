@@ -26,7 +26,7 @@ protocol DatePickerRouterProtocol {
     func presentYearPicker(from view: UIViewController, completion: @escaping (Int) -> Void)
 }
 
-@available(iOS 13.4, *)
+@available(iOS 13.0, *)
 final class FilmsRouter: FilmsRoutingLogic, FilmsDataPassing, DatePickerRouterProtocol {
 
     enum Constants {
@@ -65,33 +65,26 @@ final class FilmsRouter: FilmsRoutingLogic, FilmsDataPassing, DatePickerRouterPr
 
     func presentYearPicker(from view: UIViewController, completion: @escaping (Int) -> Void) {
         let alertController = UIAlertController(title: "Выберите год", message: nil, preferredStyle: .alert)
-
-        // Создаем контейнер для UIDatePicker
+        
+        // Создаем контейнер для UIPickerView
         let containerView = UIView()
         containerView.backgroundColor = .white
         containerView.layer.cornerRadius = GlobalConstants.cornerRadius
         containerView.layer.masksToBounds = true
+        
+        let pickerView = UIPickerView()
+        pickerView.backgroundColor = .white
+        pickerView.dataSource = view as? FilmsController
+        pickerView.delegate = view as? FilmsController
 
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.backgroundColor = .white // Устанавливаем белый фон для UIDatePicker
-        datePicker.preferredDatePickerStyle = .wheels
-
-        let currentYear = Calendar.current.component(.year, from: Date())
-        let minDate = Calendar.current.date(from: DateComponents(year: 1950))
-        let maxDate = Calendar.current.date(from: DateComponents(year: currentYear))
-
-        datePicker.minimumDate = minDate
-        datePicker.maximumDate = maxDate
-
-        containerView.addSubview(datePicker)
-
-        datePicker.snp.makeConstraints {
-            $0.edges.equalTo(containerView) // Заполняем весь контейнер
+        containerView.addSubview(pickerView)
+        
+        pickerView.snp.makeConstraints {
+            $0.edges.equalTo(containerView)
         }
-
+        
         alertController.view.addSubview(containerView)
-
+        
         containerView.snp.makeConstraints {
             $0.leading.equalTo(alertController.view.snp.leading)
             $0.trailing.equalTo(alertController.view.snp.trailing)
@@ -99,12 +92,23 @@ final class FilmsRouter: FilmsRoutingLogic, FilmsDataPassing, DatePickerRouterPr
             $0.height.equalTo(Constants.heightOfPicker)
             $0.bottom.equalTo(alertController.view.snp.bottom).offset(-Constants.offset50)
         }
+        
+        // Диапазон годов
+        let yearsForPicking = Array(GlobalConstants.defaultSelectedYear...GlobalConstants.currentYear)
+        
+        // выбранный ранее год
+        if let yearForFilter = dataStore?.yearForFilter {
+            if let index = yearsForPicking.firstIndex(of: yearForFilter) {
+                pickerView.selectRow(index, inComponent: 0, animated: false)
+            }
+        }
 
         alertController.addAction(UIAlertAction(title: GlobalConstants.ok, style: .default, handler: { _ in
-            let selectedYear = Calendar.current.component(.year, from: datePicker.date)
+            let selectedRow = pickerView.selectedRow(inComponent: 0)
+            let selectedYear = yearsForPicking[selectedRow]
             completion(selectedYear)
         }))
-
+        
         view.present(alertController, animated: true, completion: nil)
     }
 }

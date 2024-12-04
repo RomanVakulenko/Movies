@@ -8,9 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1A2FB710F0E697FCC66EB59D /* Pods_KinopoiskLoginAndSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A47EBB6FF950C1C2562E726 /* Pods_KinopoiskLoginAndSearch.framework */; };
-		AD2251C52C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */; };
+		AD20C0232CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AD20C0212CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodeld */; };
+		AD20C0252CD9288400DC84AE /* RealmDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD20C0242CD9288400DC84AE /* RealmDataService.swift */; };
+		AD20C0282CD92A8500DC84AE /* StorageBaseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD20C0272CD92A8500DC84AE /* StorageBaseModels.swift */; };
 		AD2251C72C9AB1C200CD1847 /* StorageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */; };
 		AD2251C92C9AB2EE00CD1847 /* StorageWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */; };
+		AD29DD312CD66112005B50AB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD29DD302CD66112005B50AB /* R.generated.swift */; };
 		AD5FA29C2C9AA7F9001E2D7E /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FA29B2C9AA7F8001E2D7E /* CoreDataService.swift */; };
 		AD6BA6E72C960039002458CF /* FilmsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6E62C960039002458CF /* FilmsTableCell.swift */; };
 		AD6BA6EA2C960073002458CF /* FilmsTableCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6BA6E92C960073002458CF /* FilmsTableCellViewModel.swift */; };
@@ -95,9 +98,12 @@
 		09766B7DC24A8449430B1E88 /* Pods-KinopoiskLoginAndSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.release.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.release.xcconfig"; sourceTree = "<group>"; };
 		4A47EBB6FF950C1C2562E726 /* Pods_KinopoiskLoginAndSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KinopoiskLoginAndSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A70FC17F339533ECD6AA2955 /* Pods-KinopoiskLoginAndSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinopoiskLoginAndSearch.debug.xcconfig"; path = "Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch.debug.xcconfig"; sourceTree = "<group>"; };
-		AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KinopoiskLoginAndSearch.xcdatamodel; sourceTree = "<group>"; };
+		AD20C0222CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KinopoiskLoginAndSearch.xcdatamodel; sourceTree = "<group>"; };
+		AD20C0242CD9288400DC84AE /* RealmDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDataService.swift; sourceTree = "<group>"; };
+		AD20C0272CD92A8500DC84AE /* StorageBaseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageBaseModels.swift; sourceTree = "<group>"; };
 		AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageDataManager.swift; sourceTree = "<group>"; };
 		AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageWorker.swift; sourceTree = "<group>"; };
+		AD29DD302CD66112005B50AB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		AD5FA29B2C9AA7F8001E2D7E /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		AD6BA6E62C960039002458CF /* FilmsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsTableCell.swift; sourceTree = "<group>"; };
 		AD6BA6E92C960073002458CF /* FilmsTableCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsTableCellViewModel.swift; sourceTree = "<group>"; };
@@ -200,15 +206,40 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		AD2251C22C9AAD2600CD1847 /* CoreData */ = {
+		AD20C0202CD927E000DC84AE /* Storage */ = {
 			isa = PBXGroup;
 			children = (
 				AD2251C82C9AB2EE00CD1847 /* StorageWorker.swift */,
 				AD2251C62C9AB1C200CD1847 /* StorageDataManager.swift */,
+				AD20C0262CD92A5700DC84AE /* Realm */,
+				AD2251C22C9AAD2600CD1847 /* CoreData */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		AD20C0262CD92A5700DC84AE /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				AD20C0242CD9288400DC84AE /* RealmDataService.swift */,
+				AD20C0272CD92A8500DC84AE /* StorageBaseModels.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
+		AD2251C22C9AAD2600CD1847 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
 				AD5FA29B2C9AA7F8001E2D7E /* CoreDataService.swift */,
-				AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */,
+				AD20C0212CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodeld */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		AD29DD2A2CD635CC005B50AB /* FillmsScreen */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = FillmsScreen;
 			sourceTree = "<group>";
 		};
 		AD6BA6E82C96004D002458CF /* FilmsTableCell */ = {
@@ -246,6 +277,7 @@
 			children = (
 				ADA9E6A42CD4B55800DEF2EB /* KinopoiskLoginAndSearchTests.swift */,
 				ADA9E6AD2CD4C71E00DEF2EB /* LoginScreen */,
+				AD29DD2A2CD635CC005B50AB /* FillmsScreen */,
 			);
 			path = KinopoiskLoginAndSearchTests;
 			sourceTree = "<group>";
@@ -284,10 +316,11 @@
 				ADB40B1F2C95987600AAAAE9 /* AppDelegate.swift */,
 				ADB40B212C95987600AAAAE9 /* SceneDelegate.swift */,
 				ADE9293E2CA44E8000AB4B49 /* DIManager.swift */,
+				AD29DD302CD66112005B50AB /* R.generated.swift */,
 				ADB40B5F2C95B02800AAAAE9 /* KeychainAndPreferences */,
 				ADB40B3C2C95A4B800AAAAE9 /* Protocols */,
 				ADB40B352C95A41B00AAAAE9 /* NetworkLayer */,
-				AD2251C22C9AAD2600CD1847 /* CoreData */,
+				AD20C0202CD927E000DC84AE /* Storage */,
 				AD6BA6F42C9609A5002458CF /* Cells and Views */,
 				ADF885622C97820F000E24DD /* Models */,
 				ADB40B622C95BF6200AAAAE9 /* LoginScreen */,
@@ -469,6 +502,7 @@
 			buildConfigurationList = ADB40B302C95987800AAAAE9 /* Build configuration list for PBXNativeTarget "KinopoiskLoginAndSearch" */;
 			buildPhases = (
 				03CD4D1360A188E706978DDC /* [CP] Check Pods Manifest.lock */,
+				AD29DD2F2CD65F9C005B50AB /* ShellScript */,
 				ADB40B182C95987600AAAAE9 /* Sources */,
 				ADB40B192C95987600AAAAE9 /* Frameworks */,
 				ADB40B1A2C95987600AAAAE9 /* Resources */,
@@ -585,6 +619,25 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KinopoiskLoginAndSearch/Pods-KinopoiskLoginAndSearch-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		AD29DD2F2CD65F9C005B50AB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/R.generated.swift\n",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -629,6 +682,8 @@
 				ADB40B852C95C35600AAAAE9 /* FilmsView.swift in Sources */,
 				ADF8856F2C98C952000E24DD /* StillsViewModel.swift in Sources */,
 				AD6BA6EA2C960073002458CF /* FilmsTableCellViewModel.swift in Sources */,
+				AD20C0252CD9288400DC84AE /* RealmDataService.swift in Sources */,
+				AD20C0232CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */,
 				ADB40B6F2C95BFEF00AAAAE9 /* LogInRegistrFlow.swift in Sources */,
 				ADF8855B2C974E99000E24DD /* StillCollectionCell.swift in Sources */,
 				ADF885642C978241000E24DD /* Films.swift in Sources */,
@@ -641,7 +696,6 @@
 				ADB40B802C95C35600AAAAE9 /* FilmsController.swift in Sources */,
 				ADE9293F2CA44E8000AB4B49 /* DIManager.swift in Sources */,
 				ADB40B842C95C35600AAAAE9 /* FilmsPresenter.swift in Sources */,
-				AD2251C52C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld in Sources */,
 				ADB40B442C95A57900AAAAE9 /* NetworkService.swift in Sources */,
 				ADB40B392C95A48700AAAAE9 /* DataMapperError.swift in Sources */,
 				ADB40B722C95BFEF00AAAAE9 /* LogInRegistrController.swift in Sources */,
@@ -650,6 +704,7 @@
 				ADB40B542C95A6F000AAAAE9 /* Print global.swift in Sources */,
 				ADB40B992C95C3FE00AAAAE9 /* OneFilmDetailsPresenter.swift in Sources */,
 				ADB40B582C95AB6C00AAAAE9 /* UserPreferences.swift in Sources */,
+				AD20C0282CD92A8500DC84AE /* StorageBaseModels.swift in Sources */,
 				ADB40B4D2C95A68000AAAAE9 /* Crypto.swift in Sources */,
 				ADB40B342C959D2B00AAAAE9 /* Endpoint.swift in Sources */,
 				ADB40B5A2C95AB8A00AAAAE9 /* UserDefaultsWrapper.swift in Sources */,
@@ -660,6 +715,7 @@
 				ADB40B822C95C35600AAAAE9 /* FilmsBuilder.swift in Sources */,
 				ADB40B6D2C95BFEF00AAAAE9 /* LogInRegistrBuilder.swift in Sources */,
 				ADF8855D2C974EEE000E24DD /* StillCollectionCellViewModel.swift in Sources */,
+				AD29DD312CD66112005B50AB /* R.generated.swift in Sources */,
 				ADB40B5E2C95AC7600AAAAE9 /* KeychainQueryConfig.swift in Sources */,
 				AD6BA6E72C960039002458CF /* FilmsTableCell.swift in Sources */,
 				ADB40B6E2C95BFEF00AAAAE9 /* LogInRegistrView.swift in Sources */,
@@ -954,14 +1010,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCVersionGroup section */
-		AD2251C32C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodeld */ = {
+		AD20C0212CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */,
+				AD20C0222CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodel */,
 			);
-			currentVersion = AD2251C42C9AAEB200CD1847 /* KinopoiskLoginAndSearch.xcdatamodel */;
+			currentVersion = AD20C0222CD9285D00DC84AE /* KinopoiskLoginAndSearch.xcdatamodel */;
 			name = KinopoiskLoginAndSearch.xcdatamodeld;
-			path = /Users/vakula_48/Documents/iOS/KinopoiskLoginAndSearch/KinopoiskLoginAndSearch/CoreData/KinopoiskLoginAndSearch.xcdatamodeld;
+			path = /Users/vakula_48/Documents/iOS/KinopoiskLoginAndSearch/KinopoiskLoginAndSearch/Storage/CoreData/KinopoiskLoginAndSearch.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

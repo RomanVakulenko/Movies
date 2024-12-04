@@ -10,5 +10,7 @@ pod 'SnapKit'
 pod 'DifferenceKit'
 pod 'Reusable'
 pod 'Swinject'
+pod 'R.swift'
+pod 'RealmSwift'
 
 end

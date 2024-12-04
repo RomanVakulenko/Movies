@@ -60,7 +60,7 @@ final class LogInRegistrPresenter: LogInRegistrPresentationLogic {
     }
 
     func presentAlert(response: LogInRegistrFlow.AlertInfo.Response) {
-        var title = GlobalConstants.attention
+        let title = GlobalConstants.attention
         var text = ""
 
         switch response.alertAt {

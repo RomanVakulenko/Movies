@@ -67,9 +67,12 @@ final class FilmsInteractor: FilmsBusinessLogic, FilmsDataStore {
     // MARK: - Public methods
 
     func onDidLoadViews(request: FilmsScreenFlow.OnDidLoadViews.Request) {
+        presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: true))
+
         workerLoadFilms(isRefreshRequested: false) { filmsToDisplay in
             self.presenter?.presentSearchBar(response: FilmsScreenFlow.UpdateSearch.Response())
             self.presenterDoUpdate()
+            self.presenter?.presentWaitIndicator(response: FilmsScreenFlow.OnWaitIndicator.Response(isShow: false))
 
             self.loadAvatarsFor(films: filmsToDisplay) { _ in
                 self.presenterDoUpdate()

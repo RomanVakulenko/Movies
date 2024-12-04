@@ -94,22 +94,22 @@ extension KeychainWrapper: KeyValueStorage {
 
         return value
     }
-    //1. сначала хешируем (доп. безопасность)
-    func set(_ value: String, key: String) {
-        // Хешируем пароль перед сохранением
-        guard let hashedValue = Crypto.hash(message: value) else {
-            assertionFailure("Unable to hash password")
-            return
-        }
 
-        guard let data = hashedValue.data(using: .utf8) else {
+    func set(_ value: String, key: String) {
+        // Если нужна допБезопасность - хешируем пароль ДО сохранения
+//        guard let hashedValue = Crypto.hash(message: value) else {
+//            assertionFailure("Unable to hash password")
+//            return
+//        }
+
+        guard let data = value.data(using: .utf8) else {
             assertionFailure("Unable to set data in keychain: \(KeychainError.invalidData)")
             return
         }
 
         set(data, key: key)
     }
-    //2. потом делаем data из строки и добавялем в keyChain
+    //
     func set(_ value: Data, key: String) {
         let query = KeychainQueryFactory.makeQuery(forService: service, key: key, value: value)
 

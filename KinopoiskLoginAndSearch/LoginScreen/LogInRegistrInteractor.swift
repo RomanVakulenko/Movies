@@ -52,7 +52,7 @@ final class LogInRegistrInteractor: LogInRegistrBusinessLogic, LogInRegistrDataS
         }
 
         if userPreferences.isRegistered && userPreferences.username == login {
-            if let savedPassword = keychain.password, savedPassword == Crypto.hash(message: password) {
+            if let savedPassword = keychain.password, savedPassword == password {
                 presenter?.presentRouteToFilmsScreen(response: LogInRegistrFlow.RoutePayload.Response())
             } else {
                 presenter?.presentAlert(response: LogInRegistrFlow.AlertInfo.Response(alertAt: .invalidPassword))

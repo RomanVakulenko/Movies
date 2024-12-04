@@ -11,24 +11,25 @@ import XCTest
 
 final class LogInRegistrTest: XCTestCase {
 
-    override func setUpWithError() throws {
+    var sut: LogInRegistrController?
 
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        sut = LogInRegistrBuilder().getController() as? LogInRegistrController
     }
 
     override func tearDownWithError() throws {
-
-    }
-
-    func testThatViewControllerLoadsCorrectly() {
-        let loginViewController = LogInRegistrBuilder().getController()
-        XCTAssertNotNil(loginViewController, "loginViewController is nil")
+        sut = nil
+        try super.tearDownWithError()
     }
     
     func testThatScreenAssemblesCorrectly() {
-        guard let viewController = LogInRegistrBuilder().getController() as? LogInRegistrController else {
+        guard let viewController = sut else {
             XCTFail("Configuring viewController fails")
             return
         }
+
+        XCTAssertNotNil(sut, "loginViewController is nil")
 
         XCTAssertNotNil(viewController.interactor, "viewController.interactor is nil")
         XCTAssertTrue(viewController.interactor is LogInRegistrInteractor, "interactor is not LogInRegistrInteractor")

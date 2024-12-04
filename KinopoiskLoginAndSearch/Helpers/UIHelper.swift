@@ -7,7 +7,7 @@
 
 
 import UIKit
-
+import RswiftResources
 
 enum UIHelper {
     

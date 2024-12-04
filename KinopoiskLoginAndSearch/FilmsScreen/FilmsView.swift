@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RswiftResources
 import SnapKit
 
 protocol FilmsViewOutput: AnyObject,
